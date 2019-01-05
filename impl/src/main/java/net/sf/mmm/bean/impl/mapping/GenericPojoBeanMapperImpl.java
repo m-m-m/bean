@@ -14,6 +14,7 @@ import net.sf.mmm.bean.api.BeanPrototypeBuilder;
 import net.sf.mmm.bean.api.mapping.GenericPojoBeanMapper;
 import net.sf.mmm.bean.base.mapping.AbstractPojoBeanMapper;
 import net.sf.mmm.property.api.WritableProperty;
+import net.sf.mmm.util.collection.api.CollectionFactoryManager;
 import net.sf.mmm.util.pojo.api.PojoFactory;
 import net.sf.mmm.util.pojo.descriptor.api.PojoDescriptor;
 import net.sf.mmm.util.pojo.descriptor.api.PojoDescriptorBuilder;
@@ -23,7 +24,6 @@ import net.sf.mmm.util.pojo.descriptor.api.accessor.PojoPropertyAccessorNonArg;
 import net.sf.mmm.util.pojo.descriptor.api.accessor.PojoPropertyAccessorNonArgMode;
 import net.sf.mmm.util.pojo.descriptor.api.accessor.PojoPropertyAccessorOneArg;
 import net.sf.mmm.util.pojo.descriptor.api.accessor.PojoPropertyAccessorOneArgMode;
-import net.sf.mmm.util.reflect.api.CollectionReflectionUtil;
 import net.sf.mmm.util.reflect.api.GenericType;
 
 /**
@@ -32,8 +32,7 @@ import net.sf.mmm.util.reflect.api.GenericType;
  * @author hohwille
  * @since 1.0.0
  */
-public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Bean>
-    implements GenericPojoBeanMapper {
+public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Bean> implements GenericPojoBeanMapper {
 
   private PojoDescriptorBuilderFactory descriptorBuilderFactory;
 
@@ -41,12 +40,13 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
 
   private PojoFactory pojoFactory;
 
-  private CollectionReflectionUtil collectionReflectionUtil;
+  private CollectionFactoryManager collectionFactoryManager;
 
   /**
    * The constructor.
    */
   public GenericPojoBeanMapperImpl() {
+
     super();
   }
 
@@ -113,21 +113,21 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
   }
 
   /**
-   * @return the {@link CollectionReflectionUtil}.
+   * @return the {@link CollectionFactoryManager}.
    */
-  protected CollectionReflectionUtil getCollectionReflectionUtil() {
+  protected CollectionFactoryManager getCollectionReflectionUtil() {
 
-    return this.collectionReflectionUtil;
+    return this.collectionFactoryManager;
   }
 
   /**
-   * @param collectionReflectionUtil is the {@link CollectionReflectionUtil} to {@link Inject}.
+   * @param collectionFactoryManager is the {@link CollectionFactoryManager} to {@link Inject}.
    */
   @Inject
-  public void setCollectionReflectionUtil(CollectionReflectionUtil collectionReflectionUtil) {
+  public void setCollectionReflectionUtil(CollectionFactoryManager collectionFactoryManager) {
 
     getInitializationState().requireNotInitilized();
-    this.collectionReflectionUtil = collectionReflectionUtil;
+    this.collectionFactoryManager = collectionFactoryManager;
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -169,8 +169,8 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private <T extends Bean> Object toBeanValue(Object pojo, BeanPrototypeBuilder prototypeBuilder, T bean,
-      Object value, GenericType<?> type) {
+  private <T extends Bean> Object toBeanValue(Object pojo, BeanPrototypeBuilder prototypeBuilder, T bean, Object value,
+      GenericType<?> type) {
 
     if (value instanceof Bean) {
       if (value == pojo) {
@@ -182,7 +182,7 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
       }
     } else if (value instanceof Collection) {
       Collection<?> valueCollcetion = (Collection<?>) value;
-      Collection copy = this.collectionReflectionUtil.create((Class) value.getClass(), valueCollcetion.size());
+      Collection copy = this.collectionFactoryManager.create((Class) value.getClass(), valueCollcetion.size());
       GenericType<?> elementType = type.getComponentType();
       for (Object element : valueCollcetion) {
         copy.add(toBeanValue(pojo, prototypeBuilder, bean, element, elementType));
@@ -190,7 +190,7 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
       return copy;
     } else if (value instanceof Map) {
       Map<?, ?> valueMap = (Map<?, ?>) value;
-      Map copy = this.collectionReflectionUtil.createMap((Class) value.getClass(), valueMap.size());
+      Map copy = this.collectionFactoryManager.createMap((Class) value.getClass(), valueMap.size());
       GenericType<?> keyType = type.getKeyType();
       GenericType<?> valueType = type.getComponentType();
       for (Entry<?, ?> entry : valueMap.entrySet()) {
@@ -238,7 +238,7 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
       }
     } else if (value instanceof Collection) {
       Collection<?> valueCollcetion = (Collection<?>) value;
-      Collection copy = this.collectionReflectionUtil.create((Class) value.getClass(), valueCollcetion.size());
+      Collection copy = this.collectionFactoryManager.create((Class) value.getClass(), valueCollcetion.size());
       GenericType<?> elementType = type.getComponentType();
       for (Object element : valueCollcetion) {
         copy.add(fromBeanValue(bean, pojo, element, elementType));
@@ -246,7 +246,7 @@ public class GenericPojoBeanMapperImpl extends AbstractPojoBeanMapper<Object, Be
       return copy;
     } else if (value instanceof Map) {
       Map<?, ?> valueMap = (Map<?, ?>) value;
-      Map copy = this.collectionReflectionUtil.createMap((Class) value.getClass(), valueMap.size());
+      Map copy = this.collectionFactoryManager.createMap((Class) value.getClass(), valueMap.size());
       GenericType<?> keyType = type.getKeyType();
       GenericType<?> valueType = type.getComponentType();
       for (Entry<?, ?> entry : valueMap.entrySet()) {
