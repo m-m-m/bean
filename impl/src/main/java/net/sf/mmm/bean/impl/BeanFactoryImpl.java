@@ -22,6 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.Property;
+
+import net.sf.mmm.bean.BeanAccessBase;
+import net.sf.mmm.bean.BeanAccessMutable;
+import net.sf.mmm.bean.BeanAccessPrototype;
+import net.sf.mmm.bean.BeanAccessPrototypeExternal;
+import net.sf.mmm.bean.BeanAccessPrototypeInternal;
+import net.sf.mmm.bean.BeanAccessReadOnly;
 import net.sf.mmm.bean.api.Bean;
 import net.sf.mmm.bean.api.BeanAccess;
 import net.sf.mmm.bean.api.BeanFactory;

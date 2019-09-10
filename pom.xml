@@ -5,36 +5,49 @@
   <parent>
     <groupId>net.sf.m-m-m</groupId>
     <artifactId>mmm</artifactId>
-    <version>2.7.0</version>
+    <version>2.7.1</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
-  <groupId>net.sf.m-m-m</groupId>
   <artifactId>mmm-bean-parent</artifactId>
-  <version>dev-SNAPSHOT</version><!-- never released -->
+  <version>${revision}${changelist}</version>
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
-  <description>Provides TODO.</description>
+  <description>Provides beans based on real properties.</description>
 
   <modules>
-    <module>bom</module>
-    <module>modules</module>
+    <module>core</module>
   </modules>
 
   <properties>
     <!-- Internal project versions -->
     <net.sf.mmm.property.version>1.0.0-SNAPSHOT</net.sf.mmm.property.version>
-    <net.sf.mmm.bean.version>1.0.0-SNAPSHOT</net.sf.mmm.bean.version>
-    <java.version>1.8</java.version>
+    <java.version>11</java.version>
+    <mmm.repository>property</mmm.repository>
   </properties>
+  
+  <dependencies>
+    <!-- Test -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.5.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.12.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-  <issueManagement>
-    <system>GitHub</system>
-    <url>http://github.com/m-m-m/bean/issues</url>
-  </issueManagement>
-  <scm>
-    <connection>scm:git:git@github.com:m-m-m/bean.git</connection>
-    <developerConnection>scm:git:git@github.com:m-m-m/bean.git</developerConnection>
-    <url>https://github.com/m-m-m/bean/tree/master</url>
-    <tag/>
-  </scm>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>mmm-property</artifactId>
+        <version>${net.sf.mmm.property.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>

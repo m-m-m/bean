@@ -5,6 +5,8 @@ package net.sf.mmm.bean.impl;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 
+import net.sf.mmm.bean.BeanAccessBase;
+import net.sf.mmm.bean.BeanAccessPrototype;
 import net.sf.mmm.bean.api.Bean;
 
 /**

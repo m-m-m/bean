@@ -8,6 +8,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
+import net.sf.mmm.bean.BeanAccessBase;
+import net.sf.mmm.bean.BeanAccessPrototype;
+import net.sf.mmm.bean.BeanAccessPrototypePolymorphic;
+import net.sf.mmm.bean.BeanAccessPrototypeVirtual;
 import net.sf.mmm.bean.api.Bean;
 import net.sf.mmm.bean.api.BeanFactory;
 import net.sf.mmm.bean.api.BeanPrototypeBuilder;

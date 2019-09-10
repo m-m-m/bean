@@ -2,6 +2,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package net.sf.mmm.bean.impl;
 
+import net.sf.mmm.bean.BeanAccessInstance;
 import net.sf.mmm.bean.api.Bean;
 import net.sf.mmm.property.api.AbstractProperty;
 import net.sf.mmm.property.api.lang.GenericProperty;

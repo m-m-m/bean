@@ -4,6 +4,8 @@ package net.sf.mmm.bean.impl;
 
 import java.lang.reflect.Method;
 
+import net.sf.mmm.bean.BeanAccessBase;
+import net.sf.mmm.bean.BeanAccessPrototype;
 import net.sf.mmm.bean.api.Bean;
 import net.sf.mmm.property.api.WritableProperty;
 

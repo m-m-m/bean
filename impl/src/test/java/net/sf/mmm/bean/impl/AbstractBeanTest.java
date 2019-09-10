@@ -10,11 +10,11 @@ import org.assertj.core.api.Assertions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.sf.mmm.bean.BeanAccessBase;
 import net.sf.mmm.bean.api.AbstractBeanFactory;
 import net.sf.mmm.bean.api.Bean;
 import net.sf.mmm.bean.api.BeanAccess;
 import net.sf.mmm.bean.api.BeanFactory;
-import net.sf.mmm.bean.impl.BeanAccessBase;
 import net.sf.mmm.bean.impl.BeanFactoryImpl;
 import net.sf.mmm.bean.impl.example.CountryCodeProperty;
 import net.sf.mmm.bean.impl.example.ExamplePojo;
