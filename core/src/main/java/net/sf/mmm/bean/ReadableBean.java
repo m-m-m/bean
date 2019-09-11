@@ -131,9 +131,9 @@ public interface ReadableBean extends Validatable, MarshallableObject {
   /**
    * @return {@code true} if this {@link Bean} is a {@link BeanClass}, {@code false} otherwise (it is a regular
    *         instance).
-   * @see VirtualBean#getType()
+   * @see BeanClass#getPrototype()
    */
-  boolean isClass();
+  boolean isPrototype();
 
   /**
    * A {@link Bean} may be polymorphic to allow mappings to and from other representations without knowing the exact

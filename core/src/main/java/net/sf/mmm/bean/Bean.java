@@ -39,7 +39,7 @@ public class Bean extends AbstractBean {
   }
 
   @Override
-  public final boolean isClass() {
+  public final boolean isPrototype() {
 
     return false;
   }

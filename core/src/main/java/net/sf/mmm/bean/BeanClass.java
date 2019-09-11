@@ -14,7 +14,7 @@ import net.sf.mmm.bean.impl.BeanClassImpl;
  * @see VirtualBean#getType()
  * @since 1.0.0
  */
-public interface BeanClass extends BeanType, VirtualBean {
+public interface BeanClass extends BeanType {
 
   /**
    * @return the {@link List} of the super
@@ -24,43 +24,25 @@ public interface BeanClass extends BeanType, VirtualBean {
   @Override
   Class<? extends VirtualBean> getJavaClass();
 
-  @Override
-  default boolean isClass() {
-
-    return true;
-  }
-
   /**
-   * @param javaClass the {@link #getJavaClass() java class} reflecting a {@link VirtualBean}.
-   * @return the {@link BeanClass} for the given {@link Class}.
+   * @return the prototype of this {@link BeanClass}. Properties added to this prototype will be inherited by all
+   *         instances of this {@link BeanClass} including those created before adding the new property.
    */
-  static BeanClass of(Class<? extends VirtualBean> javaClass) {
-
-    return BeanClassImpl.of(javaClass);
-  }
+  VirtualBean getPrototype();
 
   /**
    * @param packageName the {@link #getPackageName() package name}.
    * @param simpleName the {@link #getSimpleName() simple name}.
    * @param stableName the {@link #getStableName() stable name}.
-   * @param dynamic the {@link #isDynamic() dyanmic flag}.
    * @param superClasses the {@link #getSuperClasses() super-classes}.
    * @return the created {@link #isVirtual() virtual} {@link BeanClass}.
    * @see AdvancedBean#AdvancedBean(AbstractBean, boolean, BeanClass)
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  static BeanClass createVirtual(String packageName, String simpleName, String stableName, boolean dynamic,
-      BeanClass... superClasses) {
+  static BeanClass createVirtual(String packageName, String simpleName, String stableName, BeanClass... superClasses) {
 
     List<BeanClassImpl> superClassList = (List) Arrays.asList(superClasses);
-    return new BeanClassImpl(superClasses[0].getJavaClass(), superClassList, packageName, stableName, simpleName,
-        dynamic);
-  }
-
-  @Override
-  default String getPropertyNameForAlias(String alias) {
-
-    return null;
+    return new BeanClassImpl(superClasses[0].getJavaClass(), superClassList, packageName, stableName, simpleName);
   }
 
 }

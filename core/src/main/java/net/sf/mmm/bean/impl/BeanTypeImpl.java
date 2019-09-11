@@ -16,7 +16,7 @@ import net.sf.mmm.bean.WritableBean;
  *
  * @see ReadableBean#getType()
  */
-public final class BeanTypeImpl implements BeanType {
+public class BeanTypeImpl implements BeanType {
 
   private static final Map<String, BeanTypeImpl> CLASS_MAP = new ConcurrentHashMap<>();
 
@@ -30,12 +30,19 @@ public final class BeanTypeImpl implements BeanType {
    * @param javaClass the {@link #getJavaClass() java class}.
    * @param stableName the {@link #getStableName() stable name}.
    */
-  private BeanTypeImpl(Class<? extends WritableBean> javaClass, String stableName) {
+  protected BeanTypeImpl(Class<? extends WritableBean> javaClass, String stableName) {
 
     super();
     Objects.requireNonNull(javaClass, "javaClass");
     this.javaClass = javaClass;
     this.stableName = getStableName(javaClass, stableName);
+  }
+
+  protected BeanTypeImpl(BeanTypeImpl template) {
+
+    super();
+    this.javaClass = template.javaClass;
+    this.stableName = template.stableName;
   }
 
   static String getStableName(Class<? extends WritableBean> javaClass, String stableName) {

@@ -21,8 +21,9 @@ public class AdvancedBeanTest extends Assertions {
   @Test
   public void testAdvancedBeanDynamicVirtual() {
 
-    BeanClass virtucalBeanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo.VirtualBean", true,
-        BeanClass.of(TestAdvancedBean.class));
+    // class
+    BeanClass virtucalBeanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo.VirtualBean",
+        TestAdvancedBean.PROTOTYPE.getType());
     assertThat(virtucalBeanClass.getQualifiedName()).isEqualTo("com.foo.MyVirtualBean");
     assertThat(virtucalBeanClass.getStableName()).isEqualTo("foo.VirtualBean");
     List<BeanClass> superClasses = virtucalBeanClass.getSuperClasses();
@@ -35,8 +36,12 @@ public class AdvancedBeanTest extends Assertions {
     BeanClass testAdvancedParentBeanClass = superClasses.get(0);
     assertThat(testAdvancedParentBeanClass.getQualifiedName()).isEqualTo(TestAdvancedParentBean.class.getName());
     assertThat(testAdvancedParentBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedParentBean");
+
+    // bean
     TestAdvancedBean bean = new TestAdvancedBean(true, virtucalBeanClass);
-    assertThat(bean.isClass()).isFalse();
+    assertThat(bean.isPrototype()).isTrue();
+    bean = new TestAdvancedBean(true, virtucalBeanClass);
+    assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
     assertThat(bean.getType()).isSameAs(virtucalBeanClass);
@@ -47,9 +52,9 @@ public class AdvancedBeanTest extends Assertions {
     assertThat(bean.getProperty("Name")).isSameAs(bean.Name);
     assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
     assertThat(bean.getPropertyCount()).isEqualTo(2);
-    assertThat(virtucalBeanClass.getPropertyCount()).isEqualTo(2);
-    assertThat(BeanHelper.getPropertyNames(virtucalBeanClass)).containsExactlyInAnyOrder("Name", "Age");
-    assertThat(testAdvancedBeanClass.getPropertyCount()).isEqualTo(2);
+    assertThat(virtucalBeanClass.getPrototype().getPropertyCount()).isEqualTo(2);
+    assertThat(BeanHelper.getPropertyNames(virtucalBeanClass.getPrototype())).containsExactlyInAnyOrder("Name", "Age");
+    assertThat(testAdvancedBeanClass.getPrototype().getPropertyCount()).isEqualTo(2);
     TestAdvancedBean readOnly = WritableBean.getReadOnly(bean);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
@@ -75,11 +80,11 @@ public class AdvancedBeanTest extends Assertions {
     birthday.set(date);
     assertThat(readOnly.getProperty("Birthday").getValue()).isSameAs(date);
     StringProperty string = new StringProperty("String");
-    testAdvancedParentBeanClass.addProperty(string);
+    testAdvancedParentBeanClass.getPrototype().addProperty(string);
     assertThat(readOnly.getProperties()).hasSize(4);
     assertThat(readOnly.getProperty("String")).isEqualTo(string);
     bean.set("String", "value");
-    virtucalBeanClass.set("String", "defaultValue");
+    virtucalBeanClass.getPrototype().set("String", "defaultValue");
     assertThat(readOnly.get("String")).isEqualTo("value");
     bean = new TestAdvancedBean(true, virtucalBeanClass);
     assertThat(bean.get("String")).isEqualTo("defaultValue");

@@ -11,16 +11,16 @@ import net.sf.mmm.property.number.integers.IntegerProperty;
 @Name("mmm.TestAdvancedBean")
 public class TestAdvancedBean extends TestAdvancedParentBean {
 
-  static {
-    new TestAdvancedBean();
-  }
+  /** @see BeanClass#getPrototype() */
+  @SuppressWarnings("hiding")
+  public static final TestAdvancedBean PROTOTYPE = new TestAdvancedBean();
 
   /** Age of person. */
   public final IntegerProperty Age;
 
   public TestAdvancedBean() {
 
-    this(null, false, null);
+    this(null, true, null);
   }
 
   public TestAdvancedBean(boolean dynamic) {

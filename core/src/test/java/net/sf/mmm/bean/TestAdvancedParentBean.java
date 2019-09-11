@@ -11,16 +11,16 @@ import net.sf.mmm.property.string.StringProperty;
 @Name("mmm.TestAdvancedParentBean")
 public class TestAdvancedParentBean extends AdvancedBean {
 
-  static {
-    new TestAdvancedParentBean();
-  }
+  /** @see BeanClass#getPrototype() */
+  @SuppressWarnings("hiding")
+  public static final TestAdvancedParentBean PROTOTYPE = new TestAdvancedParentBean();
 
   /** Full name of person. */
   public final StringProperty Name;
 
   public TestAdvancedParentBean() {
 
-    this(null, false, null);
+    this(null, true, null);
   }
 
   public TestAdvancedParentBean(boolean dynamic) {

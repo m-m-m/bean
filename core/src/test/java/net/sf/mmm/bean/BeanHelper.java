@@ -8,10 +8,14 @@ import java.util.Set;
 import net.sf.mmm.property.ReadableProperty;
 
 /**
- *
+ * Helper class for {@link Bean}s.
  */
 public class BeanHelper {
 
+  /**
+   * @param bean the {@link ReadableBean}.
+   * @return the {@link Set} with the names of the {@link ReadableBean#getProperties() properties}.
+   */
   public static Set<String> getPropertyNames(ReadableBean bean) {
 
     Set<String> names = new HashSet<>();

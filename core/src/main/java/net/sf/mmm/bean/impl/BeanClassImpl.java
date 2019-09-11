@@ -2,35 +2,19 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package net.sf.mmm.bean.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Objects;
 
-import net.sf.mmm.bean.AbstractBean;
-import net.sf.mmm.bean.AdvancedBean;
 import net.sf.mmm.bean.Bean;
 import net.sf.mmm.bean.BeanClass;
 import net.sf.mmm.bean.VirtualBean;
-import net.sf.mmm.property.WritableProperty;
+import net.sf.mmm.bean.WritableBean;
 
 /**
  * A {@link BeanClass} reflects a {@link Bean} (similar to a Java {@link Class}).
  */
-public final class BeanClassImpl extends AbstractBean implements BeanClass {
-
-  private static final AtomicLong MODIFICATION_SEQUNCE = new AtomicLong(1);
-
-  private static final Map<String, BeanClassImpl> CLASS_MAP = new ConcurrentHashMap<>();
-
-  private static final BeanClassImpl CLASS = new BeanClassImpl(BeanClass.class, Collections.emptyList(), false);
-
-  private Map<String, String> aliasMap;
-
-  private final Class<? extends VirtualBean> javaClass;
+public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
 
   private final List<BeanClassImpl> superClassList;
 
@@ -42,26 +26,21 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
 
   private final String simpleName;
 
-  private final String stableName;
-
   private final String qualifiedName;
 
-  private long modificationCounter;
+  private VirtualBean prototype;
 
-  private long updateCounter;
-
-  private boolean initialized;
+  private BeanClassImpl readOnly;
 
   /**
    * The constructor.
    *
    * @param javaClass the {@link Class} of the {@link Bean} to reflect.
    * @param superClassList the {@link #getSuperClasses() super-classes}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
-  public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, boolean dynamic) {
+  public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList) {
 
-    this(javaClass, superClassList, null, dynamic);
+    this(javaClass, superClassList, null);
   }
 
   /**
@@ -70,13 +49,10 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
    * @param javaClass the {@link Class} of the {@link Bean} to reflect.
    * @param superClassList the {@link #getSuperClasses() super-classes}.
    * @param stableName the {@link #getStableName() stable name}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
-  public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String stableName,
-      boolean dynamic) {
+  public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String stableName) {
 
-    this(null, javaClass, superClassList, javaClass.getPackageName(), javaClass.getSimpleName(), stableName, dynamic,
-        false);
+    this(javaClass, superClassList, javaClass.getPackageName(), javaClass.getSimpleName(), stableName, false);
   }
 
   /**
@@ -86,12 +62,11 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
    * @param superClassList the {@link #getSuperClasses() super-classes}.
    * @param stableName the {@link #getStableName() stable name}.
    * @param simpleName the {@link #getSimpleName() simple name}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
   public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String stableName,
-      String simpleName, boolean dynamic) {
+      String simpleName) {
 
-    this(javaClass, superClassList, javaClass.getPackageName(), simpleName, stableName, dynamic);
+    this(javaClass, superClassList, javaClass.getPackageName(), simpleName, stableName);
   }
 
   /**
@@ -102,20 +77,17 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
    * @param packageName the {@link #getPackageName() package name}.
    * @param stableName the {@link #getStableName() stable name}.
    * @param simpleName the {@link #getSimpleName() simple name}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
   public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String packageName,
-      String stableName, String simpleName, boolean dynamic) {
+      String stableName, String simpleName) {
 
-    this(null, javaClass, superClassList, packageName, simpleName, stableName, dynamic, true);
+    this(javaClass, superClassList, packageName, simpleName, stableName, true);
   }
 
-  private BeanClassImpl(BeanClassImpl writable, Class<? extends VirtualBean> javaClass,
-      List<BeanClassImpl> superClassList, String packageName, String simpleName, String stableName, boolean dynamic,
-      boolean virtual) {
+  private BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String packageName,
+      String simpleName, String stableName, boolean virtual) {
 
-    super(writable, dynamic);
-    this.javaClass = javaClass;
+    super(javaClass, stableName);
     this.superClassList = superClassList;
     this.superClasses = Collections.unmodifiableList(superClassList);
     if (packageName == null) {
@@ -128,7 +100,6 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
     } else {
       this.simpleName = simpleName;
     }
-    this.stableName = BeanTypeImpl.getStableName(javaClass, stableName);
     if (this.packageName.isEmpty()) {
       this.qualifiedName = this.simpleName;
     } else {
@@ -139,48 +110,22 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
 
   private BeanClassImpl(BeanClassImpl writable) {
 
-    super(writable, writable.isDynamic());
-    this.javaClass = writable.javaClass;
+    super(writable);
     this.superClassList = writable.superClassList;
     this.superClasses = writable.superClasses;
     this.packageName = writable.packageName;
     this.simpleName = writable.simpleName;
-    this.stableName = writable.stableName;
     this.qualifiedName = writable.qualifiedName;
     this.virtual = writable.virtual;
+    this.prototype = WritableBean.getReadOnly(writable.prototype);
+    this.readOnly = this;
   }
 
-  @Override
-  public BeanClass getType() {
-
-    return CLASS;
-  }
-
-  @Override
-  protected boolean isThreadSafe() {
-
-    return true;
-  }
-
-  @Override
-  protected AbstractBean create(AbstractBean writable, boolean dynamic) {
-
-    if (writable == this) {
-      return new BeanClassImpl(this);
-    } else if (writable == null) {
-      if (dynamic == isDynamic()) {
-        return this;
-      }
-      return new BeanClassImpl(null, this.javaClass, this.superClassList, this.packageName, this.simpleName,
-          this.stableName, dynamic, this.virtual);
-    }
-    return super.create(writable, dynamic);
-  }
-
+  @SuppressWarnings("unchecked")
   @Override
   public Class<? extends VirtualBean> getJavaClass() {
 
-    return this.javaClass;
+    return (Class<? extends VirtualBean>) super.getJavaClass();
   }
 
   @Override
@@ -202,12 +147,6 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
   }
 
   @Override
-  public String getStableName() {
-
-    return this.stableName;
-  }
-
-  @Override
   public String getQualifiedName() {
 
     return this.qualifiedName;
@@ -220,123 +159,29 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
   }
 
   @Override
-  public boolean isClass() {
+  public VirtualBean getPrototype() {
 
-    return true;
+    return this.prototype;
   }
 
   /**
-   * @return the current modification counter of this class.
+   * @param prototype the {@link #getPrototype() prototype}.
    */
-  public long getModificationCounter() {
+  public void setPrototype(VirtualBean prototype) {
 
-    return this.modificationCounter;
-  }
-
-  @Override
-  protected void onPropertyAdded(WritableProperty<?> property) {
-
-    super.onPropertyAdded(property);
-    this.modificationCounter = MODIFICATION_SEQUNCE.incrementAndGet();
-  }
-
-  @Override
-  protected void updateProperties() {
-
-    super.updateProperties();
-    long maxCounter = this.updateCounter;
-    for (BeanClassImpl superClass : this.superClassList) {
-      if (superClass.isDynamic()) {
-        Iterable<? extends WritableProperty<?>> properties = superClass.getProperties();
-        if (superClass.modificationCounter > this.updateCounter) {
-          for (WritableProperty<?> property : properties) {
-            add(property, AddMode.COPY_WITH_VALUE);
-          }
-          if (superClass.modificationCounter > maxCounter) {
-            maxCounter = superClass.modificationCounter;
-          }
-        }
-      }
+    if (this.prototype != null) {
+      throw new IllegalStateException("Prototype already set!");
     }
-    this.updateCounter = maxCounter;
+    Objects.requireNonNull(prototype, "prototype");
+    this.prototype = prototype;
   }
 
-  @Override
-  public String getPropertyNameForAlias(String alias) {
+  public BeanClassImpl getReadOnly() {
 
-    if (this.aliasMap != null) {
-      return this.aliasMap.get(alias);
+    if (this.readOnly == null) {
+      this.readOnly = new BeanClassImpl(this);
     }
-    return null;
-  }
-
-  /**
-   * @param alias the alias.
-   * @param name the property name.
-   * @see #getPropertyNameForAlias(String)
-   */
-  public void setAlias(String alias, String name) {
-
-    if (this.aliasMap == null) {
-      this.aliasMap = new HashMap<>();
-    }
-    this.aliasMap.put(alias, name);
-  }
-
-  /**
-   * @param javaClass the {@link #getJavaClass() java class} reflecting the {@link VirtualBean}.
-   * @return the {@link BeanClassImpl} for the given {@link Class}.
-   */
-  public static BeanClassImpl of(Class<? extends VirtualBean> javaClass) {
-
-    BeanClassImpl beanClass = CLASS_MAP.computeIfAbsent(javaClass.getName(), (x) -> create(javaClass));
-    return beanClass;
-  }
-
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  private static BeanClassImpl create(Class<? extends VirtualBean> type) {
-
-    boolean dynamic = true;
-    List<BeanClassImpl> superClassList = Collections.emptyList();
-    if (type.isInterface()) {
-      if (type == VirtualBean.class) {
-        dynamic = false;
-      } else {
-        Class<?>[] interfaces = type.getInterfaces();
-        superClassList = new ArrayList<>(interfaces.length);
-        for (Class<?> superclass : interfaces) {
-          if (VirtualBean.class.isAssignableFrom(superclass)) {
-            superClassList.add(of((Class) superclass));
-          }
-        }
-      }
-    } else {
-      if (type == AdvancedBean.class) {
-        dynamic = false;
-      } else {
-        Class<?> superclass = type.getSuperclass();
-        if (AdvancedBean.class.isAssignableFrom(superclass)) {
-          superClassList = Collections.singletonList(of((Class) superclass));
-        }
-      }
-    }
-    return new BeanClassImpl(type, superClassList, dynamic);
-  }
-
-  /**
-   * @return {@code true} if {@link #setInitialized()} has been called once, {@code false} otherwise.
-   */
-  public boolean isInitialized() {
-
-    return this.initialized;
-  }
-
-  /**
-   * Set {@link #isInitialized() initialized} to {@code true}.
-   */
-  public void setInitialized() {
-
-    this.initialized = true;
+    return this.readOnly;
   }
 
 }

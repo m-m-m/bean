@@ -10,10 +10,15 @@ public interface VirtualBean extends WritableBean {
   @Override
   BeanClass getType();
 
-  @Override
-  default String getPropertyNameForAlias(String alias) {
+  /**
+   * @param <B> type of the {@link VirtualBean}.
+   * @param bean the {@link VirtualBean} to get the prototype of.
+   * @return the {@link BeanClass#getPrototype() prototype} of the given {@link VirtualBean}.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends VirtualBean> B getPrototype(B bean) {
 
-    return getType().getPropertyNameForAlias(alias);
+    return (B) bean.getType().getPrototype();
   }
 
 }

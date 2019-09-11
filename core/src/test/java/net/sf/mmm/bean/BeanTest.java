@@ -23,7 +23,7 @@ public class BeanTest extends Assertions {
   public void testBean() {
 
     TestBean bean = new TestBean();
-    assertThat(bean.isClass()).isFalse();
+    assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isFalse();
     assertThat(bean.isReadOnly()).isFalse();
     assertThat(bean.Name.getName()).isEqualTo("Name");
@@ -61,7 +61,7 @@ public class BeanTest extends Assertions {
   public void testBeanDynamic() {
 
     TestBean bean = new TestBean(true);
-    assertThat(bean.isClass()).isFalse();
+    assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
     assertThat(bean.Name.getName()).isEqualTo("Name");
