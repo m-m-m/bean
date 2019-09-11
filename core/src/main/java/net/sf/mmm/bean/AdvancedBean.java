@@ -60,7 +60,18 @@ public class AdvancedBean extends AbstractBean implements VirtualBean {
   @Override
   public BeanClass getType() {
 
+    this.type.setInitialized();
     return this.type;
+  }
+
+  @Override
+  protected <P extends WritableProperty<?>> P add(P property, AddMode mode) {
+
+    P result = super.add(property, mode);
+    if ((mode == AddMode.INTERNAL) && !this.type.isInitialized() && !isReadOnly()) {
+      this.type.add(property, AddMode.COPY);
+    }
+    return result;
   }
 
   @Override
@@ -72,7 +83,7 @@ public class AdvancedBean extends AbstractBean implements VirtualBean {
       long modificationCounter = this.type.getModificationCounter();
       if (this.updateCounter < modificationCounter) {
         for (WritableProperty<?> property : properties) {
-          add(property, AddMode.COPY);
+          add(property, AddMode.COPY_WITH_VALUE);
         }
         this.updateCounter = modificationCounter;
       }

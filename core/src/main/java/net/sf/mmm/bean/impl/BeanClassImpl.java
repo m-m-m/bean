@@ -15,7 +15,6 @@ import net.sf.mmm.bean.AdvancedBean;
 import net.sf.mmm.bean.Bean;
 import net.sf.mmm.bean.BeanClass;
 import net.sf.mmm.bean.VirtualBean;
-import net.sf.mmm.bean.WritableBean;
 import net.sf.mmm.property.WritableProperty;
 
 /**
@@ -50,6 +49,8 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
   private long modificationCounter;
 
   private long updateCounter;
+
+  private boolean initialized;
 
   /**
    * The constructor.
@@ -127,11 +128,7 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
     } else {
       this.simpleName = simpleName;
     }
-    if ((stableName == null) || stableName.isBlank()) {
-      this.stableName = this.simpleName;
-    } else {
-      this.stableName = stableName;
-    }
+    this.stableName = BeanTypeImpl.getStableName(javaClass, stableName);
     if (this.packageName.isEmpty()) {
       this.qualifiedName = this.simpleName;
     } else {
@@ -253,7 +250,7 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
         Iterable<? extends WritableProperty<?>> properties = superClass.getProperties();
         if (superClass.modificationCounter > this.updateCounter) {
           for (WritableProperty<?> property : properties) {
-            add(property, AddMode.COPY);
+            add(property, AddMode.COPY_WITH_VALUE);
           }
           if (superClass.modificationCounter > maxCounter) {
             maxCounter = superClass.modificationCounter;
@@ -299,24 +296,47 @@ public final class BeanClassImpl extends AbstractBean implements BeanClass {
   @SuppressWarnings({ "unchecked", "rawtypes" })
   private static BeanClassImpl create(Class<? extends VirtualBean> type) {
 
-    List<BeanClassImpl> superClassList;
+    boolean dynamic = true;
+    List<BeanClassImpl> superClassList = Collections.emptyList();
     if (type.isInterface()) {
-      Class<?>[] interfaces = type.getInterfaces();
-      superClassList = new ArrayList<>(interfaces.length);
-      for (Class<?> superclass : interfaces) {
-        if (WritableBean.class.isAssignableFrom(superclass)) {
-          superClassList.add(of((Class) superclass));
+      if (type == VirtualBean.class) {
+        dynamic = false;
+      } else {
+        Class<?>[] interfaces = type.getInterfaces();
+        superClassList = new ArrayList<>(interfaces.length);
+        for (Class<?> superclass : interfaces) {
+          if (VirtualBean.class.isAssignableFrom(superclass)) {
+            superClassList.add(of((Class) superclass));
+          }
         }
       }
     } else {
-      Class<?> superclass = type.getSuperclass();
-      if (AdvancedBean.class.isAssignableFrom(superclass)) {
-        superClassList = Collections.singletonList(of((Class) superclass));
+      if (type == AdvancedBean.class) {
+        dynamic = false;
       } else {
-        superClassList = Collections.emptyList();
+        Class<?> superclass = type.getSuperclass();
+        if (AdvancedBean.class.isAssignableFrom(superclass)) {
+          superClassList = Collections.singletonList(of((Class) superclass));
+        }
       }
     }
-    return new BeanClassImpl(type, superClassList, true);
+    return new BeanClassImpl(type, superClassList, dynamic);
+  }
+
+  /**
+   * @return {@code true} if {@link #setInitialized()} has been called once, {@code false} otherwise.
+   */
+  public boolean isInitialized() {
+
+    return this.initialized;
+  }
+
+  /**
+   * Set {@link #isInitialized() initialized} to {@code true}.
+   */
+  public void setInitialized() {
+
+    this.initialized = true;
   }
 
 }

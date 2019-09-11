@@ -3,16 +3,17 @@
 package net.sf.mmm.bean;
 
 import net.sf.mmm.property.number.integers.IntegerProperty;
-import net.sf.mmm.property.string.StringProperty;
 
 /**
  * {@link AdvancedBean} for testing.
  */
 @SuppressWarnings("javadoc")
-public class TestAdvancedBean extends AdvancedBean {
+@Name("mmm.TestAdvancedBean")
+public class TestAdvancedBean extends TestAdvancedParentBean {
 
-  /** Full name of person. */
-  public final StringProperty Name;
+  static {
+    new TestAdvancedBean();
+  }
 
   /** Age of person. */
   public final IntegerProperty Age;
@@ -40,7 +41,6 @@ public class TestAdvancedBean extends AdvancedBean {
   public TestAdvancedBean(AbstractBean writable, boolean dynamic, BeanClass type) {
 
     super(writable, dynamic, type);
-    this.Name = add(new StringProperty("Name"));
     this.Age = add(new IntegerProperty("Age"));
   }
 

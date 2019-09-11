@@ -24,7 +24,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
 
     WritableProperty<?> property = getProperty(name);
     if (property == null) {
-      throw new IllegalArgumentException(name);
+      throw new IllegalArgumentException("Missing property: " + name);
     }
     return property;
   }
@@ -202,7 +202,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
    */
   @SuppressWarnings("unchecked")
   static <B extends WritableBean> B getReadOnly(B bean) {
-  
+
     if (bean == null) {
       return null;
     } else if (bean.isReadOnly()) {

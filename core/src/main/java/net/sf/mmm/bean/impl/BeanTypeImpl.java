@@ -35,15 +35,19 @@ public final class BeanTypeImpl implements BeanType {
     super();
     Objects.requireNonNull(javaClass, "javaClass");
     this.javaClass = javaClass;
-    if (stableName == null) {
-      Name name = javaClass.getAnnotation(Name.class);
-      if (name == null) {
-        this.stableName = javaClass.getSimpleName();
-      } else {
-        this.stableName = name.value();
-      }
+    this.stableName = getStableName(javaClass, stableName);
+  }
+
+  static String getStableName(Class<? extends WritableBean> javaClass, String stableName) {
+
+    if (stableName != null) {
+      return stableName;
+    }
+    Name name = javaClass.getAnnotation(Name.class);
+    if (name == null) {
+      return javaClass.getSimpleName();
     } else {
-      this.stableName = stableName;
+      return name.value();
     }
   }
 

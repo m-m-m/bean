@@ -198,7 +198,7 @@ public abstract class AbstractBean implements WritableBean {
 
     requireWritable();
     requireDynamic();
-    return add(property);
+    return add(property, AddMode.NORMAL);
   }
 
   /**
@@ -211,7 +211,7 @@ public abstract class AbstractBean implements WritableBean {
    */
   protected <P extends WritableProperty<?>> P add(P property) {
 
-    return add(property, AddMode.NORMAL);
+    return add(property, AddMode.INTERNAL);
   }
 
   /**
@@ -230,30 +230,19 @@ public abstract class AbstractBean implements WritableBean {
       property = (P) this.writable.getProperty(property.getName()).getReadOnly();
     }
     WritableProperty<?> existing;
-    switch (mode) {
-      case NORMAL:
-        existing = this.propertiesMap.putIfAbsent(property.getName(), property);
-        if (existing != null) {
-          throw new IllegalArgumentException("Duplicate property " + property.getName());
-        }
+    if (mode.isAddInstance()) {
+      existing = this.propertiesMap.putIfAbsent(property.getName(), property);
+      if (existing != null) {
+        throw new IllegalArgumentException("Duplicate property " + property.getName());
+      }
+      onPropertyAdded(property);
+    } else {
+      PropertyFunction<P> function = new PropertyFunction<>(property, mode);
+      this.propertiesMap.computeIfAbsent(property.getName(), function);
+      if (function.result != null) {
+        property = function.result;
         onPropertyAdded(property);
-        break;
-      case COPY:
-        CopyFunction<P> copyFunction = new CopyFunction<>(property);
-        existing = this.propertiesMap.computeIfAbsent(property.getName(), copyFunction);
-        if (copyFunction.copy != null) {
-          property = copyFunction.copy;
-          onPropertyAdded(property);
-        }
-        break;
-      case READ_ONLY:
-        ReadOnlyFunction<P> readOnlyFunction = new ReadOnlyFunction<>(property);
-        existing = this.propertiesMap.computeIfAbsent(property.getName(), readOnlyFunction);
-        if (readOnlyFunction.readOnly != null) {
-          property = readOnlyFunction.readOnly;
-          onPropertyAdded(property);
-        }
-        break;
+      }
     }
     return property;
   }
@@ -269,15 +258,18 @@ public abstract class AbstractBean implements WritableBean {
   public String toString() {
 
     StringBuilder sb = new StringBuilder(getType().getStableName());
-    sb.append("[");
+    sb.append("(");
     if (isReadOnly()) {
       sb.append("readonly,");
+    } else {
+      sb.append("mutable,");
     }
     if (isDynamic()) {
       sb.append("dynamic,");
     }
     toString(sb);
-    sb.append("]");
+    sb.setLength(sb.length() - 1);
+    sb.append(")");
     return sb.toString();
   }
 
@@ -301,54 +293,61 @@ public abstract class AbstractBean implements WritableBean {
     /** Add property as-is. */
     NORMAL,
 
+    /** Add property as-is (from internal {@link AbstractBean#add(WritableProperty)}. */
+    INTERNAL,
+
     /** Add a {@link WritableProperty#copy(WritableProperty) copy} of the property if none exists with that name. */
     COPY,
 
+    /**
+     * Add a {@link WritableProperty#copy(WritableProperty) copy} of the property with the
+     * {@link WritableProperty#getValue() value} if none exists with that name.
+     */
+    COPY_WITH_VALUE,
+
     /** Add a {@link WritableProperty#getReadOnly() read-only view} of the property if none exists with that name. */
-    READ_ONLY
+    READ_ONLY;
+
+    /**
+     * @return {@code true} to add the given {@link WritableProperty} instance as-is, {@code false} otherwise (if a copy
+     *         or read-only view shall be added instead).
+     */
+    public boolean isAddInstance() {
+
+      return ((this == NORMAL) || (this == INTERNAL));
+    }
   }
 
-  private static class CopyFunction<P extends WritableProperty<?>> implements Function<String, WritableProperty<?>> {
-
-    private final P property;
-
-    private P copy;
-
-    private CopyFunction(P property) {
-
-      super();
-      this.property = property;
-    }
-
-    @Override
-    public WritableProperty<?> apply(String t) {
-
-      this.copy = WritableProperty.copy(this.property);
-      return this.copy;
-    }
-
-  }
-
-  private static class ReadOnlyFunction<P extends WritableProperty<?>>
+  private static class PropertyFunction<P extends WritableProperty<?>>
       implements Function<String, WritableProperty<?>> {
 
     private final P property;
 
-    private P readOnly;
+    private final AddMode mode;
 
-    private ReadOnlyFunction(P property) {
+    private P result;
+
+    private PropertyFunction(P property, AddMode mode) {
 
       super();
       this.property = property;
+      this.mode = mode;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public WritableProperty<?> apply(String t) {
 
-      this.readOnly = WritableProperty.getReadOnly(this.property);
-      return this.readOnly;
+      if (this.mode == AddMode.READ_ONLY) {
+        this.result = WritableProperty.getReadOnly(this.property);
+      } else {
+        this.result = WritableProperty.copy(this.property);
+        if (this.mode == AddMode.COPY_WITH_VALUE) {
+          ((WritableProperty) this.result).setValue(this.property.getValue());
+        }
+      }
+      return this.result;
     }
-
   }
 
 }

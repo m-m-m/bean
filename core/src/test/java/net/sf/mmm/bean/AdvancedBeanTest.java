@@ -5,7 +5,7 @@ package net.sf.mmm.bean;
 import java.time.LocalDate;
 import java.util.List;
 
-import net.sf.mmm.property.booleans.BooleanProperty;
+import net.sf.mmm.property.string.StringProperty;
 import net.sf.mmm.property.temporal.localdate.LocalDateProperty;
 
 import org.assertj.core.api.Assertions;
@@ -21,23 +21,25 @@ public class AdvancedBeanTest extends Assertions {
   @Test
   public void testAdvancedBeanDynamicVirtual() {
 
-    BeanClass beanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo.VirtualBean", true,
+    BeanClass virtucalBeanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo.VirtualBean", true,
         BeanClass.of(TestAdvancedBean.class));
-    assertThat(beanClass.getQualifiedName()).isEqualTo("com.foo.MyVirtualBean");
-    assertThat(beanClass.getStableName()).isEqualTo("foo.VirtualBean");
-    List<BeanClass> superClasses = beanClass.getSuperClasses();
+    assertThat(virtucalBeanClass.getQualifiedName()).isEqualTo("com.foo.MyVirtualBean");
+    assertThat(virtucalBeanClass.getStableName()).isEqualTo("foo.VirtualBean");
+    List<BeanClass> superClasses = virtucalBeanClass.getSuperClasses();
     assertThat(superClasses).hasSize(1);
-    BeanClass superClass = superClasses.get(0);
-    assertThat(superClass.getQualifiedName()).isEqualTo(TestAdvancedBean.class.getName());
-    superClasses = superClass.getSuperClasses();
+    BeanClass testAdvancedBeanClass = superClasses.get(0);
+    assertThat(testAdvancedBeanClass.getQualifiedName()).isEqualTo(TestAdvancedBean.class.getName());
+    assertThat(testAdvancedBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedBean");
+    superClasses = testAdvancedBeanClass.getSuperClasses();
     assertThat(superClasses).hasSize(1);
-    superClass = superClasses.get(0);
-    assertThat(superClass.getQualifiedName()).isEqualTo(AdvancedBean.class.getName());
-    TestAdvancedBean bean = new TestAdvancedBean(true, beanClass);
+    BeanClass testAdvancedParentBeanClass = superClasses.get(0);
+    assertThat(testAdvancedParentBeanClass.getQualifiedName()).isEqualTo(TestAdvancedParentBean.class.getName());
+    assertThat(testAdvancedParentBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedParentBean");
+    TestAdvancedBean bean = new TestAdvancedBean(true, virtucalBeanClass);
     assertThat(bean.isClass()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
-    assertThat(bean.getType()).isSameAs(beanClass);
+    assertThat(bean.getType()).isSameAs(virtucalBeanClass);
     assertThat(bean.Name.getName()).isEqualTo("Name");
     assertThat(bean.Name.getValue()).isNull();
     assertThat(bean.Age.getName()).isEqualTo("Age");
@@ -45,6 +47,9 @@ public class AdvancedBeanTest extends Assertions {
     assertThat(bean.getProperty("Name")).isSameAs(bean.Name);
     assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
     assertThat(bean.getPropertyCount()).isEqualTo(2);
+    assertThat(virtucalBeanClass.getPropertyCount()).isEqualTo(2);
+    assertThat(BeanHelper.getPropertyNames(virtucalBeanClass)).containsExactlyInAnyOrder("Name", "Age");
+    assertThat(testAdvancedBeanClass.getPropertyCount()).isEqualTo(2);
     TestAdvancedBean readOnly = WritableBean.getReadOnly(bean);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
@@ -69,10 +74,15 @@ public class AdvancedBeanTest extends Assertions {
     LocalDate date = LocalDate.of(2003, 02, 01);
     birthday.set(date);
     assertThat(readOnly.getProperty("Birthday").getValue()).isSameAs(date);
-    BooleanProperty friend = new BooleanProperty("Fried");
-    superClass.addProperty(friend);
+    StringProperty string = new StringProperty("String");
+    testAdvancedParentBeanClass.addProperty(string);
     assertThat(readOnly.getProperties()).hasSize(4);
-    assertThat(readOnly.getProperty("Fried")).isEqualTo(friend);
+    assertThat(readOnly.getProperty("String")).isEqualTo(string);
+    bean.set("String", "value");
+    virtucalBeanClass.set("String", "defaultValue");
+    assertThat(readOnly.get("String")).isEqualTo("value");
+    bean = new TestAdvancedBean(true, virtucalBeanClass);
+    assertThat(bean.get("String")).isEqualTo("defaultValue");
   }
 
 }
