@@ -2,50 +2,62 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package net.sf.mmm.bean.property;
 
-import net.sf.mmm.bean.Bean;
+import net.sf.mmm.bean.WritableBean;
 import net.sf.mmm.property.Property;
 import net.sf.mmm.property.PropertyMetadata;
 
 /**
  * Implementation of {@link BeanProperty}.
  *
+ * @param <V> type of the {@link WritableBean bean} {@link #getValue() value}.
  * @since 1.0.0
  */
-public class BeanProperty extends Property<Bean> implements WritableBeanProperty {
+public class BeanProperty<V extends WritableBean> extends Property<V> implements WritableBeanProperty<V> {
 
-  private Bean value;
+  private final Class<V> valueClass;
+
+  private V value;
 
   /**
    * The constructor.
    *
    * @param name the {@link #getName() name}.
+   * @param valueClass the {@link #getValueClass() value class}.
    */
-  public BeanProperty(String name) {
+  public BeanProperty(String name, Class<V> valueClass) {
 
-    super(name);
+    this(name, valueClass, null);
   }
 
   /**
    * The constructor.
    *
    * @param name the {@link #getName() name}.
+   * @param valueClass the {@link #getValueClass() value class}.
    * @param metadata the {@link #getMetadata() metadata}.
    */
-  public BeanProperty(String name, PropertyMetadata<Bean> metadata) {
+  public BeanProperty(String name, Class<V> valueClass, PropertyMetadata<V> metadata) {
 
     super(name, metadata);
+    this.valueClass = valueClass;
   }
 
   @Override
-  protected Bean doGetValue() {
+  protected V doGetValue() {
 
     return this.value;
   }
 
   @Override
-  protected void doSetValue(Bean newValue) {
+  protected void doSetValue(V newValue) {
 
     this.value = newValue;
+  }
+
+  @Override
+  public Class<V> getValueClass() {
+
+    return this.valueClass;
   }
 
   // @Override

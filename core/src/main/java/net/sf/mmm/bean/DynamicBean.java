@@ -5,6 +5,7 @@ package net.sf.mmm.bean;
 /**
  * A {@link Bean} that is always {@link #isDynamic() dynamic}. Only exists for simplicity.
  */
+@Name("mmm.DynamicBean")
 public final class DynamicBean extends Bean {
 
   /**

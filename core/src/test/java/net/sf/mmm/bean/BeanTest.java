@@ -4,17 +4,14 @@ package net.sf.mmm.bean;
 
 import java.time.LocalDate;
 
-import net.sf.mmm.bean.BeanType;
-import net.sf.mmm.bean.WritableBean;
 import net.sf.mmm.property.temporal.localdate.LocalDateProperty;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test of {@link net.sf.mmm.bean.Bean} via {@link TestBean}.
  */
-public class BeanTest extends Assertions {
+public class BeanTest extends AbstractBeanTest {
 
   /**
    * Test of {@link TestBean}.
@@ -26,32 +23,15 @@ public class BeanTest extends Assertions {
     assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isFalse();
     assertThat(bean.isReadOnly()).isFalse();
+    checkType(bean, "mmm.TestBean");
     assertThat(bean.Name.getName()).isEqualTo("Name");
     assertThat(bean.Name.getValue()).isNull();
+    checkProperty(bean, bean.Name, "John Doe");
     assertThat(bean.Age.getName()).isEqualTo("Age");
     assertThat(bean.Age.getValue()).isNull();
-    assertThat(bean.getProperty("Name")).isSameAs(bean.Name);
-    assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
+    checkProperty(bean, bean.Age, Integer.valueOf(42));
     assertThat(bean.getPropertyCount()).isEqualTo(2);
-    BeanType type = bean.getType();
-    assertThat(type.getJavaClass()).isSameAs(TestBean.class);
-    assertThat(type.getPackageName()).isEqualTo(TestBean.class.getPackageName());
-    assertThat(type.getSimpleName()).isEqualTo(TestBean.class.getSimpleName());
-    assertThat(type.getQualifiedName()).isEqualTo(TestBean.class.getName());
-    assertThat(type.getStableName()).isEqualTo("mmm.TestBean");
     assertThat(bean.getPropertyNameForAlias("Undefined")).isNull();
-    TestBean readOnly = WritableBean.getReadOnly(bean);
-    assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
-        .isEqualTo(bean.Name);
-    assertThat(readOnly.getRequiredProperty("Name").isReadOnly()).isTrue();
-    assertThat(readOnly.getRequiredProperty("Age")).isSameAs(readOnly.Age).isNotSameAs(bean.Age).isEqualTo(bean.Age);
-    assertThat(readOnly.getRequiredProperty("Age").isReadOnly()).isTrue();
-    String name = "John Doe";
-    bean.Name.set(name);
-    assertThat(readOnly.Name.get()).isSameAs(name);
-    int age = 42;
-    bean.Age.set(age);
-    assertThat(readOnly.Age.get()).isEqualTo(age);
   }
 
   /**

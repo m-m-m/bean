@@ -45,7 +45,12 @@ public class BeanTypeImpl implements BeanType {
     this.stableName = template.stableName;
   }
 
-  static String getStableName(Class<? extends WritableBean> javaClass, String stableName) {
+  /**
+   * @param javaClass the {@link Class} reflecting the {@link WritableBean}.
+   * @param stableName the {@link #getStableName() stable name} or {@code null} to determine automatically.
+   * @return the {@link #getStableName() stable name}.
+   */
+  public static String getStableName(Class<? extends WritableBean> javaClass, String stableName) {
 
     if (stableName != null) {
       return stableName;

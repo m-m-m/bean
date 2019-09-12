@@ -8,13 +8,12 @@ import java.util.List;
 import net.sf.mmm.property.string.StringProperty;
 import net.sf.mmm.property.temporal.localdate.LocalDateProperty;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test of {@link AbstractBean} via {@link TestAdvancedBean}.
  */
-public class AdvancedBeanTest extends Assertions {
+public class AdvancedBeanTest extends AbstractBeanTest {
   /**
    * Test of {@link TestBean} with {@link TestBean#isDynamic() dynamic flag} set.
    */
@@ -38,9 +37,11 @@ public class AdvancedBeanTest extends Assertions {
     assertThat(testAdvancedParentBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedParentBean");
 
     // bean
+    TestAdvancedBean prototype = new TestAdvancedBean(true, virtucalBeanClass);
+    assertThat(prototype.isPrototype()).isTrue();
+    assertThat(prototype.getType()).isSameAs(virtucalBeanClass);
+    assertThat(virtucalBeanClass.getPrototype()).isSameAs(prototype);
     TestAdvancedBean bean = new TestAdvancedBean(true, virtucalBeanClass);
-    assertThat(bean.isPrototype()).isTrue();
-    bean = new TestAdvancedBean(true, virtucalBeanClass);
     assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
