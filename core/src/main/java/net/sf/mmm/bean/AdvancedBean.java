@@ -97,7 +97,7 @@ public class AdvancedBean extends AbstractBean implements VirtualBean {
    * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
    * @return the {@link BeanClass} for this instance.
    */
-  private BeanClassImpl createBeanClass(Class<? extends AdvancedBean> javaClass) {
+  private BeanClassImpl createBeanClass(Class<? extends VirtualBean> javaClass) {
 
     List<BeanClassImpl> superClassList = Collections.emptyList();
     if (javaClass.isInterface()) {
