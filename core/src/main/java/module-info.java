@@ -6,9 +6,11 @@ module net.sf.mmm.bean {
 
   requires transitive net.sf.mmm.property;
 
-  exports net.sf.mmm.bean;
-
   provides net.sf.mmm.property.factory.PropertyFactory //
       with net.sf.mmm.bean.property.PropertyFactoryBean; //
+
+  exports net.sf.mmm.bean;
+
+  exports net.sf.mmm.bean.property;
 
 }

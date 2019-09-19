@@ -19,6 +19,8 @@
   </modules>
 
   <properties>
+    <revision>1.0.0</revision>
+    <changeList>-SNAPSHOT</changeList>
     <!-- Internal project versions -->
     <net.sf.mmm.property.version>1.0.0-SNAPSHOT</net.sf.mmm.property.version>
     <java.version>11</java.version>
