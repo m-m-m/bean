@@ -6,6 +6,139 @@ image:https://raw.github.com/m-m-m/mmm/master/src/site/resources/images/logo.png
 
 == mmm-bean
 
-image:https://travis-ci.org/m-m-m/bean.svg?branch=master["build-status",link="https://travis-ci.org/m-m-m/bean"]
+image:https://travis-ci.org/m-m-m/bean.svg?branch=develop["build-status",link="https://travis-ci.org/m-m-m/bean"]
 
-The `mmm-bean` project is a library to TODO
+The `mmm-bean` project is a library for advanced beans based on real properties.
+It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
+
+== Example
+
+[source,java]
+-----
+public class TestBean extends Bean {
+
+  /** Full name of person. */
+  public final StringProperty Name;
+
+  /** Age of person. */
+  public final IntegerProperty Age;
+
+  public TestBean() {
+
+    this(null, true);
+  }
+
+  public TestBean(AbstractBean writable, boolean dynamic) {
+
+    super(writable, dynamic);
+    this.Name = add(new StringProperty("Name"));
+    this.Age = add(new IntegerProperty("Age"));
+  }
+}
+-----
+
+Wait, that looks kind of odd, right?
+
+* Capitalized field names - that is a violation of Java conventions. C# hackers doing Java coding, or what?
+* So public fields - aint that an anti-pattern?
+* And what are those strange contructor arguments?
+* Do you guys have to reinvent Java fundamentals?
+
+Before we answer these questions lets first have a look at the usage:
+
+[source,java]
+-----
+TestBean bean = new TestBean();
+bean.Name.set("John Doe");
+bean.Age.set(42);
+// Read-Only views
+TestBean readonly = WritableBean.getReadOnly(bean);
+assertThat(readonly.Age.get()).isEqualTo(42);
+bean.Age.set(43);
+assertThat(readonly.Age.get()).isEqualTo(43);
+try {
+  readonly.Age.set(44);
+  fail("Exception expected");
+} catch (IllegalStateException e) {
+}
+// Change listener...
+bean.Age.addListener((e) -> {System.out.println(e.getOldValue() + "-->" + e.getValue());});
+bean.Age.set(44); // prints: 43 --> 44
+// Copy and compare
+TestBean bean2 = new TestBean();
+for (WritableProperty<?> property : bean.getProperties()) {
+  bean2.set(property.getName(), property.getValue());
+}
+assertThat(bean.isEqualTo(bean2)).isTrue();
+-----
+
+And believe me, this his is just the beginning. There is so much more:
+
+* build-in JSON and XML mapping
+* polymorphic type hierarchies
+* powerful validation support
+* all ready as modules for Java11
+* generic metadata and annotations on properties
+* unidircational and bidirectional bindings
+* computational expressions for property values
+* dynamic property support
+* optional virtual run-time type creation with protoypic inheritance
+* alternative support for bean interfaces as dynamic proxies providing multi-inheritance and even less boiler-plate code (but more magic and overhead)
+* ...
+
+So comming back to those questions:
+
+* You do not have to use capitalized field names. We only recommend it as C# also had good reasons to do it. As we create something new here, we think it is reasonable to use a different convention what also indicates the difference to regular POJO stuff.
+* You do not have to declare properties as public fields. You can still declare them private and provide additional accessor methods. However, this again is pointless boiler-plate code and our intention is to make things simple. Instead, ask yourself, why getters and setters have been introduced once? All these reasons do not apply for properties declared as public final (!) fields. You can even change your code to make them readonly, computed, etc.
+* The argumented constructor is needed to create read-only views of the bean. In case you do not need such features, you can ommit such constructor.
+* And yes, classic Java Beans aka POJOs suck. Everybody hates them. You may also use Lombok instead. We offer many additional features and use pure Java so no tweaking of IDEs, build-tools, etc. is required (that may break in future releases).
+
+So are there any drawbacks?
+
+Yes, most existing frameworks rely on POJOs with old-fashioned getters and setters. So these cool new beans will not work with JPA/Hibernate, Jackson, JSON-B, JAX-B, Dozer, Orika, etc.
+
+Wait, that's a huge drawback, right? Well not quite... Marshalling and mapping is already build-in so you can dump most of these frameworks and libraries as well. As it does not even need reflection it is also much faster. But how about JPA? Well, we believe that call-by-reference and magical saving of dirty entities on transaction commit have been an evil design flaw from the start. To keep data-sovereignty JPA users invent transfer-objects and layers of abstractions, etc. making simple things complex and full of waste. Choose a database mapper that is designed for call-by-value and you are fine. We also provide type-safe query building based on our new beans and invent DB mappers.
+
+== Static and dynamic typing
+
+Java became famous for its strong typing and advanced type-safe, structured coding with great IDE support for code completion and refactoring.
+Java coders used to laugh at JavaScript and TypeScript with its dynamic typing and still relatively poor IDE support.
+But this world is evolving and also has shown reasonable benefits with its flexibility. One example is service versioning and compatibility.
+So lets assume you provide a REST service that allows to load an entity and save it back after making changes.
+Next lets assume, you want to extend the entity with a new property.
+What happens if you have clients out in the wild that are not updated in sync with the change of your server providing the REST service?
+Well, for JavaScript clients no problem. But for Java clients your entity class does not know about the new property.
+It will either already fail to load the entity or lose the property value when sending the changes back for saving.
+
+So wouldn't it be nice to have a way to support something like this in Java as well?
+The beans we offer here support exactly what you need for this problem. Simply create them as dynamic beans (provide `true` for the dynamic flag in super constructor).
+
+[source,java]
+-----
+TestBean bean = new TestBean();
+bean.Name.set("Peter Pan");
+bean.Age.set(16);
+// Dynamically add a new property
+WritableProperty<Instant> foo = bean.getOrCreateProperty("Foo", Instant.class);
+foo.setValue(Instant.parse("1999-12-31T23:59:59Z"));
+// Write JSON
+StringWriter stringWriter = new StringWriter();
+StructuredWriter writer = JsonpMarshalling.of().writer(stringWriter);
+bean.write(writer);
+String json = stringWriter.toString();
+System.out.println(json);
+-----
+
+This will print the following JSON:
+
+[source,json]
+-----
+{
+  "Name":"Peter Pan",
+  "Age":16,
+  "Foo":"1999-12-31T23:59:59Z"
+}
+-----
+
+So if you want the best of both worlds (static and dynamic typing), you have found the solution now.
+Of course you can populate an existing bean with data from JSON in an analog way.
