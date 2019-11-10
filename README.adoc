@@ -1,14 +1,10 @@
-= Mature Modular Meta-framework (mmm)
+image:https://raw.github.com/m-m-m/mmm/master/src/site/resources/images/logo.png[logo,link="https://m-m-m.github.io"]
 
-image:https://raw.github.com/m-m-m/mmm/master/src/site/resources/images/logo.png[logo]
-
-*Welcome to the wonderful world of http://m-m-m.sourceforge.net/index.html[mmm]*
-
-== mmm-bean
+= mmm-bean
 
 image:https://travis-ci.org/m-m-m/bean.svg?branch=develop["build-status",link="https://travis-ci.org/m-m-m/bean"]
 
-The `mmm-bean` project is a library for advanced beans based on real properties.
+The module `mmm-bean` provides infrastructure for advanced beans based on real properties.
 It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
 
 == Example
