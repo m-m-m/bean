@@ -2,15 +2,19 @@
  * Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-module net.sf.mmm.bean {
+/**
+ * Provides advanced Java beans based on {@code mmm-property}.
+ */
+@SuppressWarnings("all") //
+module io.github.mmm.bean {
 
-  requires transitive net.sf.mmm.property;
+  requires transitive io.github.mmm.property;
 
-  provides net.sf.mmm.property.factory.PropertyFactory //
-      with net.sf.mmm.bean.property.PropertyFactoryBean; //
+  provides io.github.mmm.property.factory.PropertyFactory //
+      with io.github.mmm.bean.property.PropertyFactoryBean; //
 
-  exports net.sf.mmm.bean;
+  exports io.github.mmm.bean;
 
-  exports net.sf.mmm.bean.property;
+  exports io.github.mmm.bean.property;
 
 }
