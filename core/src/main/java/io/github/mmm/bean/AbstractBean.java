@@ -300,8 +300,8 @@ public abstract class AbstractBean implements WritableBean {
     COPY,
 
     /**
-     * Add a {@link WritableProperty#copy(WritableProperty) copy} of the property with the
-     * {@link WritableProperty#getValue() value} if none exists with that name.
+     * Add a {@link WritableProperty#copy(WritableProperty) copy} of the property with the {@link WritableProperty#get()
+     * value} if none exists with that name.
      */
     COPY_WITH_VALUE,
 
@@ -343,7 +343,7 @@ public abstract class AbstractBean implements WritableBean {
       } else {
         this.result = WritableProperty.copy(this.property);
         if (this.mode == AddMode.COPY_WITH_VALUE) {
-          ((WritableProperty) this.result).setValue(this.property.getValue());
+          ((WritableProperty) this.result).set(this.property.get());
         }
       }
       return this.result;

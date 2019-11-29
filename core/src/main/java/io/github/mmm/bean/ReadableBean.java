@@ -27,10 +27,10 @@ import io.github.mmm.validation.ValidationResultBuilder;
  * <li><b>Powerful</b> - {@link WritableProperty} supports listeners and bindings as well as
  * {@link WritableProperty#getValueClass() generic type information}.</li>
  * <li><b>Validation</b> - build-in {@link #validate() validation support}.</li>
- * <li><b>Marshalling</b> - build-in support to {@link WritableBean#read(io.github.mmm.marshall.StructuredReader) read} and
- * {@link #write(io.github.mmm.marshall.StructuredWriter) write} the {@link Bean} from/to JSON, XML, or other formats.
- * Implement custom datatypes as {@link io.github.mmm.property.Property property} and you will not need separate classes or
- * configurations for mapping.</li>
+ * <li><b>Marshalling</b> - build-in support to {@link WritableBean#read(io.github.mmm.marshall.StructuredReader) read}
+ * and {@link #write(io.github.mmm.marshall.StructuredWriter) write} the {@link Bean} from/to JSON, XML, or other
+ * formats. Implement custom datatypes as {@link io.github.mmm.property.Property property} and you will not need
+ * separate classes or configurations for mapping.</li>
  * <li><b>Portable</b> - everything relies only on established Java standard mechanisms. No customization of build
  * processes, IDEs, etc. needed. It just works with any build tool (maven, gradle, buildr, ant, etc.) and IDE (Eclipse,
  * IntelliJ, NetBeans, etc.) without plugins and therefore will also work in the future whatever may come.</li>
@@ -82,9 +82,9 @@ public interface ReadableBean extends Validatable, MarshallableObject {
 
   /**
    * @param name the {@link ReadableProperty#getName() property name}.
-   * @return the {@link ReadableProperty#getValue() value} of the {@link #getProperty(String) property with the given
-   *         name}. Will be {@code null} if no such property exists or the {@link ReadableProperty#getValue() property
-   *         value} is {@code null}.
+   * @return the {@link ReadableProperty#get() value} of the {@link #getProperty(String) property with the given name}.
+   *         Will be {@code null} if no such property exists or the {@link ReadableProperty#get() property value} is
+   *         {@code null}.
    */
   default Object get(String name) {
 
@@ -92,7 +92,7 @@ public interface ReadableBean extends Validatable, MarshallableObject {
     if (property == null) {
       return null;
     }
-    return property.getValue();
+    return property.get();
   }
 
   /**

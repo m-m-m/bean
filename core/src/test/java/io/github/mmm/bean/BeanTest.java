@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
 
@@ -31,7 +30,7 @@ public class BeanTest extends AbstractBeanTest {
     checkProperty(bean, bean.Name, "John Doe");
     TestBean bean2 = new TestBean();
     for (WritableProperty<?> property : bean.getProperties()) {
-      bean2.set(property.getName(), property.getValue());
+      bean2.set(property.getName(), property.get());
     }
     assertThat(bean.Age.getName()).isEqualTo("Age");
     assertThat(bean.Age.getValue()).isNull();
@@ -83,7 +82,7 @@ public class BeanTest extends AbstractBeanTest {
     // yes, this is inconsistent and does not match the age, it is only a test
     LocalDate date = LocalDate.of(2003, 02, 01);
     birthday.set(date);
-    assertThat(readOnly.getProperty("Birthday").getValue()).isSameAs(date);
+    assertThat(readOnly.getProperty("Birthday").get()).isSameAs(date);
   }
 
 }

@@ -34,13 +34,13 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
    * given value.
    *
    * @param name the {@link WritableProperty#getName() name} of the property.
-   * @param value new {@link WritableProperty#getValue() value} of the specified property.
+   * @param value new {@link WritableProperty#get() value} of the specified property.
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
   default void set(String name, Object value) {
 
     WritableProperty property = getRequiredProperty(name);
-    property.setValue(value);
+    property.set(value);
   }
 
   /**
@@ -49,7 +49,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
    *
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
-   * @param value new {@link WritableProperty#getValue() value} of the specified property.
+   * @param value new {@link WritableProperty#get() value} of the specified property.
    * @param valueClass the {@link WritableProperty#getValueClass() value class}.
    * @see #set(String, Object)
    */
@@ -64,15 +64,15 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
    *
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
-   * @param value new {@link WritableProperty#getValue() value} of the specified property.
+   * @param value new {@link WritableProperty#get() value} of the specified property.
    * @param valueClass the {@link WritableProperty#getValueClass() value class}.
-   * @param valueType the {@link Type} reflecting the {@link WritableProperty#getValue() property value}.
+   * @param valueType the {@link Type} reflecting the {@link WritableProperty#get() property value}.
    * @see #set(String, Object)
    */
   default <V> void set(String name, V value, Class<V> valueClass, Type valueType) {
 
     WritableProperty<V> property = getOrCreateProperty(name, valueClass, valueType);
-    property.setValue(value);
+    property.set(value);
   }
 
   /**
@@ -109,7 +109,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
    * @param valueClass the {@link WritableProperty#getValueClass() value class}.
-   * @param valueType the {@link Type} reflecting the {@link WritableProperty#getValue() property value}.
+   * @param valueType the {@link Type} reflecting the {@link WritableProperty#get() property value}.
    * @return the newly created and added property.
    * @throws IllegalStateException if this {@link WritableBean} already has such property, is {@link #isReadOnly()
    *         read-only}, or not {@link #isDynamic() dynamic}.
@@ -119,7 +119,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
   /**
    * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class) creates} the specified property.
    *
-   * @param <V> the generic type of the {@link WritableProperty#getValue() property value}.
+   * @param <V> the generic type of the {@link WritableProperty#get() property value}.
    * @param name the {@link WritableProperty#getName() property name}.
    * @param valueClass the {@link WritableProperty#getValueClass() value class} of the requested property.
    * @return the requested property. Will be created if it does not already {@link #getProperty(String) exist}.
@@ -136,10 +136,10 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
   /**
    * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class, Type) creates} the specified property.
    *
-   * @param <V> the generic type of the {@link WritableProperty#getValue() property value}.
+   * @param <V> the generic type of the {@link WritableProperty#get() property value}.
    * @param name the {@link WritableProperty#getName() property name}.
-   * @param valueClass the {@link Class} reflecting the {@link WritableProperty#getValue() property value}.
-   * @param valueType the {@link Type} reflecting the {@link WritableProperty#getValue() property value}.
+   * @param valueClass the {@link Class} reflecting the {@link WritableProperty#get() property value}.
+   * @param valueType the {@link Type} reflecting the {@link WritableProperty#get() property value}.
    * @return the requested property. Will be created if it does not already {@link #getProperty(String) exist}.
    * @throws IllegalArgumentException if the requested property already exists but has an incompatible
    *         {@link WritableProperty#getValueClass() value class}.
@@ -183,7 +183,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
             }
             Class<? extends Object> valueClass = value.getClass();
             property = createProperty(propertyName, valueClass);
-            ((WritableProperty) property).setValue(value);
+            ((WritableProperty) property).set(value);
           } else {
             // LOG.debug("ignoring undefined property {}.{}", getBeanClass(), propertyName);
             reader.skipValue();

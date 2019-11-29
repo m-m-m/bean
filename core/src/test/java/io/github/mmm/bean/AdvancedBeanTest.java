@@ -7,9 +7,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.mmm.bean.AbstractBean;
-import io.github.mmm.bean.BeanClass;
-import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.string.StringProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
 
@@ -82,7 +79,7 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     // yes, this is inconsistent and does not match the age, it is only a test
     LocalDate date = LocalDate.of(2003, 02, 01);
     birthday.set(date);
-    assertThat(readOnly.getProperty("Birthday").getValue()).isSameAs(date);
+    assertThat(readOnly.getProperty("Birthday").get()).isSameAs(date);
     StringProperty string = new StringProperty("String");
     testAdvancedParentBeanClass.getPrototype().addProperty(string);
     assertThat(readOnly.getProperties()).hasSize(4);
