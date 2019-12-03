@@ -49,7 +49,7 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     assertThat(bean.Name.getName()).isEqualTo("Name");
     assertThat(bean.Name.getValue()).isNull();
     assertThat(bean.Age.getName()).isEqualTo("Age");
-    assertThat(bean.Age.getValue()).isNull();
+    assertThat(bean.Age.get()).isNull();
     assertThat(bean.getProperty("Name")).isSameAs(bean.Name);
     assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
     assertThat(bean.getPropertyCount()).isEqualTo(2);
