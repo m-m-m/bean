@@ -164,10 +164,10 @@ public interface ReadableBean extends Validatable, MarshallableObject {
   }
 
   /**
-   * A {@link ReadableBean} implementation shall not override {@link #equals(Object)} and {@link #hashCode()} for
+   * A {@link Bean} implementation shall not override {@link Object#equals(Object)} and {@link Object#hashCode()} for
    * efficient usage in {@link java.util.Collection}s and {@link java.util.Map}s. Hence the regular
-   * {@link #equals(Object) equals} method will just check for object identity. For a logical equals check you may use
-   * this method. Be aware that is may be expensive as it recursively traverses into all properties that may again
+   * {@link Object#equals(Object) equals} method will just check for object identity. For a logical equals check you may
+   * use this method. Be aware that is may be expensive as it recursively traverses into all properties that may again
    * contain a {@link ReadableBean}.
    *
    * @param other the {@link ReadableBean} to compare with.

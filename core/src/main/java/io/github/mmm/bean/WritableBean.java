@@ -216,7 +216,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
    * @return a {@link #isReadOnly() immutable} view of this {@link WritableBean}. Read operations on this
    *         {@link #isReadOnly() immutable} view will produce the exact same results as on the original
    *         {@link WritableBean}. However, all write operations will fail.
-   * @see #getReadOnly(Bean)
+   * @see #getReadOnly(WritableBean)
    */
   WritableBean getReadOnly();
 
