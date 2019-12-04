@@ -33,7 +33,7 @@ public class BeanTest extends AbstractBeanTest {
       bean2.set(property.getName(), property.get());
     }
     assertThat(bean.Age.getName()).isEqualTo("Age");
-    assertThat(bean.Age.getValue()).isNull();
+    assertThat(bean.Age.get()).isNull();
     checkProperty(bean, bean.Age, Integer.valueOf(42));
     assertThat(bean.getPropertyCount()).isEqualTo(2);
     assertThat(bean.getPropertyNameForAlias("Undefined")).isNull();
@@ -52,7 +52,7 @@ public class BeanTest extends AbstractBeanTest {
     assertThat(bean.Name.getName()).isEqualTo("Name");
     assertThat(bean.Name.getValue()).isNull();
     assertThat(bean.Age.getName()).isEqualTo("Age");
-    assertThat(bean.Age.getValue()).isNull();
+    assertThat(bean.Age.get()).isNull();
     assertThat(bean.getProperty("Name")).isSameAs(bean.Name);
     assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
     assertThat(bean.getPropertyCount()).isEqualTo(2);
