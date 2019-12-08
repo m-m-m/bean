@@ -3,9 +3,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>net.sf.m-m-m</groupId>
+    <groupId>io.github.m-m-m</groupId>
     <artifactId>mmm</artifactId>
-    <version>2.7.1</version>
+    <version>7</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
   <artifactId>mmm-bean-parent</artifactId>
@@ -20,29 +20,12 @@
 
   <properties>
     <revision>1.0.0</revision>
-    <changeList>-SNAPSHOT</changeList>
+    <changelist>-SNAPSHOT</changelist>
     <!-- Internal project versions -->
     <net.sf.mmm.property.version>1.0.0-SNAPSHOT</net.sf.mmm.property.version>
-    <java.version>11</java.version>
     <mmm.repository>property</mmm.repository>
   </properties>
   
-  <dependencies>
-    <!-- Test -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.5.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.12.2</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
   <dependencyManagement>
     <dependencies>
       <dependency>

@@ -1,15 +1,12 @@
-= Mature Modular Meta-framework (mmm)
+image:https://raw.github.com/m-m-m/mmm/master/src/site/resources/images/logo.png[logo,link="https://m-m-m.github.io"]
 
-image:https://raw.github.com/m-m-m/mmm/master/src/site/resources/images/logo.png[logo]
-
-*Welcome to the wonderful world of http://m-m-m.sourceforge.net/index.html[mmm]*
-
-== mmm-bean
+= mmm-bean
 
 image:https://travis-ci.org/m-m-m/bean.svg?branch=develop["build-status",link="https://travis-ci.org/m-m-m/bean"]
 
-The `mmm-bean` project is a library for advanced beans based on real properties.
+The module `mmm-bean` provides infrastructure for advanced beans based on real properties.
 It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
+For motivation and details see the https://m-m-m.github.io/docs/api/io.github.mmm.bean/module-summary.html[documnetation].
 
 == Example
 
@@ -40,7 +37,7 @@ public class TestBean extends Bean {
 Wait, that looks kind of odd, right?
 
 * Capitalized field names - that is a violation of Java conventions. C# hackers doing Java coding, or what?
-* So public fields - aint that an anti-pattern?
+* So public fields - ain't that an anti-pattern?
 * And what are those strange contructor arguments?
 * Do you guys have to reinvent Java fundamentals?
 
@@ -72,7 +69,7 @@ for (WritableProperty<?> property : bean.getProperties()) {
 assertThat(bean.isEqualTo(bean2)).isTrue();
 -----
 
-And believe me, this his is just the beginning. There is so much more:
+This his is just the beginning. There is so much more:
 
 * build-in JSON and XML mapping
 * polymorphic type hierarchies
@@ -88,16 +85,34 @@ And believe me, this his is just the beginning. There is so much more:
 
 So comming back to those questions:
 
-* You do not have to use capitalized field names. We only recommend it as C# also had good reasons to do it. As we create something new here, we think it is reasonable to use a different convention what also indicates the difference to regular POJO stuff.
-* You do not have to declare properties as public fields. You can still declare them private and provide additional accessor methods. However, this again is pointless boiler-plate code and our intention is to make things simple. Instead, ask yourself, why getters and setters have been introduced once? All these reasons do not apply for properties declared as public final (!) fields. You can even change your code to make them readonly, computed, etc.
-* The argumented constructor is needed to create read-only views of the bean. In case you do not need such features, you can ommit such constructor.
-* And yes, classic Java Beans aka POJOs suck. Everybody hates them. You may also use Lombok instead. We offer many additional features and use pure Java so no tweaking of IDEs, build-tools, etc. is required (that may break in future releases).
+* You do not have to use capitalized field names. We only recommend it as C# also had good reasons to do it.
+As we create something new here, we think it is reasonable to use a different convention what also indicates the difference to regular POJO stuff.
+* You do not have to declare properties as public fields.
+You can still declare them private and provide additional accessor methods.
+However, this again is pointless boiler-plate code and our intention is to make things simple.
+Instead, ask yourself, why getters and setters have been introduced once?
+All these reasons do not apply for properties declared as public final (!) fields.
+You can even change your code to make them readonly, computed, etc.
+* The argumented constructor is needed to create read-only views of the bean.
+In case you do not need such features, you can ommit such constructor.
+* And yes, classic Java Beans aka POJOs suck.
+Everybody hates them.
+You may also use https://projectlombok.org/[Lombok] instead.
+We offer many additional features and use pure Java so no tweaking of IDEs, build-tools, etc. is required (that may break in future releases).
 
 So are there any drawbacks?
 
-Yes, most existing frameworks rely on POJOs with old-fashioned getters and setters. So these cool new beans will not work with JPA/Hibernate, Jackson, JSON-B, JAX-B, Dozer, Orika, etc.
+Yes, most existing frameworks rely on POJOs with old-fashioned getters and setters.
+So these cool new beans will not work with JPA/Hibernate, Jackson, JSON-B, JAX-B, Dozer, Orika, etc.
 
-Wait, that's a huge drawback, right? Well not quite... Marshalling and mapping is already build-in so you can dump most of these frameworks and libraries as well. As it does not even need reflection it is also much faster. But how about JPA? Well, we believe that call-by-reference and magical saving of dirty entities on transaction commit have been an evil design flaw from the start. To keep data-sovereignty JPA users invent transfer-objects and layers of abstractions, etc. making simple things complex and full of waste. Choose a database mapper that is designed for call-by-value and you are fine. We also provide type-safe query building based on our new beans and invent DB mappers.
+Wait, that's a huge drawback, right?
+Well not quite... Marshalling and mapping is already build-in so you can dump most of these frameworks and libraries as well.
+As it does not even need reflection it is also much faster.
+But how about JPA?
+Well, we believe that call-by-reference and magical saving of dirty entities on transaction commit have been an evil design flaw from the start.
+To keep data-sovereignty JPA users invent transfer-objects and layers of abstractions, etc. making simple things complex and full of waste.
+Choose a database mapper that is designed for call-by-value and you are fine.
+We also provide type-safe query building based on our new beans and invent DB mappers.
 
 == Static and dynamic typing
 
