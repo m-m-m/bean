@@ -43,13 +43,22 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
   }
 
   @Override
-  protected V doGetValue() {
+  public boolean isValueMutable() {
+
+    if (this.value != null) {
+      return !this.value.isReadOnly();
+    }
+    return false;
+  }
+
+  @Override
+  protected V doGet() {
 
     return this.value;
   }
 
   @Override
-  protected void doSetValue(V newValue) {
+  protected void doSet(V newValue) {
 
     this.value = newValue;
   }
@@ -59,11 +68,5 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
 
     return this.valueClass;
   }
-
-  // @Override
-  // public ValidatorBuilderBoolean<PropertyBuilder<BooleanProperty>> withValdidator() {
-  //
-  // return withValdidator(x -> new ValidatorBuilderBoolean<>(x));
-  // }
 
 }
