@@ -3,4 +3,4 @@
 /**
  * Contains internal implementation.
  */
-package io.github.mmm.bean.impl;
+package io.github.mmm.bean.factory.impl;

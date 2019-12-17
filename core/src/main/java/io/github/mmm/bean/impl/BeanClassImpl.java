@@ -2,10 +2,15 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
+import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
@@ -16,9 +21,13 @@ import io.github.mmm.bean.WritableBean;
  */
 public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
 
+  private static final Map<String, BeanClassImpl> CLASS_MAP = new ConcurrentHashMap<>();
+
   private final List<BeanClassImpl> superClassList;
 
   private final List<BeanClass> superClasses;
+
+  private Class<?>[] javaClasses;
 
   private final boolean virtual;
 
@@ -31,6 +40,10 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
   private VirtualBean prototype;
 
   private BeanClassImpl readOnly;
+
+  static {
+    asClass(VirtualBean.class);
+  }
 
   /**
    * The constructor.
@@ -105,6 +118,20 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     } else {
       this.qualifiedName = this.packageName + "." + this.simpleName;
     }
+    if (this.superClassList.isEmpty() || !virtual) {
+      this.javaClasses = new Class<?>[] { javaClass };
+    } else {
+      List<Class<?>> classes = new ArrayList<>();
+      classes.add(javaClass);
+      for (BeanClassImpl superClass : superClassList) {
+        for (Class<?> type : superClass.getJavaClasses()) {
+          if (!type.isAssignableFrom(javaClass)) {
+            classes.add(type);
+          }
+        }
+      }
+      this.javaClasses = classes.toArray(new Class<?>[classes.size()]);
+    }
     this.virtual = virtual;
   }
 
@@ -126,6 +153,12 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
   public Class<? extends VirtualBean> getJavaClass() {
 
     return (Class<? extends VirtualBean>) super.getJavaClass();
+  }
+
+  @Override
+  public Class<?>[] getJavaClasses() {
+
+    return this.javaClasses;
   }
 
   @Override
@@ -185,6 +218,78 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
       this.readOnly = new BeanClassImpl(this);
     }
     return this.readOnly;
+  }
+
+  /**
+   * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
+   * @return the {@link BeanClass} for this instance.
+   */
+  public static BeanClassImpl asClass(Class<? extends VirtualBean> javaClass) {
+
+    return asClass(javaClass, BeanClassImpl::getBeanClass);
+  }
+
+  /**
+   * @param key the fully-qualified (virtual or physical) class-name.
+   * @return the {@link BeanClass} for this instance.
+   */
+  public static BeanClassImpl getClass(String key) {
+
+    return CLASS_MAP.get(key);
+  }
+
+  /**
+   * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
+   * @param factory a {@link Function} to get or create {@link BeanClassImpl} by {@link Class}.
+   * @return the {@link BeanClass} for this instance.
+   */
+  public static BeanClassImpl asClass(Class<? extends VirtualBean> javaClass,
+      Function<Class<?>, BeanClassImpl> factory) {
+
+    String key = javaClass.getName();
+    return CLASS_MAP.computeIfAbsent(key, (x) -> createBeanClass(javaClass, factory));
+  }
+
+  private static BeanClassImpl createBeanClass(Class<? extends VirtualBean> javaClass,
+      Function<Class<?>, BeanClassImpl> factory) {
+
+    List<BeanClassImpl> superClassList = Collections.emptyList();
+    if (javaClass.isInterface()) {
+      if (javaClass != VirtualBean.class) {
+        Class<?>[] interfaces = javaClass.getInterfaces();
+        superClassList = new ArrayList<>(interfaces.length);
+        for (Class<?> superclass : interfaces) {
+          if (VirtualBean.class.isAssignableFrom(superclass)) {
+            BeanClassImpl superBeanClass = factory.apply(superclass);
+            Objects.requireNonNull(superBeanClass, "factory.apply");
+            superClassList.add(superBeanClass);
+          }
+        }
+      }
+    } else {
+      if (javaClass != AdvancedBean.class) {
+        Class<?> superclass = javaClass.getSuperclass();
+        if (AdvancedBean.class.isAssignableFrom(superclass)) {
+          superClassList = Collections.singletonList(factory.apply(superclass));
+        }
+      }
+    }
+    BeanClassImpl beanClass = new BeanClassImpl(javaClass, superClassList);
+    return beanClass;
+  }
+
+  /**
+   * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
+   * @return the corresponding {@link BeanClass}.
+   */
+  private static BeanClassImpl getBeanClass(Class<?> javaClass) {
+
+    BeanClassImpl beanClass = CLASS_MAP.get(javaClass.getName());
+    if (beanClass == null) {
+      throw new IllegalStateException(
+          "Super-class " + javaClass + " not registered! It seems you forgot to declare a static prototype instance.");
+    }
+    return beanClass;
   }
 
 }

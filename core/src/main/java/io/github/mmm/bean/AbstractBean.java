@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,9 +10,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import io.github.mmm.bean.impl.BeanCreator;
 import io.github.mmm.property.WritableProperty;
+import io.github.mmm.property.builder.DefaultPropertyBuilders;
 import io.github.mmm.property.factory.PropertyFactoryManager;
-import io.github.mmm.property.factory.PropertyFactoryManagerImpl;
 
 /**
  * Abstract base implementation of {@link WritableBean}.
@@ -22,15 +22,15 @@ import io.github.mmm.property.factory.PropertyFactoryManagerImpl;
  */
 public abstract class AbstractBean implements WritableBean {
 
-  private static final Class<?>[] SIGNATURE = new Class[] { Bean.class, boolean.class };
-
   private final Map<String, WritableProperty<?>> propertiesMap;
 
   private final Collection<WritableProperty<?>> properties;
 
   private final boolean dynamic;
 
-  private final AbstractBean writable;
+  final AbstractBean writable;
+
+  private DefaultPropertyBuilders builders;
 
   private AbstractBean readOnly;
 
@@ -121,8 +121,7 @@ public abstract class AbstractBean implements WritableBean {
   protected AbstractBean create(AbstractBean writableBean, boolean dynamicFlag) {
 
     try {
-      Constructor<? extends AbstractBean> constructor = getClass().getConstructor(SIGNATURE);
-      return constructor.newInstance(writableBean, Boolean.valueOf(dynamicFlag));
+      return BeanCreator.create(getClass(), writableBean, dynamicFlag);
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
@@ -155,7 +154,7 @@ public abstract class AbstractBean implements WritableBean {
     if ((property == null) && (this.writable != null)) {
       property = this.writable.getProperty(name);
       if (property != null) {
-        property = add(property);
+        property = add(property.getReadOnly());
       }
     }
     return property;
@@ -186,9 +185,7 @@ public abstract class AbstractBean implements WritableBean {
 
     requireWritable();
     requireDynamic();
-    PropertyFactoryManager factoryManager = PropertyFactoryManagerImpl.getInstance();
-    boolean polymorphic = false;
-    WritableProperty<V> property = factoryManager.create(valueClass, polymorphic, name);
+    WritableProperty<V> property = PropertyFactoryManager.get().create(valueClass, name);
     add(property);
     return property;
   }
@@ -215,8 +212,9 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   /**
-   * Internal method for {@link #addProperty(WritableProperty)}, without verification. Will be called from constructor
-   * of bean class implementations to register properties.
+   * Internal method for {@link #addProperty(WritableProperty)}, without verification. Shall only be used internally.
+   * From outside only use indirectly via {@link #addProperty(WritableProperty)} or from constructor via
+   * {@link #add(WritableProperty)}.
    *
    * @param <P> type of the {@link WritableProperty} to add.
    * @param property the {@link WritableProperty} to add.
@@ -224,9 +222,9 @@ public abstract class AbstractBean implements WritableBean {
    * @return the given {@code property}.
    */
   @SuppressWarnings("unchecked")
-  protected <P extends WritableProperty<?>> P add(P property, AddMode mode) {
+  <P extends WritableProperty<?>> P add(P property, AddMode mode) {
 
-    if (this.writable != null) {
+    if ((this.writable != null) && (mode != AddMode.DIRECT)) {
       property = (P) this.writable.getProperty(property.getName()).getReadOnly();
     }
     WritableProperty<?> existing;
@@ -245,6 +243,27 @@ public abstract class AbstractBean implements WritableBean {
       }
     }
     return property;
+  }
+
+  /**
+   * @return the builder factory to build properties to be added to this bean.
+   */
+  protected DefaultPropertyBuilders add() {
+
+    if (this.builders == null) {
+      this.builders = createPropertyBuilders();
+    }
+    return this.builders;
+  }
+
+  /**
+   * Internal method that may be overridden to replace the {@link PropertyBuilders} implementation.
+   * 
+   * @return the {@link PropertyBuilders} instance.
+   */
+  protected PropertyBuilders createPropertyBuilders() {
+
+    return new PropertyBuilders(this);
   }
 
   /**
@@ -288,13 +307,16 @@ public abstract class AbstractBean implements WritableBean {
   /**
    * Enum with the available modes for {@link AbstractBean#add(WritableProperty, AddMode) adding a property internally}.
    */
-  protected static enum AddMode {
+  static enum AddMode {
 
-    /** Add property as-is. */
+    /** Add property from {@link AbstractBean#addProperty(WritableProperty)}. */
     NORMAL,
 
-    /** Add property as-is (from internal {@link AbstractBean#add(WritableProperty)}. */
+    /** Add property from {@link AbstractBean#add(WritableProperty)}. */
     INTERNAL,
+
+    /** Add property from {@link PropertyBuilders}. */
+    DIRECT,
 
     /** Add a {@link WritableProperty#copy(WritableProperty) copy} of the property if none exists with that name. */
     COPY,
@@ -314,7 +336,7 @@ public abstract class AbstractBean implements WritableBean {
      */
     public boolean isAddInstance() {
 
-      return ((this == NORMAL) || (this == INTERNAL));
+      return ((this == NORMAL) || (this == INTERNAL)) || (this == DIRECT);
     }
   }
 
@@ -343,7 +365,9 @@ public abstract class AbstractBean implements WritableBean {
       } else {
         this.result = WritableProperty.copy(this.property);
         if (this.mode == AddMode.COPY_WITH_VALUE) {
-          ((WritableProperty) this.result).set(this.property.get());
+          if (!this.result.isReadOnly()) {
+            ((WritableProperty) this.result).set(this.property.get());
+          }
         }
       }
       return this.result;

@@ -179,8 +179,7 @@ public interface ReadableBean extends Validatable, MarshallableObject {
 
     if (other == null) {
       return false;
-    }
-    if (getPropertyCount() != other.getPropertyCount()) {
+    } else if (getPropertyCount() != other.getPropertyCount()) {
       return false;
     } else if (getType() != other.getType()) {
       return false;

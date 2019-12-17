@@ -13,25 +13,52 @@
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
   <description>Provides beans based on real properties.</description>
-
-  <modules>
-    <module>core</module>
-  </modules>
-
   <properties>
     <revision>1.0.0</revision>
     <changelist>-SNAPSHOT</changelist>
-    <!-- Internal project versions -->
-    <net.sf.mmm.property.version>1.0.0-SNAPSHOT</net.sf.mmm.property.version>
     <mmm.repository>property</mmm.repository>
   </properties>
+
+  <modules>
+    <module>core</module>
+    <module>factory</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.3.0-alpha5</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>mmm-bean</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>mmm-bean-factory</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>mmm-bean-builder</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>mmm-property</artifactId>
-        <version>${net.sf.mmm.property.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>mmm-property-builder</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

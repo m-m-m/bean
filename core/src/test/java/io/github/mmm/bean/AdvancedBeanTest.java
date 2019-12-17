@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.mmm.bean.examples.TestAdvancedBean;
+import io.github.mmm.bean.examples.TestAdvancedParentBean;
+import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.property.string.StringProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
 

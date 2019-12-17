@@ -10,10 +10,18 @@ package io.github.mmm.bean;
 public interface BeanType {
 
   /**
-   * @return the {@link Class} (or interface) reflecting the "implementation" of this {@link BeanType}. If this
+   * @return the primary {@link Class} (or interface) reflecting the "implementation" of this {@link BeanType}. If this
    *         {@link BeanType} is {@link #isVirtual() virtual} this will be inherited from the first parent class.
    */
   Class<? extends WritableBean> getJavaClass();
+
+  /**
+   * @return an array with all types (interfaces) composed (implemented) by this {@link BeanType}.
+   */
+  default Class<?>[] getJavaClasses() {
+
+    return new Class<?>[] { getJavaClass() };
+  }
 
   /**
    * @return packageName the {@link Class#getPackageName() package name}.
@@ -55,8 +63,10 @@ public interface BeanType {
   String getStableName();
 
   /**
-   * @return {@code true} if this {@link Bean} is virtual meaning that it represents a class or interface that does not
-   *         exist as Java {@link Class}, {@code false} otherwise.
+   * @return {@code true} if this {@link BeanType} belongs to a {@link VirtualBean} meaning that it may represent a
+   *         class or interface that does not exist as Java {@link Class}, {@code false} otherwise.
+   * @see BeanClass
+   * @see VirtualBean
    */
   boolean isVirtual();
 

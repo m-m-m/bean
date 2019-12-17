@@ -5,7 +5,7 @@ package io.github.mmm.bean;
 import io.github.mmm.bean.impl.BeanTypeImpl;
 
 /**
- * Implementation of {@link WritableBean} for regular instances (that are not a {@link BeanClass}).
+ * Regular implementation of {@link WritableBean}. For {@link VirtualBean}s use {@link AdvancedBean} instead.
  */
 public class Bean extends AbstractBean {
 
@@ -29,7 +29,7 @@ public class Bean extends AbstractBean {
   public Bean(AbstractBean writable, boolean dynamic) {
 
     super(writable, dynamic);
-    this.type = BeanTypeImpl.of(getClass());
+    this.type = BeanTypeImpl.asType(getClass());
   }
 
   @Override

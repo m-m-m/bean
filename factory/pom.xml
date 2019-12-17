@@ -7,7 +7,7 @@
     <artifactId>mmm-bean-parent</artifactId>
     <version>${revision}${changelist}</version>
   </parent>
-  <artifactId>mmm-bean</artifactId>
+  <artifactId>mmm-bean-factory</artifactId>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
   <description>The API for advanced Java beans.</description>
@@ -15,11 +15,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>mmm-property</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>mmm-property-builder</artifactId>
+      <artifactId>mmm-bean</artifactId>
     </dependency>
   </dependencies>
 

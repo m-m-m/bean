@@ -3,7 +3,8 @@
 package io.github.mmm.bean;
 
 /**
- * {@link WritableBean} that is {@link BeanType#isVirtual() virtual}.
+ * {@link WritableBean} that may be {@link BeanType#isVirtual() virtual} so it can potentially represent types that do
+ * not exist as Java {@link Class}.
  */
 public interface VirtualBean extends WritableBean {
 

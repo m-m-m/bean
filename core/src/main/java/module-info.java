@@ -64,13 +64,15 @@
  *
  * <h3>Interface only</h3><br>
  * If you want to have no boilerplate code at all, like to have multi-inheritance and do not fear magic, you can even
- * define your beans as interfaces. To instantiate such bean, you need to use
- * {@link io.github.mmm.bean.BeanFactory#create(Class)}.
+ * define your beans as interfaces only. Then you can instantiate them using {@code BeanFactory} from the module
+ * {@code io.github.mmm.bean.factory} of {@code mmm-bean-factory}.
  */
 @SuppressWarnings("all") //
 module io.github.mmm.bean {
 
   requires transitive io.github.mmm.property;
+
+  requires transitive io.github.mmm.property.builder;
 
   provides io.github.mmm.property.factory.PropertyFactory //
       with io.github.mmm.bean.property.PropertyFactoryBean; //
@@ -78,5 +80,7 @@ module io.github.mmm.bean {
   exports io.github.mmm.bean;
 
   exports io.github.mmm.bean.property;
+
+  exports io.github.mmm.bean.impl to io.github.mmm.bean.factory;
 
 }

@@ -133,9 +133,9 @@ public class BeanTypeImpl implements BeanType {
    * @param javaClass the {@link #getJavaClass() java class}.
    * @return the {@link BeanType} representing the given {@link Class}.
    */
-  public static BeanTypeImpl of(Class<? extends WritableBean> javaClass) {
+  public static BeanTypeImpl asType(Class<? extends WritableBean> javaClass) {
 
-    return of(javaClass, null);
+    return asType(javaClass, null);
   }
 
   /**
@@ -143,7 +143,7 @@ public class BeanTypeImpl implements BeanType {
    * @param stableName the custom {@link #getStableName() stable name}.
    * @return the {@link BeanType} representing the given {@link Class}.
    */
-  public static BeanTypeImpl of(Class<? extends WritableBean> javaClass, String stableName) {
+  public static BeanTypeImpl asType(Class<? extends WritableBean> javaClass, String stableName) {
 
     if (javaClass == null) {
       return null;

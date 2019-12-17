@@ -1,20 +1,21 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.bean;
+package io.github.mmm.bean.factory.impl;
+
+import io.github.mmm.bean.AbstractBean;
+import io.github.mmm.bean.AbstractVirtualBean;
+import io.github.mmm.bean.Bean;
+import io.github.mmm.bean.BeanClass;
 
 /**
- * Implementation of {@link VirtualBean} as regular java class. Extend your beans from this class if you need virtual
- * and dynamic typing.
+ *
  */
-public class AdvancedBean extends AbstractVirtualBean {
-
-  /** @see BeanClass#getPrototype() */
-  public static final AdvancedBean PROTOTYPE = new AdvancedBean();
+public final class SimpleVirtualBean extends AbstractVirtualBean {
 
   /**
    * The constructor.
    */
-  public AdvancedBean() {
+  public SimpleVirtualBean() {
 
     super();
   }
@@ -26,7 +27,7 @@ public class AdvancedBean extends AbstractVirtualBean {
    *        create a regular mutable {@link Bean}.
    * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
-  public AdvancedBean(AbstractBean writable, boolean dynamic) {
+  public SimpleVirtualBean(AbstractBean writable, boolean dynamic) {
 
     super(writable, dynamic);
   }
@@ -39,14 +40,9 @@ public class AdvancedBean extends AbstractVirtualBean {
    * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param type the {@link #getType() type}.
    */
-  public AdvancedBean(AbstractBean writable, boolean dynamic, BeanClass type) {
+  public SimpleVirtualBean(AbstractBean writable, boolean dynamic, BeanClass type) {
 
     super(writable, dynamic, type);
-    Class<? extends AdvancedBean> javaClass = getClass();
-    if ((type != null) && (type.getJavaClass() != javaClass)) {
-      throw new IllegalArgumentException(
-          "BeanClass " + type.getJavaClass() + " has to match bean implementation class " + javaClass.getName());
-    }
   }
 
 }

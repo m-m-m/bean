@@ -1,8 +1,10 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.bean;
+package io.github.mmm.bean.factory;
 
-import io.github.mmm.bean.impl.BeanFactoryImpl;
+import io.github.mmm.bean.Bean;
+import io.github.mmm.bean.WritableBean;
+import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
 
 /**
  * Interface for a factory to create instances of {@link WritableBean}. In case you are implementing beans extending
@@ -21,7 +23,20 @@ public interface BeanFactory {
    *         interface, a dynamic proxy implementation is generated. Otherwise if a class is given it needs to extend
    *         {@link Bean}, be non-abstract and requires a non-arg constructor.
    */
-  <B extends WritableBean> B create(Class<B> type);
+  default <B extends WritableBean> B create(Class<B> type) {
+
+    return create(type, false);
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean}.
+   * @param type the {@link Class} reflecting the {@link WritableBean}.
+   * @param dynamic the {@link WritableBean#isDynamic() dynamic} flag.
+   * @return a new instance of the {@link WritableBean} specified by the given {@link Class}. If {@code type} is an
+   *         interface, a dynamic proxy implementation is generated. Otherwise if a class is given it needs to extend
+   *         {@link Bean}, be non-abstract and requires a non-arg constructor.
+   */
+  <B extends WritableBean> B create(Class<B> type, boolean dynamic);
 
   /**
    * @return the instance of {@link BeanFactory}.
