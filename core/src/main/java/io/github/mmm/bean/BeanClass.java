@@ -3,6 +3,7 @@
 package io.github.mmm.bean;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import io.github.mmm.bean.impl.BeanClassImpl;
@@ -17,9 +18,9 @@ import io.github.mmm.bean.impl.BeanClassImpl;
 public interface BeanClass extends BeanType {
 
   /**
-   * @return the {@link List} of the super
+   * @return the {@link Collection} of the super {@link BeanClass} this class inherits from.
    */
-  List<BeanClass> getSuperClasses();
+  Collection<BeanClass> getSuperClasses();
 
   @Override
   Class<? extends VirtualBean> getJavaClass();
@@ -29,6 +30,77 @@ public interface BeanClass extends BeanType {
    *         instances of this {@link BeanClass} including those created before adding the new property.
    */
   VirtualBean getPrototype();
+
+  /**
+   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
+   * @return {@code true} if {@code this} {@link BeanClass} is a transitive {@link #getSuperClasses() super-class} of
+   *         the given {@link BeanClass}, {@code false} otherwise.
+   */
+  default boolean isSuperclassOf(BeanClass beanClass) {
+
+    return isSuperclassOf(beanClass, true, false);
+  }
+
+  /**
+   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
+   * @param transitive {@code true} to check hierarchy transitive, {@code false} otherwise (only check for direct
+   *        superclass).
+   * @param equal {@code true} if equality of {@code this} and the given {@link BeanClass} will be accepted (returning
+   *        {@code true}), {@code false} otherwise.
+   * @return {@code true} if {@code this} {@link BeanClass} is a ({@code transitive}) {@link #getSuperClasses()
+   *         super-class} of (or {@code equal} to) the given {@link BeanClass}, {@code false} otherwise.
+   */
+  default boolean isSuperclassOf(BeanClass beanClass, boolean transitive, boolean equal) {
+
+    if (beanClass == null) {
+      return false;
+    } else if (equal && (this == beanClass)) {
+      return true;
+    } else if (transitive) {
+      for (BeanClass superClass : beanClass.getSuperClasses()) {
+        if (superClass.isSuperclassOf(beanClass, true, true)) {
+          return true;
+        }
+      }
+    } else {
+      for (BeanClass superClass : beanClass.getSuperClasses()) {
+        if (superClass == this) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
+   * @return {@code true} if {@code this} {@link BeanClass} is a transitive sub-class of (or in other words inherits
+   *         from) the given {@link BeanClass}, {@code false} otherwise.
+   */
+  default boolean isSubclassOf(BeanClass beanClass) {
+
+    if (beanClass == null) {
+      return false;
+    }
+    return beanClass.isSuperclassOf(this);
+  }
+
+  /**
+   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
+   * @param transitive {@code true} to check hierarchy transitive, {@code false} otherwise (only check for direct
+   *        subclass).
+   * @param equal {@code true} if equality of {@code this} and the given {@link BeanClass} will be accepted (returning
+   *        {@code true}), {@code false} otherwise.
+   * @return {@code true} if {@code this} {@link BeanClass} is a ({@code transitive}) sub-class of (or {@code equal} to)
+   *         the given {@link BeanClass}, {@code false} otherwise.
+   */
+  default boolean isSubclassOf(BeanClass beanClass, boolean transitive, boolean equal) {
+
+    if (beanClass == null) {
+      return false;
+    }
+    return beanClass.isSuperclassOf(this, transitive, equal);
+  }
 
   /**
    * @param packageName the {@link #getPackageName() package name}.

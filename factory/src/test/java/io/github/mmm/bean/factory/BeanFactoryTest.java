@@ -8,8 +8,6 @@ import java.time.Period;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.github.mmm.bean.examples.ContactBean;
-import io.github.mmm.bean.examples.PersonBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
 /**
@@ -17,7 +15,7 @@ import io.github.mmm.property.number.integers.IntegerProperty;
  */
 public class BeanFactoryTest extends Assertions {
 
-  /** Test of {@link BeanFactory#create(Class)}. */
+  /** Test of {@link BeanFactory#create(Class)} from an interface. */
   @Test
   public void testCreateFromInterface() {
 
@@ -37,7 +35,7 @@ public class BeanFactoryTest extends Assertions {
     assertThat(bean.Age().get()).isEqualTo(age);
   }
 
-  /** Test of {@link BeanFactory#create(Class)}. */
+  /** Test of {@link BeanFactory#create(Class)} from an interface with inheritance. */
   @Test
   public void testCreateFromInterfaceWithInheritance() {
 
@@ -50,6 +48,20 @@ public class BeanFactoryTest extends Assertions {
     assertThat(ageProperty.get()).isNull();
     bean.setBirthday(bithday);
     assertThat(ageProperty.get()).isEqualTo(age);
+  }
+
+  /** Test of {@link BeanFactory#create(Class)} with a bean class implementation. */
+  @Test
+  public void testCreateFromClass() {
+
+    TestBean bean = BeanFactory.get().create(TestBean.class);
+    assertThat(bean.getClass()).isSameAs(TestBean.class);
+    String name = "John Doe";
+    bean.setName(name);
+    int age = 20;
+    bean.Age.setValue(age);
+    assertThat(bean.getName()).isEqualTo(name);
+    assertThat(bean.getAge()).isEqualTo(age);
   }
 
 }
