@@ -1,8 +1,12 @@
-image:https://raw.github.com/m-m-m/mmm/master/src/site/resources/images/logo.png[logo,link="https://m-m-m.github.io"]
+image:https://m-m-m.github.io/logo.svg[logo,width="150",link="https://m-m-m.github.io"]
 
-= mmm-bean
+image:https://img.shields.io/github/license/m-m-m/bean.svg?label=License["Apache License, Version 2.0",link=https://github.com/m-m-m/bean/blob/master/LICENSE]
+image:https://travis-ci.org/m-m-m/bean.svg?branch=master["build-status",link="https://travis-ci.org/m-m-m/bean"]
 
-image:https://travis-ci.org/m-m-m/bean.svg?branch=develop["build-status",link="https://travis-ci.org/m-m-m/bean"]
+== mmm-bean
+
+image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
+image:https://m-m-m.github.io/javadoc.svg?status=online["apidoc",link="https://m-m-m.github.io/docs/api/io.github.mmm.bean/module-summary.html"]
 
 The module `mmm-bean` provides infrastructure for advanced beans based on real properties.
 It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
