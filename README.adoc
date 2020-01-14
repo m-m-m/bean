@@ -73,7 +73,7 @@ for (WritableProperty<?> property : bean.getProperties()) {
 assertThat(bean.isEqualTo(bean2)).isTrue();
 -----
 
-This his is just the beginning. There is so much more:
+This is just the beginning. There is so much more:
 
 * build-in JSON and XML mapping
 * polymorphic type hierarchies
