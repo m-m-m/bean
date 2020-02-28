@@ -1,6 +1,6 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.bean.factory;
+package io.github.mmm.bean.factory.test;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -8,6 +8,7 @@ import java.time.Period;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
 /**

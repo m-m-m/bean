@@ -1,10 +1,8 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.bean.factory;
+package io.github.mmm.bean;
 
-import io.github.mmm.bean.Bean;
-import io.github.mmm.bean.WritableBean;
-import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
+import io.github.mmm.bean.impl.BeanFactoryManager;
 
 /**
  * Interface for a factory to create instances of {@link WritableBean}. In case you are implementing beans extending
@@ -43,7 +41,7 @@ public interface BeanFactory {
    */
   public static BeanFactory get() {
 
-    return BeanFactoryImpl.INSTANCE;
+    return BeanFactoryManager.INSTANCE;
   }
 
 }

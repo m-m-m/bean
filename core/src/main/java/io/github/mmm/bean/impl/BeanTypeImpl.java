@@ -2,9 +2,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.Name;
@@ -18,7 +18,8 @@ import io.github.mmm.bean.WritableBean;
  */
 public class BeanTypeImpl implements BeanType {
 
-  private static final Map<String, BeanTypeImpl> CLASS_MAP = new ConcurrentHashMap<>();
+  // temporary workaround for teaVM
+  private static final Map<String, BeanTypeImpl> CLASS_MAP = new HashMap<>(); // new ConcurrentHashMap<>();
 
   private final Class<? extends WritableBean> javaClass;
 

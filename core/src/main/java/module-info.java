@@ -1,7 +1,13 @@
+
 /*
  * Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
+import io.github.mmm.bean.BeanFactory;
+import io.github.mmm.bean.impl.BeanCreator;
+import io.github.mmm.bean.property.PropertyFactoryBean;
+import io.github.mmm.property.factory.PropertyFactory;
+
 /**
  * Provides advanced Java beans based on {@code mmm-property}.<br>
  * <h2>Bean</h2><br>
@@ -74,8 +80,11 @@ module io.github.mmm.bean {
 
   requires transitive io.github.mmm.property.builder;
 
-  provides io.github.mmm.property.factory.PropertyFactory //
-      with io.github.mmm.bean.property.PropertyFactoryBean; //
+  uses BeanFactory;
+
+  provides BeanFactory with BeanCreator;
+
+  provides PropertyFactory with PropertyFactoryBean;
 
   exports io.github.mmm.bean;
 

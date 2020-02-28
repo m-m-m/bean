@@ -4,22 +4,25 @@ package io.github.mmm.bean.factory.impl;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.util.Objects;
 
+import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
-import io.github.mmm.bean.factory.BeanFactory;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
-import io.github.mmm.bean.impl.BeanCreator;
 
 /**
  * Implementation of {@link BeanFactory}.
  */
 public class BeanFactoryImpl implements BeanFactory {
 
-  /** The singleton instance. */
-  public static final BeanFactoryImpl INSTANCE = new BeanFactoryImpl(Thread.currentThread().getContextClassLoader());
-
   private final ClassLoader classLoader;
+
+  /**
+   * The constructor.
+   */
+  public BeanFactoryImpl() {
+
+    this(Thread.currentThread().getContextClassLoader());
+  }
 
   /**
    * The constructor.
@@ -32,20 +35,15 @@ public class BeanFactoryImpl implements BeanFactory {
     this.classLoader = classLoader;
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked" })
   @Override
   public <B extends WritableBean> B create(Class<B> type, boolean dynamic) {
 
-    Objects.requireNonNull(type, "type");
-    try {
-      if (type.isInterface()) {
-        BeanProxyPrototype prototype = BeanProxyPrototype.get(type, this, true);
-        return (B) prototype.newInstance(dynamic).getProxy();
-      } else {
-        return (B) BeanCreator.create((Class) type, null, dynamic);
-      }
-    } catch (Exception e) {
-      throw new IllegalArgumentException("Failed to create bean of type " + type.getName(), e);
+    if (type.isInterface()) {
+      BeanProxyPrototype prototype = BeanProxyPrototype.get(type, this, true);
+      return (B) prototype.newInstance(dynamic).getProxy();
+    } else {
+      return null;
     }
   }
 

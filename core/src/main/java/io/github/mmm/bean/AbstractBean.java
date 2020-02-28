@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import io.github.mmm.bean.impl.BeanCreator;
@@ -51,7 +50,9 @@ public abstract class AbstractBean implements WritableBean {
     }
     this.dynamic = dynamic;
     if (isThreadSafe()) {
-      this.propertiesMap = new ConcurrentHashMap<>();
+      // temporary workaround for https://github.com/konsoletyper/teavm/issues/445
+      // this.propertiesMap = new ConcurrentHashMap<>();
+      this.propertiesMap = new HashMap<>();
     } else {
       this.propertiesMap = new HashMap<>();
     }
@@ -258,7 +259,7 @@ public abstract class AbstractBean implements WritableBean {
 
   /**
    * Internal method that may be overridden to replace the {@link PropertyBuilders} implementation.
-   * 
+   *
    * @return the {@link PropertyBuilders} instance.
    */
   protected PropertyBuilders createPropertyBuilders() {

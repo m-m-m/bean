@@ -5,6 +5,8 @@ package io.github.mmm.bean.impl;
 import java.lang.reflect.Constructor;
 
 import io.github.mmm.bean.AbstractBean;
+import io.github.mmm.bean.BeanFactory;
+import io.github.mmm.bean.WritableBean;
 
 /**
  * Creator of {@link AbstractBean} instances.
@@ -12,12 +14,30 @@ import io.github.mmm.bean.AbstractBean;
  * @since 1.0.0
  * @see #create(Class, AbstractBean, boolean)
  */
-public final class BeanCreator {
+public final class BeanCreator implements BeanFactory {
 
   private static final Class<?>[] CONSTRUCTOR_SIGNATURE = new Class<?>[] { AbstractBean.class, boolean.class };
 
-  private BeanCreator() {
+  /**
+   * The constructor.
+   */
+  public BeanCreator() {
 
+    super();
+  }
+
+  @Override
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public <B extends WritableBean> B create(Class<B> type, boolean dynamic) {
+
+    try {
+      if (type.isInterface()) {
+        return null;
+      }
+      return (B) create((Class) type, null, dynamic);
+    } catch (Exception e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
   }
 
   /**
