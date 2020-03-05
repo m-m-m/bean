@@ -95,6 +95,21 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   @Override
+  public WritableBean newInstance() {
+
+    AbstractBean instance = create(null, this.dynamic);
+    if (this.dynamic) {
+      // copy dynamic properties
+      for (WritableProperty<?> property : this.properties) {
+        if (instance.getProperty(property.getName()) == null) {
+          instance.addProperty(WritableProperty.copy(property));
+        }
+      }
+    }
+    return instance;
+  }
+
+  @Override
   public final boolean isReadOnly() {
 
     return (this.writable != null);
