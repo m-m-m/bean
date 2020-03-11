@@ -4,14 +4,14 @@ package io.github.mmm.bean;
 
 import java.lang.reflect.Type;
 
+import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
-import io.github.mmm.marshall.UnmarshallableObject;
 import io.github.mmm.property.WritableProperty;
 
 /**
  * Writable interface of {@link ReadableBean}.
  */
-public interface WritableBean extends ReadableBean, UnmarshallableObject {
+public interface WritableBean extends ReadableBean, MarshallingObject {
 
   @Override
   WritableProperty<?> getProperty(String name);
@@ -189,7 +189,7 @@ public interface WritableBean extends ReadableBean, UnmarshallableObject {
             reader.skipValue();
           }
         } else {
-          property.read(reader);
+          property.readObject(reader);
         }
       }
     }

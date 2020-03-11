@@ -204,10 +204,10 @@ public interface ReadableBean extends Validatable, MarshallableObject {
     }
     for (ReadableProperty<?> property : getProperties()) {
       String name = property.getName();
-      // if (!property.isTransient()) {
-
-      writer.writeName(name);
-      property.write(writer);
+      if (!property.isTransient()) {
+        writer.writeName(name);
+        property.writeObject(writer, property);
+      }
     }
     writer.writeEnd();
   }
