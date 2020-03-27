@@ -49,8 +49,8 @@ public class TestBean extends AdvancedBean implements PersonBean {
   public TestBean(AbstractBean writable, boolean dynamic) {
 
     super(writable, dynamic);
-    this.Name = add(new StringProperty("Name"));
-    this.Age = add(new IntegerProperty("Age"));
+    this.Name = add().newString("Name");
+    this.Age = add().newInteger().withValidator().range(0, 99).and().build("Age");
   }
 
   @Override
