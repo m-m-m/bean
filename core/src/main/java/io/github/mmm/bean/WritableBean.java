@@ -165,6 +165,9 @@ public interface WritableBean extends ReadableBean, MarshallingObject {
   @Override
   default void read(StructuredReader reader) {
 
+    if (!reader.readStartObject()) {
+      return;
+    }
     while (!reader.readEnd()) {
       String propertyName = reader.readName();
       if (PROPERTY_TYPE.equals(propertyName)) {
