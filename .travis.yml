@@ -7,8 +7,6 @@ env:
 install: skip
 script: mvn --settings .mvn/settings.xml install && ([[ $TRAVIS_BRANCH != "master" ]] || mvn --settings .mvn/settings.xml -DskipTests=true deploy)
 sudo: false
-cache:
-  directories: "$HOME/.m2"
 branches:
   except: gh-pages
 notifications:
