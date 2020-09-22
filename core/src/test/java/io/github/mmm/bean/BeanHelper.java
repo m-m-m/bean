@@ -5,12 +5,10 @@ package io.github.mmm.bean;
 import java.util.HashSet;
 import java.util.Set;
 
-import io.github.mmm.bean.Bean;
-import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.property.ReadableProperty;
 
 /**
- * Helper class for {@link Bean}s.
+ * Helper class for {@link io.github.mmm.bean.Bean}s.
  */
 public class BeanHelper {
 

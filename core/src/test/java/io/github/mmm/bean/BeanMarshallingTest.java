@@ -48,7 +48,6 @@ public class BeanMarshallingTest extends Assertions {
   public void testUnmarshallFromJson() {
 
     // given
-    String json = JSON;
     TestBean bean = new TestBean();
     StructuredFormat jsonFormat = JsonFormat.of();
 

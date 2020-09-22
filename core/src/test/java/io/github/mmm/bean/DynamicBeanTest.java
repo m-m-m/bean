@@ -4,9 +4,6 @@ package io.github.mmm.bean;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.mmm.bean.Bean;
-import io.github.mmm.bean.DynamicBean;
-import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.property.WritableProperty;
 
