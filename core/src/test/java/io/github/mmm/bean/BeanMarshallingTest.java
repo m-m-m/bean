@@ -6,8 +6,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.github.mmm.bean.examples.TestBean;
+import io.github.mmm.marshall.JsonFormat;
 import io.github.mmm.marshall.StructuredFormat;
-import io.github.mmm.marshall.StructuredFormatFactory;
 
 /**
  * Test of marshalling and unmarshalling {@link io.github.mmm.bean.Bean} via {@link TestBean}.
@@ -30,7 +30,7 @@ public class BeanMarshallingTest extends Assertions {
     TestBean bean = new TestBean();
     bean.Name.set(NAME);
     bean.Age.setValue(AGE);
-    StructuredFormat jsonFormat = StructuredFormatFactory.get().create(StructuredFormat.ID_JSON);
+    StructuredFormat jsonFormat = JsonFormat.of();
 
     // when
     String json = jsonFormat.write(bean);
@@ -48,7 +48,7 @@ public class BeanMarshallingTest extends Assertions {
     // given
     String json = JSON;
     TestBean bean = new TestBean();
-    StructuredFormat jsonFormat = StructuredFormatFactory.get().create(StructuredFormat.ID_JSON);
+    StructuredFormat jsonFormat = JsonFormat.of();
 
     // when
     jsonFormat.read(JSON, bean);
