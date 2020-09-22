@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.marshall.JsonFormat;
+import io.github.mmm.marshall.MarshallingConfig;
 import io.github.mmm.marshall.StructuredFormat;
 
 /**
@@ -30,7 +31,8 @@ public class BeanMarshallingTest extends Assertions {
     TestBean bean = new TestBean();
     bean.Name.set(NAME);
     bean.Age.setValue(AGE);
-    StructuredFormat jsonFormat = JsonFormat.of();
+    MarshallingConfig configuration = new MarshallingConfig().with(MarshallingConfig.INDENDATION, null);
+    StructuredFormat jsonFormat = JsonFormat.of(configuration);
 
     // when
     String json = jsonFormat.write(bean);
