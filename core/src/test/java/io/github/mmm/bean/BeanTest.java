@@ -146,8 +146,14 @@ public class BeanTest extends AbstractBeanTest {
     bean.Age.setValue(newAge);
     assertThat(listener.getEvent().getOldValue()).isEqualTo(age);
     assertThat(listener.getEvent().getValue()).isEqualTo(newAge);
+    bean.Name.set(null);
+    bean.Hobbies.getOrCreate().add(null);
     result = bean.validate();
-    assertThat(result.getMessage()).isEqualTo("The value needs to be in the range from 0 to 150.");
+    assertThat(result.getMessage()).isEqualTo("mmm.TestBuildersBean: \n" + //
+        "  Hobbies: \n" + //
+        "    #0: The value has to be filled.\n" + //
+        "  Age: The value needs to be in the range from 0 to 150.\n" + //
+        "  Name: The value has to be filled.");
   }
 
 }
