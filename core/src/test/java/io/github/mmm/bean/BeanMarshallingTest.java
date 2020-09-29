@@ -31,7 +31,7 @@ public class BeanMarshallingTest extends Assertions {
     TestBean bean = new TestBean();
     bean.Name.set(NAME);
     bean.Age.setValue(AGE);
-    MarshallingConfig configuration = new MarshallingConfig().with(MarshallingConfig.INDENDATION, null);
+    MarshallingConfig configuration = new MarshallingConfig().with(MarshallingConfig.INDENTATION, null);
     StructuredFormat jsonFormat = JsonFormat.of(configuration);
 
     // when
