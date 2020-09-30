@@ -149,11 +149,11 @@ public class BeanTest extends AbstractBeanTest {
     bean.Name.set(null);
     bean.Hobbies.getOrCreate().add(null);
     result = bean.validate();
-    assertThat(result.getMessage()).isEqualTo("mmm.TestBuildersBean: \n" + //
-        "  Hobbies: \n" + //
-        "    #0: The value has to be filled.\n" + //
-        "  Age: The value needs to be in the range from 0 to 150.\n" + //
-        "  Name: The value has to be filled.");
+    assertThat(result.getMessage(true)).isEqualTo("mmm.TestBuildersBean: [Composed]\n" + //
+        "  Hobbies: [Composed]\n" + //
+        "    #0: [Mandatory] The value has to be filled.\n" + //
+        "  Age: [Range] The value needs to be in the range from 0 to 150.\n" + //
+        "  Name: [Mandatory] The value has to be filled.");
   }
 
 }
