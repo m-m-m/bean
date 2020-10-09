@@ -38,8 +38,6 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
 
   private VirtualBean prototype;
 
-  private BeanClassImpl readOnly;
-
   static {
     asClass(VirtualBean.class);
   }
@@ -134,20 +132,6 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     this.virtual = virtual;
   }
 
-  private BeanClassImpl(BeanClassImpl writable) {
-
-    super(writable);
-    this.superClassList = writable.superClassList;
-    this.superClasses = writable.superClasses;
-    this.packageName = writable.packageName;
-    this.simpleName = writable.simpleName;
-    this.qualifiedName = writable.qualifiedName;
-    this.virtual = writable.virtual;
-    // TODO
-    this.prototype = writable.getPrototype();
-    this.readOnly = this;
-  }
-
   @SuppressWarnings("unchecked")
   @Override
   public Class<? extends VirtualBean> getJavaClass() {
@@ -207,17 +191,6 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     }
     Objects.requireNonNull(prototype, "prototype");
     this.prototype = prototype;
-  }
-
-  /**
-   * @return the read-only view of this bean-class.
-   */
-  public BeanClassImpl getReadOnly() {
-
-    if (this.readOnly == null) {
-      this.readOnly = new BeanClassImpl(this);
-    }
-    return this.readOnly;
   }
 
   /**
