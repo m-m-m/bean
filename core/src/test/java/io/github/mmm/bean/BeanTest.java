@@ -2,10 +2,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.Test;
 
+import io.github.mmm.bean.examples.DynamicTestBean;
 import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.bean.examples.TestBuildersBean;
 import io.github.mmm.property.WritableProperty;
@@ -49,7 +48,7 @@ public class BeanTest extends AbstractBeanTest {
   @Test
   public void testBeanDynamic() {
 
-    TestBean bean = new TestBean(true);
+    TestBean bean = new DynamicTestBean();
     assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
@@ -60,30 +59,25 @@ public class BeanTest extends AbstractBeanTest {
     assertThat(bean.getProperty("Name")).isSameAs(bean.Name);
     assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
     assertThat(bean.getPropertyCount()).isEqualTo(2);
-    TestBean readOnly = WritableBean.getReadOnly(bean);
-    assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
-        .isEqualTo(bean.Name);
-    assertThat(readOnly.getRequiredProperty("Name").isReadOnly()).isTrue();
-    assertThat(readOnly.getRequiredProperty("Age")).isSameAs(readOnly.Age).isNotSameAs(bean.Age).isEqualTo(bean.Age);
-    assertThat(readOnly.getRequiredProperty("Age").isReadOnly()).isTrue();
     String name = "John Doe";
     bean.Name.set(name);
-    assertThat(readOnly.Name.get()).isSameAs(name);
     int age = 42;
     bean.Age.set(age);
-    assertThat(readOnly.Age.get()).isEqualTo(age);
-    assertThat(readOnly.getPropertyCount()).isEqualTo(2);
     LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
     assertThat(bean.getPropertyCount()).isEqualTo(3);
     assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
+    TestBean readOnly = ReadableBean.copy(bean, true);
+    assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
+        .isEqualTo(bean.Name);
+    assertThat(readOnly.Name.isReadOnly()).isTrue();
+    assertThat(readOnly.Name.get()).isSameAs(name);
+    assertThat(readOnly.getRequiredProperty("Age")).isSameAs(readOnly.Age).isNotSameAs(bean.Age).isEqualTo(bean.Age);
+    assertThat(readOnly.Age.isReadOnly()).isTrue();
+    assertThat(readOnly.Age.get()).isEqualTo(age);
     assertThat(readOnly.getProperties()).hasSize(3);
     assertThat(readOnly.getPropertyCount()).isEqualTo(3);
     assertThat(readOnly.getProperty("Birthday")).isNotSameAs(birthday).isEqualTo(birthday);
     assertThat(readOnly.getProperty("Birthday").isReadOnly()).isTrue();
-    // yes, this is inconsistent and does not match the age, it is only a test
-    LocalDate date = LocalDate.of(2003, 02, 01);
-    birthday.set(date);
-    assertThat(readOnly.getProperty("Birthday").get()).isSameAs(date);
     // change listener
     ObservableEventReceiver<Object> listener = new ObservableEventReceiver<>();
     bean.Age.addListener(listener);
@@ -99,7 +93,7 @@ public class BeanTest extends AbstractBeanTest {
   @Test
   public void testBuilders() {
 
-    TestBuildersBean bean = new TestBuildersBean(true);
+    TestBuildersBean bean = new TestBuildersBean();
     assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
@@ -113,32 +107,27 @@ public class BeanTest extends AbstractBeanTest {
     assertThat(bean.Hobbies.get()).isNull();
     assertThat(bean.getProperty("Hobbies")).isSameAs(bean.Hobbies);
     assertThat(bean.getPropertyCount()).isEqualTo(3);
-    TestBuildersBean readOnly = WritableBean.getReadOnly(bean);
+    String name = "John Doe";
+    bean.Name.set(name);
+    int age = 42;
+    bean.Age.setValue(age);
+    LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
+    assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
+    assertThat(bean.getProperties()).hasSize(4);
+    TestBuildersBean readOnly = ReadableBean.copy(bean, true);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
     assertThat(readOnly.getRequiredProperty("Name").isReadOnly()).isTrue();
     assertThat(readOnly.getRequiredProperty("Age")).isSameAs(readOnly.Age).isNotSameAs(bean.Age).isEqualTo(bean.Age);
     assertThat(readOnly.getRequiredProperty("Age").isReadOnly()).isTrue();
-    String name = "John Doe";
-    bean.Name.set(name);
     assertThat(readOnly.Name.get()).isSameAs(name);
-    int age = 42;
-    bean.Age.setValue(age);
     ValidationResult result = bean.validate();
     assertThat(result.isValid()).as(result.toString()).isTrue();
-
     assertThat(readOnly.Age.get()).isEqualTo(age);
-    assertThat(readOnly.getPropertyCount()).isEqualTo(3);
-    LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
-    assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
     assertThat(readOnly.getProperties()).hasSize(4);
     assertThat(readOnly.getPropertyCount()).isEqualTo(4);
     assertThat(readOnly.getProperty("Birthday")).isNotSameAs(birthday).isEqualTo(birthday);
     assertThat(readOnly.getProperty("Birthday").isReadOnly()).isTrue();
-    // yes, this is inconsistent and does not match the age, it is only a test
-    LocalDate date = LocalDate.of(2003, 02, 01);
-    birthday.set(date);
-    assertThat(readOnly.getProperty("Birthday").get()).isSameAs(date);
     // change listener
     ObservableEventReceiver<Object> listener = new ObservableEventReceiver<>();
     bean.Age.addListener(listener);
@@ -149,6 +138,7 @@ public class BeanTest extends AbstractBeanTest {
     bean.Name.set(null);
     bean.Hobbies.getOrCreate().add(null);
     result = bean.validate();
+    assertThat(result.isValid()).isFalse();
     assertThat(result.getMessage(true)).isEqualTo("mmm.TestBuildersBean: [Composed]\n" + //
         "  Hobbies: [Composed]\n" + //
         "    #0: [Mandatory] The value has to be filled.\n" + //

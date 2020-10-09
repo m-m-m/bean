@@ -12,11 +12,9 @@ import io.github.mmm.bean.WritableBean;
  * Creator of {@link AbstractBean} instances.
  *
  * @since 1.0.0
- * @see #create(Class, AbstractBean, boolean)
+ * @see #doCreate(Class)
  */
 public final class BeanCreator implements BeanFactory {
-
-  private static final Class<?>[] CONSTRUCTOR_SIGNATURE = new Class<?>[] { AbstractBean.class, boolean.class };
 
   /**
    * The constructor.
@@ -34,7 +32,7 @@ public final class BeanCreator implements BeanFactory {
       if (type.isInterface()) {
         return null;
       }
-      return (B) create((Class) type, null, dynamic);
+      return (B) doCreate((Class) type);
     } catch (Exception e) {
       throw new IllegalStateException(e.getMessage(), e);
     }
@@ -43,17 +41,14 @@ public final class BeanCreator implements BeanFactory {
   /**
    * @param <B> type of {@link AbstractBean}.
    * @param type {@link Class} of {@link AbstractBean}.
-   * @param writableBean the {@link AbstractBean} to create a {@link AbstractBean#getReadOnly() read-only} copy of.
-   * @param dynamicFlag the {@link AbstractBean#isDynamic() dynamic flag}.
    * @return the new bean instance.
    * @throws ReflectiveOperationException in case of an error.
    */
   @SuppressWarnings("unchecked")
-  public static <B extends AbstractBean> B create(Class<B> type, AbstractBean writableBean, boolean dynamicFlag)
-      throws ReflectiveOperationException {
+  public static <B extends AbstractBean> B doCreate(Class<B> type) throws ReflectiveOperationException {
 
-    Constructor<? extends AbstractBean> constructor = type.getConstructor(CONSTRUCTOR_SIGNATURE);
-    return (B) constructor.newInstance(writableBean, Boolean.valueOf(dynamicFlag));
+    Constructor<? extends AbstractBean> constructor = type.getConstructor();
+    return (B) constructor.newInstance();
   }
 
 }

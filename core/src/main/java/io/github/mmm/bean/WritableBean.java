@@ -198,48 +198,4 @@ public interface WritableBean extends ReadableBean, MarshallingObject {
     }
   }
 
-  /**
-   * @return a new instance of this {@link WritableBean}.
-   */
-  WritableBean newInstance();
-
-  /**
-   * @return a {@link #isReadOnly() immutable} view of this {@link WritableBean}. Read operations on this
-   *         {@link #isReadOnly() immutable} view will produce the exact same results as on the original
-   *         {@link WritableBean}. However, all write operations will fail.
-   * @see #getReadOnly(WritableBean)
-   */
-  WritableBean getReadOnly();
-
-  /**
-   * @param <B> type of the {@link WritableBean}.
-   * @param bean the {@link WritableBean} to get a {@link #getReadOnly() read-only view} for.
-   * @return the {@link #getReadOnly() read-only view}.
-   */
-  @SuppressWarnings("unchecked")
-  static <B extends WritableBean> B getReadOnly(B bean) {
-
-    if (bean == null) {
-      return null;
-    } else if (bean.isReadOnly()) {
-      return bean;
-    } else {
-      return (B) bean.getReadOnly();
-    }
-  }
-
-  /**
-   * @param <B> type of the {@link WritableBean}.
-   * @param bean the {@link WritableBean} to create a new instance of.
-   * @return the {@link #newInstance() new instance}.
-   */
-  @SuppressWarnings("unchecked")
-  static <B extends WritableBean> B newInstance(B bean) {
-
-    if (bean == null) {
-      return null;
-    }
-    return (B) bean.newInstance();
-  }
-
 }

@@ -15,59 +15,43 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
 
   private static final AtomicLong MODIFICATION_SEQUNCE = new AtomicLong(1);
 
-  private final BeanClassImpl type;
-
   private long modificationCounter;
 
   private long updateCounter;
+
+  private /* final */ BeanClassImpl type;
 
   /**
    * The constructor.
    */
   public AbstractVirtualBean() {
 
-    this(null, false);
+    this(null);
   }
 
   /**
    * The constructor.
    *
-   * @param writable the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on or {@code null} to
-   *        create a regular mutable {@link Bean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
-   */
-  public AbstractVirtualBean(AbstractBean writable, boolean dynamic) {
-
-    this(writable, dynamic, null);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param writable the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on or {@code null} to
-   *        create a regular mutable {@link Bean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param type the {@link #getType() type}.
    */
-  public AbstractVirtualBean(AbstractBean writable, boolean dynamic, BeanClass type) {
+  public AbstractVirtualBean(BeanClass type) {
 
-    super(writable, dynamic);
-    Class<? extends AbstractVirtualBean> javaClass = getClass();
+    super();
     if (type == null) {
-      if (writable != null) {
-        this.type = ((AbstractVirtualBean) writable).type.getReadOnly();
-      } else {
-        this.type = BeanClassImpl.asClass(javaClass);
-        if (this.type.getPrototype() == null) {
-          this.type.setPrototype(this);
-        }
-      }
+      Class<? extends AbstractVirtualBean> javaClass = getClass();
+      this.type = BeanClassImpl.asClass(javaClass);
     } else {
       this.type = (BeanClassImpl) type;
-      if (this.type.getPrototype() == null) {
-        this.type.setPrototype(this);
-      }
     }
+    if (this.type.getPrototype() == null) {
+      this.type.setPrototype(this);
+    }
+  }
+
+  @Override
+  public boolean isDynamic() {
+
+    return true;
   }
 
   @Override
@@ -89,6 +73,35 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
   }
 
   @Override
+  protected AbstractBean create() {
+
+    AbstractVirtualBean bean = (AbstractVirtualBean) super.create();
+    bean.type = this.type;
+    return bean;
+  }
+
+  @Override
+  public WritableProperty<?> getProperty(String name) {
+
+    updateProperties();
+    return super.getProperty(name);
+  }
+
+  @Override
+  public int getPropertyCount() {
+
+    updateProperties();
+    return super.getPropertyCount();
+  }
+
+  @Override
+  public Iterable<? extends WritableProperty<?>> getProperties() {
+
+    updateProperties();
+    return super.getProperties();
+  }
+
+  @Override
   protected void onPropertyAdded(WritableProperty<?> property) {
 
     super.onPropertyAdded(property);
@@ -97,10 +110,12 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
     }
   }
 
-  @Override
+  /**
+   * Called before properties are accessed if {@link #isDynamic() dynamic} and not {@link #isReadOnly() read-only} to
+   * allow implementations to update properties internally before.
+   */
   protected void updateProperties() {
 
-    super.updateProperties();
     if (isPrototype()) {
       long maxCounter = this.updateCounter;
       for (BeanClass superClass : this.type.getSuperClasses()) {

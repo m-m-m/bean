@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 import io.github.mmm.bean.impl.BeanCreator;
+import io.github.mmm.bean.impl.BeanPropertyMetadata;
+import io.github.mmm.bean.impl.BeanPropertyMetadataFactory;
+import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.DefaultPropertyBuilders;
 import io.github.mmm.property.factory.PropertyFactoryManager;
@@ -25,30 +28,16 @@ public abstract class AbstractBean implements WritableBean {
 
   private final Collection<WritableProperty<?>> properties;
 
-  private final boolean dynamic;
-
-  final AbstractBean writable;
+  private boolean readOnly;
 
   private DefaultPropertyBuilders builders;
 
-  private AbstractBean readOnly;
-
   /**
    * The constructor.
-   *
-   * @param writable the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on or {@code null} to
-   *        create a regular mutable {@link Bean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
-  public AbstractBean(AbstractBean writable, boolean dynamic) {
+  public AbstractBean() {
 
     super();
-    this.writable = writable;
-    if (writable != null) {
-      assert (dynamic == writable.isDynamic());
-      this.readOnly = this;
-    }
-    this.dynamic = dynamic;
     if (isThreadSafe()) {
       // temporary workaround for https://github.com/konsoletyper/teavm/issues/445
       // this.propertiesMap = new ConcurrentHashMap<>();
@@ -71,7 +60,7 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public boolean isDynamic() {
 
-    return this.dynamic;
+    return false;
   }
 
   /**
@@ -94,33 +83,63 @@ public abstract class AbstractBean implements WritableBean {
     }
   }
 
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
-  public WritableBean newInstance() {
+  public AbstractBean newInstance() {
 
-    AbstractBean instance = create(null, this.dynamic);
-    if (this.dynamic) {
+    AbstractBean instance = create();
+    if (isDynamic()) {
       // copy dynamic properties
-      for (WritableProperty<?> property : this.properties) {
+      for (WritableProperty property : this.properties) {
         if (instance.getProperty(property.getName()) == null) {
-          instance.addProperty(WritableProperty.copy(property));
+          property = copyProperty(property);
+          instance.addProperty(property);
         }
       }
     }
     return instance;
   }
 
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
-  public final boolean isReadOnly() {
+  public WritableBean copy(boolean isReadOnly) {
 
-    return (this.writable != null);
+    if (this.readOnly && isReadOnly) {
+      return this;
+    }
+    AbstractBean copy = newInstance();
+    for (WritableProperty property : copy.getProperties()) {
+      Object value = get(property.getName());
+      property.set(value);
+    }
+    if (isReadOnly) {
+      copy.makeReadOnly();
+    }
+    return copy;
+  }
+
+  private void makeReadOnly() {
+
+    assert (!this.readOnly);
+    for (WritableProperty<?> property : this.propertiesMap.values()) {
+      makeReadOnly(property);
+    }
+    this.propertiesMap.replaceAll((k, p) -> p.getReadOnly());
+    this.readOnly = true;
+  }
+
+  private <V> void makeReadOnly(WritableProperty<V> property) {
+
+    if (property.isReadOnly()) {
+      return;
+    }
+    BeanPropertyMetadata<V> metadata = (BeanPropertyMetadata<V>) property.getMetadata();
+    metadata.makeReadOnly(property.get());
   }
 
   @Override
-  public final AbstractBean getReadOnly() {
+  public final boolean isReadOnly() {
 
-    if (this.readOnly == null) {
-      this.readOnly = create(this, isDynamic());
-    }
     return this.readOnly;
   }
 
@@ -129,15 +148,12 @@ public abstract class AbstractBean implements WritableBean {
    * performance please override this method. Please note, that if you do so, you also need to override this method
    * again for all sub-classes of the hierarchy.
    *
-   * @param writableBean the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on, or {@code null}
-   *        to create a regular mutable {@link Bean}.
-   * @param dynamicFlag the {@link #isDynamic() dynamic flag}.
    * @return the new {@link Bean} instance. Has to be of the same type as the {@link #getClass() current class}.
    */
-  protected AbstractBean create(AbstractBean writableBean, boolean dynamicFlag) {
+  protected AbstractBean create() {
 
     try {
-      return BeanCreator.create(getClass(), writableBean, dynamicFlag);
+      return BeanCreator.doCreate(getClass());
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
@@ -146,54 +162,24 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public Iterable<? extends WritableProperty<?>> getProperties() {
 
-    if (this.writable != null) {
-      for (WritableProperty<?> property : this.writable.getProperties()) {
-        add(property, AddMode.READ_ONLY);
-      }
-    } else if (this.dynamic) {
-      updateProperties();
-    }
     return this.properties;
   }
 
   @Override
   public WritableProperty<?> getProperty(String name) {
 
-    if ((this.writable == null) && this.dynamic) {
-      updateProperties();
-    }
     String resolvedAlias = getPropertyNameForAlias(name);
     if (resolvedAlias != null) {
       name = resolvedAlias;
     }
     WritableProperty<?> property = this.propertiesMap.get(name);
-    if ((property == null) && (this.writable != null)) {
-      property = this.writable.getProperty(name);
-      if (property != null) {
-        property = add(property.getReadOnly());
-      }
-    }
     return property;
   }
 
   @Override
   public int getPropertyCount() {
 
-    if (this.writable != null) {
-      return this.writable.getPropertyCount();
-    }
-    if (this.dynamic) {
-      updateProperties();
-    }
     return this.propertiesMap.size();
-  }
-
-  /**
-   * Called before properties are accessed if {@link #isDynamic() dynamic} and not {@link #isReadOnly() read-only} to
-   * allow implementations to update properties internally before.
-   */
-  protected void updateProperties() {
-
   }
 
   @Override
@@ -201,28 +187,32 @@ public abstract class AbstractBean implements WritableBean {
 
     requireWritable();
     requireDynamic();
-    WritableProperty<V> property = PropertyFactoryManager.get().create(valueClass, name);
-    add(property);
+    BeanPropertyMetadataFactory factory = BeanPropertyMetadataFactory.get();
+    PropertyMetadata<V> metadata = factory.create(null);
+    WritableProperty<V> property = PropertyFactoryManager.get().create(valueClass, name, metadata);
+    property = add(property);
     return property;
   }
 
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   public <P extends WritableProperty<?>> P addProperty(P property) {
 
     requireWritable();
     requireDynamic();
-    return add(property, AddMode.NORMAL);
+    return (P) add((WritableProperty) property, AddMode.NORMAL);
   }
 
   /**
    * Internal method for {@link #addProperty(WritableProperty)}, without verification. Will be called from constructor
    * of bean class implementations to register properties.
    *
+   * @param <V> type of the {@link WritableProperty#get() property value}.
    * @param <P> type of the {@link WritableProperty} to add.
    * @param property the {@link WritableProperty} to add.
    * @return the given {@code property}.
    */
-  protected <P extends WritableProperty<?>> P add(P property) {
+  protected <V, P extends WritableProperty<V>> P add(P property) {
 
     return add(property, AddMode.INTERNAL);
   }
@@ -237,13 +227,15 @@ public abstract class AbstractBean implements WritableBean {
    * @param mode the {@link AddMode}.
    * @return the given {@code property}.
    */
-  @SuppressWarnings("unchecked")
-  <P extends WritableProperty<?>> P add(P property, AddMode mode) {
+  <V, P extends WritableProperty<V>> P add(P property, AddMode mode) {
 
-    if ((this.writable != null) && (mode != AddMode.DIRECT)) {
-      property = (P) this.writable.getProperty(property.getName()).getReadOnly();
-    }
     WritableProperty<?> existing;
+    if ((mode != AddMode.DIRECT)) {
+      PropertyMetadata<V> metadata = property.getMetadata();
+      if (!(metadata instanceof BeanPropertyMetadata)) {
+        property = copyProperty(property);
+      }
+    }
     if (mode.isAddInstance()) {
       existing = this.propertiesMap.putIfAbsent(property.getName(), property);
       if (existing != null) {
@@ -280,6 +272,12 @@ public abstract class AbstractBean implements WritableBean {
   protected PropertyBuilders createPropertyBuilders() {
 
     return new PropertyBuilders(this);
+  }
+
+  private static <V, P extends WritableProperty<V>> P copyProperty(P property) {
+
+    PropertyMetadata<V> metadata = BeanPropertyMetadataFactory.get().create(property.getMetadata());
+    return WritableProperty.copy(property, null, metadata);
   }
 
   /**
@@ -379,7 +377,7 @@ public abstract class AbstractBean implements WritableBean {
       if (this.mode == AddMode.READ_ONLY) {
         this.result = WritableProperty.getReadOnly(this.property);
       } else {
-        this.result = WritableProperty.copy(this.property);
+        this.result = (P) copyProperty((WritableProperty) this.property);
         if (this.mode == AddMode.COPY_WITH_VALUE) {
           if (!this.result.isReadOnly()) {
             ((WritableProperty) this.result).set(this.property.get());

@@ -40,11 +40,12 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     assertThat(testAdvancedParentBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedParentBean");
 
     // bean
-    TestAdvancedBean prototype = new TestAdvancedBean(true, virtucalBeanClass);
+    // first instance created for virtual bean class is the prototype
+    TestAdvancedBean prototype = new TestAdvancedBean(virtucalBeanClass);
     assertThat(prototype.isPrototype()).isTrue();
     assertThat(prototype.getType()).isSameAs(virtucalBeanClass);
     assertThat(virtucalBeanClass.getPrototype()).isSameAs(prototype);
-    TestAdvancedBean bean = new TestAdvancedBean(true, virtucalBeanClass);
+    TestAdvancedBean bean = new TestAdvancedBean(virtucalBeanClass);
     assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
@@ -59,38 +60,37 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     assertThat(virtucalBeanClass.getPrototype().getPropertyCount()).isEqualTo(2);
     assertThat(BeanHelper.getPropertyNames(virtucalBeanClass.getPrototype())).containsExactlyInAnyOrder("Name", "Age");
     assertThat(testAdvancedBeanClass.getPrototype().getPropertyCount()).isEqualTo(2);
-    TestAdvancedBean readOnly = WritableBean.getReadOnly(bean);
+    String name = "John Doe";
+    bean.Name.set(name);
+    int age = 42;
+    bean.Age.set(age);
+    LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
+    assertThat(bean.getPropertyCount()).isEqualTo(3);
+    assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
+    // yes, this is inconsistent and does not match the age, it is only a test
+    LocalDate date = LocalDate.of(2003, 02, 01);
+    birthday.set(date);
+    TestAdvancedBean readOnly = ReadableBean.copy(bean, true);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
     assertThat(readOnly.getRequiredProperty("Name").isReadOnly()).isTrue();
     assertThat(readOnly.getRequiredProperty("Age")).isSameAs(readOnly.Age).isNotSameAs(bean.Age).isEqualTo(bean.Age);
     assertThat(readOnly.getRequiredProperty("Age").isReadOnly()).isTrue();
-    String name = "John Doe";
-    bean.Name.set(name);
     assertThat(readOnly.Name.get()).isSameAs(name);
-    int age = 42;
-    bean.Age.set(age);
     assertThat(readOnly.Age.get()).isEqualTo(age);
-    assertThat(readOnly.getPropertyCount()).isEqualTo(2);
-    LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
-    assertThat(bean.getPropertyCount()).isEqualTo(3);
-    assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
     assertThat(readOnly.getProperties()).hasSize(3);
     assertThat(readOnly.getPropertyCount()).isEqualTo(3);
     assertThat(readOnly.getProperty("Birthday")).isNotSameAs(birthday).isEqualTo(birthday);
     assertThat(readOnly.getProperty("Birthday").isReadOnly()).isTrue();
-    // yes, this is inconsistent and does not match the age, it is only a test
-    LocalDate date = LocalDate.of(2003, 02, 01);
-    birthday.set(date);
     assertThat(readOnly.getProperty("Birthday").get()).isSameAs(date);
-    StringProperty string = new StringProperty("String");
-    testAdvancedParentBeanClass.getPrototype().addProperty(string);
+    StringProperty string = testAdvancedParentBeanClass.getPrototype().addProperty(new StringProperty("String"));
+    string.set("defaultValue");
     assertThat(readOnly.getProperties()).hasSize(4);
     assertThat(readOnly.getProperty("String")).isEqualTo(string);
     bean.set("String", "value");
-    virtucalBeanClass.getPrototype().set("String", "defaultValue");
-    assertThat(readOnly.get("String")).isEqualTo("value");
-    bean = new TestAdvancedBean(true, virtucalBeanClass);
+    assertThat(bean.get("String")).isEqualTo("value");
+    assertThat(readOnly.get("String")).isEqualTo("defaultValue");
+    bean = new TestAdvancedBean(virtucalBeanClass);
     assertThat(bean.get("String")).isEqualTo("defaultValue");
   }
 

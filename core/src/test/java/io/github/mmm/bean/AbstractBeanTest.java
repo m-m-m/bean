@@ -54,22 +54,22 @@ public abstract class AbstractBeanTest extends Assertions {
     String propertyName = property.getName();
     assertThat(bean.getRequiredProperty(propertyName)).isSameAs(property);
     if (!bean.isReadOnly()) {
-      AbstractBean readOnlyBean = bean.getReadOnly();
+      WritableBean readOnlyBean = bean.copy(true);
       assertThat(readOnlyBean.isReadOnly()).isTrue();
       assertThat(readOnlyBean.getClass()).isSameAs(bean.getClass());
       WritableProperty<?> readOnlyProperty = readOnlyBean.getRequiredProperty(property.getName());
-      assertThat(readOnlyProperty).isNotSameAs(property).isEqualTo(property).isSameAs(property.getReadOnly());
+      assertThat(readOnlyProperty).isNotSameAs(property).isEqualTo(property);
       assertThat(readOnlyProperty.isReadOnly()).isTrue();
       assertThat(property.get()).isEqualTo(bean.get(property.getName()))
           .isEqualTo(readOnlyBean.get(property.getName()));
       if (newValue != null) {
         assertThat(property.get()).isNotEqualTo(newValue);
         ObservableEventReceiver<Object> listener = new ObservableEventReceiver<>();
-        readOnlyProperty.addListener(listener);
+        property.addListener(listener);
         property.set(newValue);
         assertThat(listener.getEventCount()).isEqualTo(1);
         assertThat(listener.getEvent().getValue()).isEqualTo(newValue);
-        readOnlyProperty.removeListener(listener);
+        property.removeListener(listener);
       }
     }
   }

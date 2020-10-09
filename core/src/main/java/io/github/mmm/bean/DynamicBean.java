@@ -6,25 +6,20 @@ package io.github.mmm.bean;
  * A {@link Bean} that is always {@link #isDynamic() dynamic}. Only exists for simplicity.
  */
 @Name("mmm.DynamicBean")
-public final class DynamicBean extends Bean {
+public class DynamicBean extends Bean {
 
   /**
    * The constructor.
    */
   public DynamicBean() {
 
-    super(null, true);
-  }
-
-  private DynamicBean(AbstractBean writable) {
-
-    super(writable, true);
+    super();
   }
 
   @Override
-  protected Bean create(AbstractBean writableBean, boolean dynamic) {
+  public boolean isDynamic() {
 
-    return new DynamicBean(writableBean);
+    return true;
   }
 
 }

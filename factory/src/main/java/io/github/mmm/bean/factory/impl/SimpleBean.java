@@ -20,14 +20,11 @@ public final class SimpleBean extends AbstractBean {
   /**
    * The constructor.
    *
-   * @param writable the writable {@link SimpleBean} to create a {@link #isReadOnly() read-only} view on or {@code null}
-   *        to create a regular mutable {@link SimpleBean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param type the {@link #getType() type}.
    */
-  public SimpleBean(AbstractBean writable, boolean dynamic, BeanType type) {
+  public SimpleBean(BeanType type) {
 
-    super(writable, dynamic);
+    super();
     this.type = BeanTypeImpl.asType(getClass());
   }
 

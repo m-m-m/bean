@@ -14,7 +14,6 @@ import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
-import io.github.mmm.bean.WritableBean;
 
 /**
  * A {@link BeanClass} reflects a {@link Bean} (similar to a Java {@link Class}).
@@ -38,8 +37,6 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
   private final String qualifiedName;
 
   private VirtualBean prototype;
-
-  private BeanClassImpl readOnly;
 
   static {
     asClass(VirtualBean.class);
@@ -135,19 +132,6 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     this.virtual = virtual;
   }
 
-  private BeanClassImpl(BeanClassImpl writable) {
-
-    super(writable);
-    this.superClassList = writable.superClassList;
-    this.superClasses = writable.superClasses;
-    this.packageName = writable.packageName;
-    this.simpleName = writable.simpleName;
-    this.qualifiedName = writable.qualifiedName;
-    this.virtual = writable.virtual;
-    this.prototype = WritableBean.getReadOnly(writable.prototype);
-    this.readOnly = this;
-  }
-
   @SuppressWarnings("unchecked")
   @Override
   public Class<? extends VirtualBean> getJavaClass() {
@@ -207,17 +191,6 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     }
     Objects.requireNonNull(prototype, "prototype");
     this.prototype = prototype;
-  }
-
-  /**
-   * @return the read-only view of this bean-class.
-   */
-  public BeanClassImpl getReadOnly() {
-
-    if (this.readOnly == null) {
-      this.readOnly = new BeanClassImpl(this);
-    }
-    return this.readOnly;
   }
 
   /**
