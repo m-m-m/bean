@@ -22,26 +22,11 @@ public class AdvancedBean extends AbstractVirtualBean {
   /**
    * The constructor.
    *
-   * @param writable the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on or {@code null} to
-   *        create a regular mutable {@link Bean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
-   */
-  public AdvancedBean(AbstractBean writable, boolean dynamic) {
-
-    super(writable, dynamic);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param writable the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on or {@code null} to
-   *        create a regular mutable {@link Bean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param type the {@link #getType() type}.
    */
-  public AdvancedBean(AbstractBean writable, boolean dynamic, BeanClass type) {
+  public AdvancedBean(BeanClass type) {
 
-    super(writable, dynamic, type);
+    super(type);
     Class<? extends AdvancedBean> javaClass = getClass();
     if ((type != null) && (type.getJavaClass() != javaClass)) {
       throw new IllegalArgumentException(

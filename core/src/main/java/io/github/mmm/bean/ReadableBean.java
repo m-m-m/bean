@@ -22,8 +22,8 @@ import io.github.mmm.validation.ValidationResultBuilder;
  * read data from Database, XML, or JSON you can still map "undefined" properties in your {@link Bean}. This way a
  * client can receive an object from a newer version of a database or service with added properties that will be kept in
  * the object and send back when the {@link Bean} is written back.</li>
- * <li><b>ReadOnly-Support</b> - {@link WritableBean#getReadOnly(WritableBean) create} a {@link #isReadOnly() read-only}
- * view of your object to pass by reference without side-effects.</li>
+ * <li><b>ReadOnly-Support</b> - create a {@link #isReadOnly() read-only} {@link #copy(boolean) copy} of your object to
+ * pass by reference without side-effects.</li>
  * <li><b>Powerful</b> - {@link WritableProperty} supports listeners and bindings as well as
  * {@link WritableProperty#getValueClass() generic type information}.</li>
  * <li><b>Validation</b> - build-in {@link #validate() validation support}.</li>
@@ -117,7 +117,6 @@ public interface ReadableBean extends Validatable, MarshallableObject {
 
   /**
    * @return {@code true} if this {@link Bean} is read-only (immutable), {@code false} otherwise.
-   * @see WritableBean#getReadOnly(WritableBean)
    */
   boolean isReadOnly();
 
@@ -210,6 +209,66 @@ public interface ReadableBean extends Validatable, MarshallableObject {
       }
     }
     writer.writeEnd();
+  }
+
+  /**
+   * @return a copy of this {@link WritableBean}. Like {@link #newInstance()} but with the values copied into the new
+   *         instance.
+   */
+  default WritableBean copy() {
+
+    return copy(false);
+  }
+
+  /**
+   * @param readOnly - {@code true} if the copy shall be {@link #isReadOnly() read-only}.
+   * @return a {@link #copy() copy} of this {@link WritableBean}. If {@code readOnly} is {@code true} and this bean is
+   *         already {@link #isReadOnly() read-only}, the same instance will be returned.
+   */
+  WritableBean copy(boolean readOnly);
+
+  /**
+   * @return a new instance of this {@link WritableBean}.
+   */
+  WritableBean newInstance();
+
+  /**
+   * @param <B> type of the {@link WritableBean}.
+   * @param bean the {@link WritableBean} to create a {@link #newInstance() new instance} of.
+   * @return the {@link #newInstance() new instance}.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends ReadableBean> B newInstance(B bean) {
+
+    if (bean == null) {
+      return null;
+    }
+    return (B) bean.newInstance();
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean}.
+   * @param bean the {@link WritableBean} to {@link #copy(boolean) copy}.
+   * @param readOnly - {@code true} if the copy shall be {@link #isReadOnly() read-only}.
+   * @return the {@link #copy(boolean) copy}.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends ReadableBean> B copy(B bean, boolean readOnly) {
+
+    if (bean == null) {
+      return null;
+    }
+    return (B) bean.copy(readOnly);
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean}.
+   * @param bean the {@link WritableBean} to {@link #copy(boolean) copy}.
+   * @return the {@link #isReadOnly() read-only} {@link #copy(boolean) copy}.
+   */
+  static <B extends ReadableBean> B copyReadOnly(B bean) {
+
+    return copy(bean, true);
   }
 
 }

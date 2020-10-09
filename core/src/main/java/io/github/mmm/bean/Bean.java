@@ -16,19 +16,7 @@ public class Bean extends AbstractBean {
    */
   public Bean() {
 
-    this(null, false);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param writable the writable {@link Bean} to create a {@link #isReadOnly() read-only} view on or {@code null} to
-   *        create a regular mutable {@link Bean}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
-   */
-  public Bean(AbstractBean writable, boolean dynamic) {
-
-    super(writable, dynamic);
+    super();
     this.type = BeanTypeImpl.asType(getClass());
   }
 

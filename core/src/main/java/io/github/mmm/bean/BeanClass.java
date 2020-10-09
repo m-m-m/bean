@@ -108,7 +108,7 @@ public interface BeanClass extends BeanType {
    * @param stableName the {@link #getStableName() stable name}.
    * @param superClasses the {@link #getSuperClasses() super-classes}.
    * @return the created {@link #isVirtual() virtual} {@link BeanClass}.
-   * @see AdvancedBean#AdvancedBean(AbstractBean, boolean, BeanClass)
+   * @see AdvancedBean#AdvancedBean(BeanClass)
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   static BeanClass createVirtual(String packageName, String simpleName, String stableName, BeanClass... superClasses) {

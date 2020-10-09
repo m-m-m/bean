@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.examples;
 
-import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.Name;
@@ -24,34 +23,19 @@ public class TestAdvancedParentBean extends AdvancedBean {
 
   public TestAdvancedParentBean() {
 
-    this(null, true, null);
+    this(null);
   }
 
-  public TestAdvancedParentBean(boolean dynamic) {
+  public TestAdvancedParentBean(BeanClass type) {
 
-    this(null, dynamic, null);
-  }
-
-  public TestAdvancedParentBean(AbstractBean writable, boolean dynamic) {
-
-    this(writable, dynamic, null);
-  }
-
-  public TestAdvancedParentBean(boolean dynamic, BeanClass type) {
-
-    this(null, dynamic, type);
-  }
-
-  public TestAdvancedParentBean(AbstractBean writable, boolean dynamic, BeanClass type) {
-
-    super(writable, dynamic, type);
+    super(type);
     this.Name = add(new StringProperty("Name"));
   }
 
   @Override
-  protected AbstractBean create(AbstractBean writableBean, boolean dynamicFlag) {
+  public boolean isDynamic() {
 
-    return new TestAdvancedParentBean(writableBean, dynamicFlag, getType());
+    return true;
   }
 
 }

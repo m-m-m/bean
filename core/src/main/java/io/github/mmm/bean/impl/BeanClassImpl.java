@@ -14,7 +14,6 @@ import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
-import io.github.mmm.bean.WritableBean;
 
 /**
  * A {@link BeanClass} reflects a {@link Bean} (similar to a Java {@link Class}).
@@ -144,7 +143,8 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     this.simpleName = writable.simpleName;
     this.qualifiedName = writable.qualifiedName;
     this.virtual = writable.virtual;
-    this.prototype = WritableBean.getReadOnly(writable.prototype);
+    // TODO
+    this.prototype = writable.getPrototype();
     this.readOnly = this;
   }
 

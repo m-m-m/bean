@@ -16,7 +16,7 @@ For motivation and details see the https://m-m-m.github.io/docs/api/io.github.mm
 
 [source,java]
 -----
-public class TestBean extends Bean {
+public class TestBean extends DynamicBean {
 
   /** Full name of person. */
   public final StringProperty Name;
@@ -25,15 +25,9 @@ public class TestBean extends Bean {
   public final IntegerProperty Age;
 
   public TestBean() {
-
-    this(null, true);
-  }
-
-  public TestBean(AbstractBean writable, boolean dynamic) {
-
-    super(writable, dynamic);
-    this.Name = add(new StringProperty("Name"));
-    this.Age = add(new IntegerProperty("Age"));
+    // this.Name = add(new StringProperty("Name"));
+    this.Name = add().newString("Name");
+    this.Age = add().newInteger("Age");
   }
 }
 -----
@@ -42,7 +36,6 @@ Wait, that looks kind of odd, right?
 
 * Capitalized field names - that is a violation of Java conventions. C# hackers doing Java coding, or what?
 * So public fields - ain't that an anti-pattern?
-* And what are those strange contructor arguments?
 * Do you guys have to reinvent Java fundamentals?
 
 Before we answer these questions lets first have a look at the usage:
@@ -52,13 +45,14 @@ Before we answer these questions lets first have a look at the usage:
 TestBean bean = new TestBean();
 bean.Name.set("John Doe");
 bean.Age.set(42);
-// Read-Only views
-TestBean readonly = WritableBean.getReadOnly(bean);
+// Read-Only copy
+TestBean readonly = ReadableBean.copyReadOnly(bean);
 assertThat(readonly.Age.get()).isEqualTo(42);
 bean.Age.set(43);
-assertThat(readonly.Age.get()).isEqualTo(43);
+assertThat(bean.Age.get()).isEqualTo(43);
+assertThat(readonly.Age.get()).isEqualTo(42);
 try {
-  readonly.Age.set(44);
+  readonly.Age.set(43);
   fail("Exception expected");
 } catch (IllegalStateException e) {
 }
@@ -70,19 +64,22 @@ TestBean bean2 = new TestBean();
 for (WritableProperty<?> property : bean.getProperties()) {
   bean2.set(property.getName(), property.getValue());
 }
+// default equals and hashCode from Object for fast usage in collections
+assertThat(bean).isNotEqualTo(bean2); 
+// build in support for sematical equals comparing by value
 assertThat(bean.isEqualTo(bean2)).isTrue();
 -----
 
 This is just the beginning. There is so much more:
 
 * build-in JSON and XML mapping
-* polymorphic type hierarchies
 * powerful validation support
-* all ready as modules for Java11
+* all ready as modules for Java11+
 * generic metadata and annotations on properties
 * unidircational and bidirectional bindings
 * computational expressions for property values
 * dynamic property support
+* polymorphic type hierarchies
 * optional virtual run-time type creation with protoypic inheritance
 * alternative support for bean interfaces as dynamic proxies providing multi-inheritance and even less boiler-plate code (but more magic and overhead)
 * ...
@@ -97,8 +94,6 @@ However, this again is pointless boiler-plate code and our intention is to make 
 Instead, ask yourself, why getters and setters have been introduced once?
 All these reasons do not apply for properties declared as public final (!) fields.
 You can even change your code to make them readonly, computed, etc.
-* The argumented constructor is needed to create read-only views of the bean.
-In case you do not need such features, you can ommit such constructor.
 * And yes, classic Java Beans aka POJOs suck.
 Everybody hates them.
 You may also use https://projectlombok.org/[Lombok] instead.
@@ -130,7 +125,7 @@ Well, for JavaScript clients no problem. But for Java clients your entity class 
 It will either already fail to load the entity or lose the property value when sending the changes back for saving.
 
 So wouldn't it be nice to have a way to support something like this in Java as well?
-The beans we offer here support exactly what you need for this problem. Simply create them as dynamic beans (provide `true` for the dynamic flag in super constructor).
+The beans we offer here support exactly what you need for this problem. Simply extends your beans from `DynamicBean` instead of `Bean` or override the `isDynamic` method.
 
 [source,java]
 -----
@@ -141,10 +136,7 @@ bean.Age.set(16);
 WritableProperty<Instant> foo = bean.getOrCreateProperty("Foo", Instant.class);
 foo.setValue(Instant.parse("1999-12-31T23:59:59Z"));
 // Write JSON
-StringWriter stringWriter = new StringWriter();
-StructuredWriter writer = JsonpMarshalling.of().writer(stringWriter);
-bean.write(writer);
-String json = stringWriter.toString();
+String json = JsonMarshalling.of().write(bean);
 System.out.println(json);
 -----
 
@@ -160,4 +152,4 @@ This will print the following JSON:
 -----
 
 So if you want the best of both worlds (static and dynamic typing), you have found the solution now.
-Of course you can populate an existing bean with data from JSON in an analog way.
+Of course you can populate an existing bean with data from JSON in an analog way and of course there is full stream support for `Reader` and `Writer`.
