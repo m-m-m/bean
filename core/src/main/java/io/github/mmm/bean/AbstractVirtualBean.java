@@ -49,6 +49,12 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
   }
 
   @Override
+  public boolean isDynamic() {
+
+    return true;
+  }
+
+  @Override
   protected boolean isThreadSafe() {
 
     return isDynamic();

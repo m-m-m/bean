@@ -51,9 +51,9 @@ public abstract class BeanProxy implements InvocationHandler {
     this.beanFactory = beanFactory;
     this.dynamic = dynamic;
     if (beanType instanceof BeanClass) {
-      this.bean = new SimpleVirtualBean(writable, true, (BeanClass) beanType);
+      this.bean = new SimpleVirtualBean((BeanClass) beanType);
     } else {
-      this.bean = new SimpleBean(writable, true, beanType);
+      this.bean = new SimpleBean(beanType);
     }
   }
 
