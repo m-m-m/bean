@@ -7,7 +7,9 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
+import io.github.mmm.bean.BeanHelper;
 import io.github.mmm.bean.PropertyMethod;
+import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
 import io.github.mmm.property.WritableProperty;
@@ -18,8 +20,6 @@ import io.github.mmm.property.WritableProperty;
  * @since 1.0.0
  */
 public abstract class BeanOperation {
-
-  private static final String SUFFIX_PROPERTY = "Property";
 
   /**
    * The constructor.
@@ -83,47 +83,22 @@ public abstract class BeanOperation {
       return new BeanOperationDefaultMethod(method);
     }
     if (parameterCount == 0) {
-      if (methodName.equals("getReadOnly")) {
-        return BeanOperationGetReadOnly.INSTANCE;
-      } else if (Character.isUpperCase(first)) {
+      if (Character.isUpperCase(first)) {
         return new BeanOperationProperty(methodName, method);
-      } else if (methodName.endsWith(SUFFIX_PROPERTY)) {
+      } else if (methodName.endsWith(ReadableBean.SUFFIX_PROPERTY)) {
         String propertyName = Character.toUpperCase(first)
-            + methodName.substring(1, methodName.length() - SUFFIX_PROPERTY.length());
+            + methodName.substring(1, methodName.length() - ReadableBean.SUFFIX_PROPERTY.length());
         return new BeanOperationProperty(propertyName, method);
       } else {
-        String propertyName = getCapitalSuffixAfterPrefixes(methodName, "get", "has", "is");
+        String propertyName = BeanHelper.getPropertyForGetter(methodName);
         if (propertyName != null) {
           return new BeanOperationGetter(propertyName, method);
         }
       }
     } else if (parameterCount == 1) {
-      String propertyName = getCapitalSuffixAfterPrefix(methodName, "set");
+      String propertyName = BeanHelper.getPropertyForSetter(methodName);
       if (propertyName != null) {
         return new BeanOperationSetter(propertyName, method);
-      }
-    }
-    return null;
-  }
-
-  private static String getCapitalSuffixAfterPrefixes(String string, String... prefixes) {
-
-    for (String prefix : prefixes) {
-      String suffix = getCapitalSuffixAfterPrefix(string, prefix);
-      if (suffix != null) {
-        return suffix;
-      }
-    }
-    return null;
-  }
-
-  private static String getCapitalSuffixAfterPrefix(String string, String prefix) {
-
-    if (string.startsWith(prefix)) {
-
-      String suffix = string.substring(prefix.length());
-      if ((suffix.length() > 0) && (Character.isUpperCase(suffix.charAt(0)))) {
-        return suffix;
       }
     }
     return null;

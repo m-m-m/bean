@@ -6,7 +6,13 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 import io.github.mmm.bean.Bean;
+import io.github.mmm.bean.Mandatory;
+import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
+import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
+import io.github.mmm.property.factory.PropertyFactoryManager;
+import io.github.mmm.validation.Validator;
+import io.github.mmm.validation.main.ValidatorMandatory;
 
 /**
  * Operation on a {@link Bean} {@link WritableProperty property}.
@@ -47,6 +53,26 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
   public Method getMethod() {
 
     return this.method;
+  }
+
+  /**
+   * @param proxy the {@link BeanProxy}.
+   * @param propertyClass the {@link Class} reflecting the {@link WritableProperty} or {@code null} if
+   *        {@code valueClass} is given.
+   * @param valueClass the {@link Class} reflecting the {@link WritableProperty#getValueClass() value class} or
+   *        {@code null} if {@code propertyClass} is given.
+   * @return the new {@link WritableProperty}.
+   */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  protected WritableProperty<?> createProperty(BeanProxy proxy, Class<?> propertyClass, Class<?> valueClass) {
+
+    Validator validator = null;
+    if (this.method.isAnnotationPresent(Mandatory.class)) {
+      validator = ValidatorMandatory.get();
+    }
+    PropertyMetadata metadata = PropertyMetadata.of(proxy.getBean(), validator);
+    return (WritableProperty<?>) PropertyFactoryManager.get().create((Class) propertyClass, valueClass,
+        this.propertyName, metadata);
   }
 
 }

@@ -10,7 +10,7 @@ import io.github.mmm.property.ReadableProperty;
 /**
  * Helper class for {@link io.github.mmm.bean.Bean}s.
  */
-public class BeanHelper {
+public class BeanTestHelper {
 
   /**
    * @param bean the {@link ReadableBean}.

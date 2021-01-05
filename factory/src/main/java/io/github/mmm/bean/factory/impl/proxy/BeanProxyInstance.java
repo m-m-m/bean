@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.impl.proxy;
 
-import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.WritableBean;
 
 /**
@@ -10,7 +9,7 @@ import io.github.mmm.bean.WritableBean;
  *
  * @since 1.0.0
  */
-public abstract class BeanProxyInstance extends BeanProxy {
+public final class BeanProxyInstance extends BeanProxy {
 
   /** @see #getPrototype() */
   protected final BeanProxyPrototype prototype;
@@ -19,14 +18,13 @@ public abstract class BeanProxyInstance extends BeanProxy {
    * The constructor.
    *
    * @param prototype the {@link #getPrototype() prototype}.
-   * @param writable the writable {@link AbstractBean bean} to create a {@link WritableBean#isReadOnly() read-only} view
-   *        on or {@code null} to create a regular mutable {@link AbstractBean bean}.
    * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
-  public BeanProxyInstance(BeanProxyPrototype prototype, AbstractBean writable, boolean dynamic) {
+  public BeanProxyInstance(BeanProxyPrototype prototype, boolean dynamic) {
 
-    super(prototype.beanFactory, prototype.beanType, writable, dynamic, prototype.interfaces);
+    super(prototype.beanFactory, prototype.beanType, dynamic, prototype.interfaces);
     this.prototype = prototype;
+    prototype.initProperties(this);
   }
 
   @Override

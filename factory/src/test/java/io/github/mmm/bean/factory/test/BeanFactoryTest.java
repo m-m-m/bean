@@ -8,7 +8,9 @@ import java.time.Period;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.github.mmm.base.exception.ReadOnlyException;
 import io.github.mmm.bean.BeanFactory;
+import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
 /**
@@ -34,6 +36,16 @@ public class BeanFactoryTest extends Assertions {
     bean.setAge(age);
     assertThat(bean.getAge()).isEqualTo(age);
     assertThat(bean.Age().get()).isEqualTo(age);
+    PersonBean copy = ReadableBean.copyReadOnly(bean);
+    assertThat(copy.Age().get()).isEqualTo(age);
+    assertThat(copy.Name().get()).isEqualTo(name);
+    try {
+      copy.Age().set(99);
+      failBecauseExceptionWasNotThrown(ReadOnlyException.class);
+    } catch (ReadOnlyException e) {
+      assertThat(e.getNlsMessage().getMessage())
+          .isEqualTo("Failed to modify read-only object: Property Age is readonly and cannot be modified.");
+    }
   }
 
   /** Test of {@link BeanFactory#create(Class)} from an interface with inheritance. */

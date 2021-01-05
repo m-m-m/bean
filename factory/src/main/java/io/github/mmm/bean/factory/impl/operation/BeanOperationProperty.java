@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.WritableProperty;
-import io.github.mmm.property.factory.PropertyFactoryManager;
 
 /**
  * {@link BeanOperation} for property accessor method.
@@ -32,7 +31,6 @@ public class BeanOperationProperty extends BeanOperationOnProperty {
     return proxy.getBean().getProperty(this.propertyName);
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public WritableProperty<?> createProperty(BeanProxy proxy) {
 
@@ -44,8 +42,7 @@ public class BeanOperationProperty extends BeanOperationOnProperty {
             "Failed to create property " + this.propertyName + " from default method " + this.method, e);
       }
     }
-    return (WritableProperty<?>) PropertyFactoryManager.get().create((Class) this.method.getReturnType(), null,
-        this.propertyName);
+    return createProperty(proxy, this.method.getReturnType(), null);
   }
 
 }

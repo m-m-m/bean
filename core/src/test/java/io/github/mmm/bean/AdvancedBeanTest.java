@@ -58,7 +58,8 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     assertThat(bean.getProperty("Age")).isSameAs(bean.Age);
     assertThat(bean.getPropertyCount()).isEqualTo(2);
     assertThat(virtucalBeanClass.getPrototype().getPropertyCount()).isEqualTo(2);
-    assertThat(BeanHelper.getPropertyNames(virtucalBeanClass.getPrototype())).containsExactlyInAnyOrder("Name", "Age");
+    assertThat(BeanTestHelper.getPropertyNames(virtucalBeanClass.getPrototype())).containsExactlyInAnyOrder("Name",
+        "Age");
     assertThat(testAdvancedBeanClass.getPrototype().getPropertyCount()).isEqualTo(2);
     String name = "John Doe";
     bean.Name.set(name);

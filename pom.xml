@@ -22,6 +22,7 @@
   <modules>
     <module>core</module>
     <module>factory</module>
+    <module>generator</module>
   </modules>
 
   <dependencies>

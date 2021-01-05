@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.WritableProperty;
-import io.github.mmm.property.factory.PropertyFactoryManager;
 
 /**
  * {@link BeanOperation} for legacy POJO getter method.
@@ -67,7 +66,7 @@ public class BeanOperationGetter extends BeanOperationOnProperty {
   @Override
   public WritableProperty<?> createProperty(BeanProxy proxy) {
 
-    return PropertyFactoryManager.get().create(this.method.getReturnType(), this.propertyName);
+    return createProperty(proxy, null, this.method.getReturnType());
   }
 
 }

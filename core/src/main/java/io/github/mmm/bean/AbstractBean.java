@@ -10,11 +10,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 import io.github.mmm.bean.impl.BeanCreator;
-import io.github.mmm.bean.impl.BeanPropertyMetadata;
-import io.github.mmm.bean.impl.BeanPropertyMetadataFactory;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
-import io.github.mmm.property.builder.DefaultPropertyBuilders;
+import io.github.mmm.property.builder.PropertyBuilders;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 
 /**
@@ -30,7 +28,7 @@ public abstract class AbstractBean implements WritableBean {
 
   private boolean readOnly;
 
-  private DefaultPropertyBuilders builders;
+  private PropertyBuilders builders;
 
   /**
    * The constructor.
@@ -100,7 +98,6 @@ public abstract class AbstractBean implements WritableBean {
     return instance;
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   public WritableBean copy(boolean isReadOnly) {
 
@@ -108,33 +105,14 @@ public abstract class AbstractBean implements WritableBean {
       return this;
     }
     AbstractBean copy = newInstance();
-    for (WritableProperty property : copy.getProperties()) {
-      Object value = get(property.getName());
-      property.set(value);
-    }
-    if (isReadOnly) {
-      copy.makeReadOnly();
-    }
+    BeanHelper.copy(this, copy, isReadOnly);
     return copy;
   }
 
-  private void makeReadOnly() {
+  void makeReadOnly() {
 
     assert (!this.readOnly);
-    for (WritableProperty<?> property : this.propertiesMap.values()) {
-      makeReadOnly(property);
-    }
-    this.propertiesMap.replaceAll((k, p) -> p.getReadOnly());
     this.readOnly = true;
-  }
-
-  private <V> void makeReadOnly(WritableProperty<V> property) {
-
-    if (property.isReadOnly()) {
-      return;
-    }
-    BeanPropertyMetadata<V> metadata = (BeanPropertyMetadata<V>) property.getMetadata();
-    metadata.makeReadOnly(property.get());
   }
 
   @Override
@@ -187,8 +165,7 @@ public abstract class AbstractBean implements WritableBean {
 
     requireWritable();
     requireDynamic();
-    BeanPropertyMetadataFactory factory = BeanPropertyMetadataFactory.get();
-    PropertyMetadata<V> metadata = factory.create(null);
+    PropertyMetadata<V> metadata = PropertyMetadata.of(this, null, null, valueType);
     WritableProperty<V> property = PropertyFactoryManager.get().create(valueClass, name, metadata);
     property = add(property);
     return property;
@@ -232,7 +209,7 @@ public abstract class AbstractBean implements WritableBean {
     WritableProperty<?> existing;
     if ((mode != AddMode.DIRECT)) {
       PropertyMetadata<V> metadata = property.getMetadata();
-      if (!(metadata instanceof BeanPropertyMetadata)) {
+      if (metadata.getLock() != this) {
         property = copyProperty(property);
       }
     }
@@ -256,7 +233,7 @@ public abstract class AbstractBean implements WritableBean {
   /**
    * @return the builder factory to build properties to be added to this bean.
    */
-  protected DefaultPropertyBuilders add() {
+  protected PropertyBuilders add() {
 
     if (this.builders == null) {
       this.builders = createPropertyBuilders();
@@ -265,18 +242,18 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   /**
-   * Internal method that may be overridden to replace the {@link PropertyBuilders} implementation.
+   * Internal method that may be overridden to replace the {@link StandardPropertyBuilders} implementation.
    *
-   * @return the {@link PropertyBuilders} instance.
+   * @return the {@link StandardPropertyBuilders} instance.
    */
-  protected PropertyBuilders createPropertyBuilders() {
+  protected StandardPropertyBuilders createPropertyBuilders() {
 
-    return new PropertyBuilders(this);
+    return new StandardPropertyBuilders(this);
   }
 
-  private static <V, P extends WritableProperty<V>> P copyProperty(P property) {
+  private <V, P extends WritableProperty<V>> P copyProperty(P property) {
 
-    PropertyMetadata<V> metadata = BeanPropertyMetadataFactory.get().create(property.getMetadata());
+    PropertyMetadata<V> metadata = property.getMetadata().withLock(this);
     return WritableProperty.copy(property, null, metadata);
   }
 
@@ -354,8 +331,7 @@ public abstract class AbstractBean implements WritableBean {
     }
   }
 
-  private static class PropertyFunction<P extends WritableProperty<?>>
-      implements Function<String, WritableProperty<?>> {
+  private class PropertyFunction<P extends WritableProperty<?>> implements Function<String, WritableProperty<?>> {
 
     private final P property;
 

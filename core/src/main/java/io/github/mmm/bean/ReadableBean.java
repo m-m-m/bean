@@ -4,6 +4,7 @@ package io.github.mmm.bean;
 
 import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.StructuredWriter;
+import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.validation.Validatable;
@@ -36,7 +37,12 @@ import io.github.mmm.validation.ValidationResultBuilder;
  * IntelliJ, NetBeans, etc.) without plugins and therefore will also work in the future whatever may come.</li>
  * </ul>
  */
-public interface ReadableBean extends Validatable, MarshallableObject {
+public interface ReadableBean extends Validatable, MarshallableObject, AttributeReadOnly {
+
+  /**
+   * The optional suffix for a property method (when following JavaFx conventions what is not recommended by mmm-bean).
+   */
+  String SUFFIX_PROPERTY = "Property";
 
   /**
    * Virtual {@link ReadableProperty#getName() property name} for the {@link #getType() type information} of a
@@ -114,11 +120,6 @@ public interface ReadableBean extends Validatable, MarshallableObject {
    * @see BeanClass
    */
   BeanType getType();
-
-  /**
-   * @return {@code true} if this {@link Bean} is read-only (immutable), {@code false} otherwise.
-   */
-  boolean isReadOnly();
 
   /**
    * @return {@code true} if this {@link Bean} is dynamic meaning that is not strictly typed but allows to dynamically
@@ -212,18 +213,8 @@ public interface ReadableBean extends Validatable, MarshallableObject {
   }
 
   /**
-   * @return a copy of this {@link WritableBean}. Like {@link #newInstance()} but with the values copied into the new
-   *         instance.
-   */
-  default WritableBean copy() {
-
-    return copy(false);
-  }
-
-  /**
    * @param readOnly - {@code true} if the copy shall be {@link #isReadOnly() read-only}.
-   * @return a {@link #copy() copy} of this {@link WritableBean}. If {@code readOnly} is {@code true} and this bean is
-   *         already {@link #isReadOnly() read-only}, the same instance will be returned.
+   * @return a copy of this {@link WritableBean} that has the same values for all {@link #getProperties() properties}.
    */
   WritableBean copy(boolean readOnly);
 

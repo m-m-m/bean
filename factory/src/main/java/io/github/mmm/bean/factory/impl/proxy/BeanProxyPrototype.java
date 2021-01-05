@@ -39,7 +39,7 @@ public class BeanProxyPrototype extends BeanProxy {
   /** @see #getInterfaces() */
   protected final Class<?>[] interfaces;
 
-  private BeanProxyReadOnly readOnly;
+  private boolean baseMethodsInitialized;
 
   /**
    * The constructor.
@@ -51,7 +51,7 @@ public class BeanProxyPrototype extends BeanProxy {
    */
   public BeanProxyPrototype(BeanFactoryImpl beanFactory, BeanType beanType, boolean dynamic, Class<?>... interfaces) {
 
-    super(beanFactory, beanType, null, dynamic, interfaces);
+    super(beanFactory, beanType, dynamic, interfaces);
     this.beanType = beanType;
     this.method2operationMap = new HashMap<>();
     this.interfaces = interfaces;
@@ -89,6 +89,10 @@ public class BeanProxyPrototype extends BeanProxy {
   private void introspect(Class<?> beanInterface, BeanIntrospector introspector, boolean primary) {
 
     if ((beanInterface == WritableBean.class) || (beanInterface == VirtualBean.class)) {
+      if (!this.baseMethodsInitialized) {
+        BeanProxyBaseMethods.INSTANCE.init(this.method2operationMap);
+        this.baseMethodsInitialized = true;
+      }
       return;
     }
     if (!introspector.visitType(beanInterface)) {
@@ -131,15 +135,6 @@ public class BeanProxyPrototype extends BeanProxy {
     return this;
   }
 
-  @Override
-  public BeanProxy getReadOnly() {
-
-    if (this.readOnly == null) {
-      this.readOnly = new BeanProxyReadOnly(this);
-    }
-    return this.readOnly;
-  }
-
   /**
    * @param method the {@link Method} to lookup.
    * @return the {@link BeanOperation} for the given {@link Method} or {@code null} if not defined.
@@ -155,7 +150,7 @@ public class BeanProxyPrototype extends BeanProxy {
    */
   public BeanProxyInstance newInstance(boolean isDynamic) {
 
-    return new BeanProxyInstanceWritable(this, isDynamic);
+    return new BeanProxyInstance(this, isDynamic);
   }
 
   /**

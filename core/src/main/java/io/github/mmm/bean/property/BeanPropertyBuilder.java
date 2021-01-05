@@ -5,6 +5,7 @@ package io.github.mmm.bean.property;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.builder.PropertyBuilder;
+import io.github.mmm.property.builder.PropertyBuilders;
 import io.github.mmm.validation.main.ValidatorBuilderObject;
 
 /**
@@ -20,20 +21,23 @@ public class BeanPropertyBuilder<V extends WritableBean> extends
 
   /**
    * The constructor.
+   *
+   * @param parent the parent {@link PropertyBuilders}.
    */
-  public BeanPropertyBuilder() {
+  public BeanPropertyBuilder(PropertyBuilders parent) {
 
-    this(null);
+    this(parent, null);
   }
 
   /**
    * The constructor.
    *
+   * @param parent the parent {@link PropertyBuilders}.
    * @param valueClass the {@link #valueClass(Class) value class}.
    */
-  public BeanPropertyBuilder(Class<V> valueClass) {
+  public BeanPropertyBuilder(PropertyBuilders parent, Class<V> valueClass) {
 
-    super();
+    super(parent);
     this.valueClass = valueClass;
   }
 

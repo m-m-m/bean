@@ -38,13 +38,10 @@ public abstract class BeanProxy implements InvocationHandler {
    *
    * @param beanFactory the owning {@link BeanFactoryImpl}.
    * @param beanType the {@link BeanType}.
-   * @param writable the writable {@link AbstractBean bean} to create a {@link WritableBean#isReadOnly() read-only} view
-   *        on or {@code null} to create a regular mutable {@link AbstractBean bean}.
    * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
    */
-  public BeanProxy(BeanFactoryImpl beanFactory, BeanType beanType, AbstractBean writable, boolean dynamic,
-      Class<?>... interfaces) {
+  public BeanProxy(BeanFactoryImpl beanFactory, BeanType beanType, boolean dynamic, Class<?>... interfaces) {
 
     super();
     this.proxy = beanFactory.createProxy(this, interfaces);
@@ -61,11 +58,6 @@ public abstract class BeanProxy implements InvocationHandler {
    * @return the {@link BeanProxyPrototype}.
    */
   public abstract BeanProxyPrototype getPrototype();
-
-  /**
-   * @return the read-only {@link BeanProxy} instance.
-   */
-  public abstract BeanProxy getReadOnly();
 
   @Override
   public Object invoke(Object instance, Method method, Object[] args) throws Throwable {

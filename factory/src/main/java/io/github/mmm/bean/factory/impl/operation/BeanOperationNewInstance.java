@@ -2,21 +2,22 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.impl.operation;
 
+import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 
 /**
- * {@link BeanOperation} for {@link io.github.mmm.bean.WritableBean#getReadOnly()}.
+ * {@link BeanOperation} for {@link ReadableBean#newInstance()}.
  *
  * @since 1.0.0
  */
-public class BeanOperationGetReadOnly extends BeanOperation {
+public class BeanOperationNewInstance extends BeanOperation {
 
-  static final BeanOperationGetReadOnly INSTANCE = new BeanOperationGetReadOnly();
+  static final BeanOperationNewInstance INSTANCE = new BeanOperationNewInstance();
 
   /**
    * The constructor.
    */
-  public BeanOperationGetReadOnly() {
+  public BeanOperationNewInstance() {
 
     super();
   }
@@ -24,7 +25,8 @@ public class BeanOperationGetReadOnly extends BeanOperation {
   @Override
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
-    return proxy.getReadOnly().getProxy();
+    boolean dynamic = proxy.getBean().isDynamic();
+    return proxy.getPrototype().newInstance(dynamic).getProxy();
   }
 
 }
