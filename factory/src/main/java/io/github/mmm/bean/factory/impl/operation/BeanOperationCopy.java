@@ -27,8 +27,7 @@ public class BeanOperationCopy extends BeanOperation {
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
     boolean readOnly = Boolean.TRUE.equals(args[0]);
-    boolean dynamic = proxy.getBean().isDynamic();
-    BeanProxyInstance instance = proxy.getPrototype().newInstance(dynamic);
+    BeanProxyInstance instance = proxy.getPrototype().newInstance();
     AbstractBean copy = instance.getBean();
     BeanHelper.copy(proxy.getBean(), copy, readOnly);
     return instance.getProxy();

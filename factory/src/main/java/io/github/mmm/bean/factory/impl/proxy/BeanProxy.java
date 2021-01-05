@@ -30,23 +30,18 @@ public abstract class BeanProxy implements InvocationHandler {
   /** @see #getBean() */
   protected final AbstractBean bean;
 
-  /** @see #isDynamic() */
-  protected final boolean dynamic;
-
   /**
    * The constructor.
    *
    * @param beanFactory the owning {@link BeanFactoryImpl}.
    * @param beanType the {@link BeanType}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
    */
-  public BeanProxy(BeanFactoryImpl beanFactory, BeanType beanType, boolean dynamic, Class<?>... interfaces) {
+  public BeanProxy(BeanFactoryImpl beanFactory, BeanType beanType, Class<?>... interfaces) {
 
     super();
     this.proxy = beanFactory.createProxy(this, interfaces);
     this.beanFactory = beanFactory;
-    this.dynamic = dynamic;
     if (beanType instanceof BeanClass) {
       this.bean = new SimpleVirtualBean((BeanClass) beanType);
     } else {
@@ -86,14 +81,6 @@ public abstract class BeanProxy implements InvocationHandler {
   public AbstractBean getBean() {
 
     return this.bean;
-  }
-
-  /**
-   * @return the {@link WritableBean#isDynamic() dynamic} flag.
-   */
-  public boolean isDynamic() {
-
-    return this.dynamic;
   }
 
 }

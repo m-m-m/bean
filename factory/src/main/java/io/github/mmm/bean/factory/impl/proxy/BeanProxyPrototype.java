@@ -46,12 +46,11 @@ public class BeanProxyPrototype extends BeanProxy {
    *
    * @param beanFactory the owning {@link BeanFactoryImpl}.
    * @param beanType the {@link BeanType}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    * @param interfaces the {@link #getInterfaces() interfaces}.
    */
-  public BeanProxyPrototype(BeanFactoryImpl beanFactory, BeanType beanType, boolean dynamic, Class<?>... interfaces) {
+  public BeanProxyPrototype(BeanFactoryImpl beanFactory, BeanType beanType, Class<?>... interfaces) {
 
-    super(beanFactory, beanType, dynamic, interfaces);
+    super(beanFactory, beanType, interfaces);
     this.beanType = beanType;
     this.method2operationMap = new HashMap<>();
     this.interfaces = interfaces;
@@ -145,23 +144,20 @@ public class BeanProxyPrototype extends BeanProxy {
   }
 
   /**
-   * @param isDynamic the {@link #isDynamic() dynamic} flag.
    * @return the new {@link BeanProxyInstance} of this prototype.
    */
-  public BeanProxyInstance newInstance(boolean isDynamic) {
+  public BeanProxyInstance newInstance() {
 
-    return new BeanProxyInstance(this, isDynamic);
+    return new BeanProxyInstance(this);
   }
 
   /**
    * @param type the {@link BeanType} of the requested prototype.
    * @param beanFactory the {@link BeanFactoryImpl}.
-   * @param isDynamic the {@link #isDynamic() dynamic} flag.
    * @return the {@link BeanProxyPrototype} from cache or newly created.
    */
   @SuppressWarnings("unchecked")
-  public static BeanProxyPrototype get(Class<? extends WritableBean> type, BeanFactoryImpl beanFactory,
-      boolean isDynamic) {
+  public static BeanProxyPrototype get(Class<? extends WritableBean> type, BeanFactoryImpl beanFactory) {
 
     BeanType beanType;
     if (VirtualBean.class.isAssignableFrom(type)) {
@@ -169,7 +165,7 @@ public class BeanProxyPrototype extends BeanProxy {
       if (beanType == null) {
         for (Class<?> superType : type.getInterfaces()) {
           if ((VirtualBean.class.isAssignableFrom(superType)) && (VirtualBean.class != superType)) {
-            get((Class<? extends WritableBean>) superType, beanFactory, isDynamic);
+            get((Class<? extends WritableBean>) superType, beanFactory);
           }
         }
       }
@@ -177,18 +173,17 @@ public class BeanProxyPrototype extends BeanProxy {
     } else {
       beanType = BeanTypeImpl.asType(type);
     }
-    return get(beanType, beanFactory, isDynamic);
+    return get(beanType, beanFactory);
   }
 
   /**
    * @param type the {@link BeanType} of the requested prototype.
    * @param beanFactory the {@link BeanFactoryImpl}.
-   * @param isDynamic the {@link #isDynamic() dynamic} flag.
    * @return the {@link BeanProxyPrototype} from cache or newly created.
    */
-  public static BeanProxyPrototype get(BeanType type, BeanFactoryImpl beanFactory, boolean isDynamic) {
+  public static BeanProxyPrototype get(BeanType type, BeanFactoryImpl beanFactory) {
 
-    return cache.get(type, () -> new BeanProxyPrototype(beanFactory, type, isDynamic, type.getJavaClasses()));
+    return cache.get(type, () -> new BeanProxyPrototype(beanFactory, type, type.getJavaClasses()));
   }
 
 }

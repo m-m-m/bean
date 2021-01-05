@@ -5,6 +5,7 @@ package io.github.mmm.bean.impl;
 import java.lang.reflect.Constructor;
 
 import io.github.mmm.bean.AbstractBean;
+import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 
@@ -26,10 +27,10 @@ public final class BeanCreator implements BeanFactory {
 
   @Override
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public <B extends WritableBean> B create(Class<B> type, boolean dynamic) {
+  public <B extends WritableBean> B create(Class<B> type, BeanClass beanClass) {
 
     try {
-      if (type.isInterface()) {
+      if (type.isInterface() || (beanClass != null)) {
         return null;
       }
       return (B) doCreate((Class) type);

@@ -25,8 +25,7 @@ public class BeanOperationNewInstance extends BeanOperation {
   @Override
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
-    boolean dynamic = proxy.getBean().isDynamic();
-    return proxy.getPrototype().newInstance(dynamic).getProxy();
+    return proxy.getPrototype().newInstance().getProxy();
   }
 
 }

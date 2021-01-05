@@ -18,11 +18,10 @@ public final class BeanProxyInstance extends BeanProxy {
    * The constructor.
    *
    * @param prototype the {@link #getPrototype() prototype}.
-   * @param dynamic the {@link #isDynamic() dynamic flag}.
    */
-  public BeanProxyInstance(BeanProxyPrototype prototype, boolean dynamic) {
+  public BeanProxyInstance(BeanProxyPrototype prototype) {
 
-    super(prototype.beanFactory, prototype.beanType, dynamic, prototype.interfaces);
+    super(prototype.beanFactory, prototype.beanType, prototype.interfaces);
     this.prototype = prototype;
     prototype.initProperties(this);
   }

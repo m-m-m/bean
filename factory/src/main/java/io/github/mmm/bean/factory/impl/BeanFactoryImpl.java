@@ -5,6 +5,7 @@ package io.github.mmm.bean.factory.impl;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
+import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
@@ -37,11 +38,11 @@ public class BeanFactoryImpl implements BeanFactory {
 
   @SuppressWarnings({ "unchecked" })
   @Override
-  public <B extends WritableBean> B create(Class<B> type, boolean dynamic) {
+  public <B extends WritableBean> B create(Class<B> type, BeanClass beanClass) {
 
     if (type.isInterface()) {
-      BeanProxyPrototype prototype = BeanProxyPrototype.get(type, this, true);
-      return (B) prototype.newInstance(dynamic).getProxy();
+      BeanProxyPrototype prototype = BeanProxyPrototype.get(type, this);
+      return (B) prototype.newInstance().getProxy();
     } else {
       return null;
     }

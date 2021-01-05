@@ -23,18 +23,18 @@ public interface BeanFactory {
    */
   default <B extends WritableBean> B create(Class<B> type) {
 
-    return create(type, false);
+    return create(type, null);
   }
 
   /**
    * @param <B> type of the {@link WritableBean}.
    * @param type the {@link Class} reflecting the {@link WritableBean}.
-   * @param dynamic the {@link WritableBean#isDynamic() dynamic} flag.
+   * @param beanClass the {@link BeanClass} that has to correspond to the {@link Class} given by parameter {@code type}.
    * @return a new instance of the {@link WritableBean} specified by the given {@link Class}. If {@code type} is an
    *         interface, a dynamic proxy implementation is generated. Otherwise if a class is given it needs to extend
    *         {@link Bean}, be non-abstract and requires a non-arg constructor.
    */
-  <B extends WritableBean> B create(Class<B> type, boolean dynamic);
+  <B extends WritableBean> B create(Class<B> type, BeanClass beanClass);
 
   /**
    * @return the instance of {@link BeanFactory}.

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ServiceLoader;
 
+import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 
@@ -31,12 +32,12 @@ public final class BeanFactoryManager implements BeanFactory {
   }
 
   @Override
-  public <B extends WritableBean> B create(Class<B> type, boolean dynamic) {
+  public <B extends WritableBean> B create(Class<B> type, BeanClass beanClass) {
 
     Objects.requireNonNull(type, "type");
     try {
       for (BeanFactory delegate : this.delegates) {
-        B bean = delegate.create(type, dynamic);
+        B bean = delegate.create(type, beanClass);
         if (bean != null) {
           return bean;
         }

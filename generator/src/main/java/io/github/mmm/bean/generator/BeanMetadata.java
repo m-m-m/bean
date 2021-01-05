@@ -139,11 +139,7 @@ public class BeanMetadata {
    */
   public void writePackageDeclaration(Writer writer) throws IOException {
 
-    writer.write("package ");
-    writer.write(BeanGenerator.BASE_PACKAGE);
-    writer.write(".");
-    writer.write(this.beanType.getPackageName());
-    writer.write(";\n");
+    BeanGenerator.writePackageDeclaration(writer, BeanGenerator.BASE_PACKAGE + "." + this.beanType.getPackageName());
   }
 
   /**
@@ -154,15 +150,7 @@ public class BeanMetadata {
    */
   public void writeImports(Writer writer) throws IOException {
 
-    writer.write("\n");
-    for (String importType : this.importTypes) {
-      writer.write("import ");
-      writer.write(importType);
-      writer.write(";\n");
-    }
-    if (!this.importTypes.isEmpty()) {
-      writer.write("\n");
-    }
+    BeanGenerator.writeImports(writer, this.importTypes);
   }
 
   /**
