@@ -8,6 +8,7 @@ package io.github.mmm.bean;
  * {@link #isDynamic() dynamic}. If a {@link io.github.mmm.property.Property} is added to the prototype, it will
  * automatically be available by all instances and {@link BeanClass#isSubclassOf(BeanClass) subclasses}.
  */
+@AbstractInterface
 public interface VirtualBean extends WritableBean {
 
   @Override

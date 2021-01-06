@@ -10,19 +10,19 @@ import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.PropertyBuilders;
 
 /**
- * Implementation of {@link PropertyBuilders} that auto registers build properties and redirects to read-only
- * properties if {@link AbstractBean#isReadOnly() read-only}.
+ * Implementation of {@link PropertyBuilders} that auto registers build properties and redirects to read-only properties
+ * if {@link AbstractBean#isReadOnly() read-only}.
  */
 public class StandardPropertyBuilders implements PropertyBuilders, Consumer<WritableProperty<?>> {
 
-  private final AbstractBean bean;
+  private final WritableBean bean;
 
   /**
    * The constructor.
    *
-   * @param bean {@link AbstractBean} to build the {@link WritableProperty properties} for.
+   * @param bean {@link WritableBean} to build the {@link WritableProperty properties} for.
    */
-  protected StandardPropertyBuilders(AbstractBean bean) {
+  public StandardPropertyBuilders(WritableBean bean) {
 
     this.bean = bean;
   }
@@ -30,7 +30,11 @@ public class StandardPropertyBuilders implements PropertyBuilders, Consumer<Writ
   @Override
   public void accept(WritableProperty<?> property) {
 
-    this.bean.add(property, AddMode.DIRECT);
+    if (this.bean instanceof AbstractBean) {
+      ((AbstractBean) this.bean).add(property, AddMode.DIRECT);
+    } else {
+      this.bean.addProperty(property);
+    }
   }
 
   @Override

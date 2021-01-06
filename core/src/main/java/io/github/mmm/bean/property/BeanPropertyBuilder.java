@@ -3,9 +3,9 @@
 package io.github.mmm.bean.property;
 
 import io.github.mmm.bean.WritableBean;
+import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.builder.PropertyBuilder;
-import io.github.mmm.property.builder.PropertyBuilders;
 import io.github.mmm.validation.main.ValidatorBuilderObject;
 
 /**
@@ -22,22 +22,22 @@ public class BeanPropertyBuilder<V extends WritableBean> extends
   /**
    * The constructor.
    *
-   * @param parent the parent {@link PropertyBuilders}.
+   * @param lock the {@link #getLock() lock}.
    */
-  public BeanPropertyBuilder(PropertyBuilders parent) {
+  public BeanPropertyBuilder(AttributeReadOnly lock) {
 
-    this(parent, null);
+    this(lock, null);
   }
 
   /**
    * The constructor.
    *
-   * @param parent the parent {@link PropertyBuilders}.
+   * @param lock the {@link #getLock() lock}.
    * @param valueClass the {@link #valueClass(Class) value class}.
    */
-  public BeanPropertyBuilder(PropertyBuilders parent, Class<V> valueClass) {
+  public BeanPropertyBuilder(AttributeReadOnly lock, Class<V> valueClass) {
 
-    super(parent);
+    super(lock);
     this.valueClass = valueClass;
   }
 

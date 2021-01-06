@@ -11,6 +11,7 @@ import io.github.mmm.property.WritableProperty;
 /**
  * Writable interface of {@link ReadableBean}.
  */
+@AbstractInterface
 public interface WritableBean extends ReadableBean, MarshallingObject {
 
   @Override
