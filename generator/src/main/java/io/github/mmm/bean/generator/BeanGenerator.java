@@ -10,12 +10,14 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -44,37 +46,88 @@ public class BeanGenerator {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanGenerator.class);
 
-  public void generate(Path targetDir, ClassLoader classLoader) {
+  /**
+   * Scans the class-path of the given {@link ClassLoader} for interfaces extending {@link WritableBean} (do not use
+   * module path when calling this).
+   *
+   * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
+   *        required packages will be created automatically.
+   * @param classloader the {@link ClassLoader} to scan for interfaces extending {@link WritableBean}.
+   */
+  public void generate(Path targetDir, ClassLoader classloader) {
 
+    List<BeanMetadata> metadataList = new ArrayList<>();
+    try (BeanScanner scanner = new BeanScanner(classloader)) {
+      Collection<Class<? extends WritableBean>> beanClasses = scanner.findBeanInterfaces();
+      for (Class<? extends WritableBean> beanClass : beanClasses) {
+        BeanMetadata metadata = generate(beanClass, targetDir);
+        if (metadata != null) {
+          metadataList.add(metadata);
+        }
+      }
+      beanClasses = scanner.findBeanClasses();
+      for (Class<? extends WritableBean> beanClass : beanClasses) {
+        BeanMetadata metadata = BeanClassMetadata.of(beanClass);
+        if (metadata != null) {
+          metadataList.add(metadata);
+        }
+      }
+    }
+    generateFactory(metadataList, targetDir);
   }
 
   /**
    * @param beanClasses the {@link Collection} of {@link Class}es reflecting the {@link WritableBean}s to generate.
-   * @param targetDir the {@link Path} to the base-directory where to generate the source-code. Sub-directories for
+   * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
    *        required packages will be created automatically.
    */
   public void generate(Collection<Class<? extends WritableBean>> beanClasses, Path targetDir) {
 
+    List<BeanMetadata> metadataList = new ArrayList<>();
     for (Class<? extends WritableBean> beanClass : beanClasses) {
-      generate(beanClass, targetDir);
+      BeanMetadata metadata = generate(beanClass, targetDir);
+      if (metadata == null) {
+        metadata = BeanClassMetadata.of(beanClass);
+      }
+      if (metadata != null) {
+        metadataList.add(metadata);
+      }
     }
+    generateFactory(metadataList, targetDir);
   }
 
-  public void generateFactory(Collection<Class<? extends WritableBean>> beanClasses, Path targetDir) {
+  /**
+   * Generates the implementation of {@link BeanFactory} capable to {@link BeanFactory#create(Class) create} all
+   * instances of the given {@link WritableBean} classes.
+   *
+   * @param metadatas the {@link Collection} with the {@link BeanMetadata} instances of the {@link WritableBean}s to be
+   *        able to {@link BeanFactory#create(Class) create}.
+   * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
+   *        required packages will be created automatically.
+   */
+  public void generateFactory(Collection<BeanMetadata> metadatas, Path targetDir) {
 
     try {
       Path packageDir = targetDir.resolve(BASE_PACKAGE);
       Files.createDirectories(packageDir);
       Path targetFile = packageDir.resolve("BeanFactoryImpl.java");
       try (BufferedWriter writer = Files.newBufferedWriter(targetFile, StandardCharsets.UTF_8)) {
-        generateFactory(beanClasses, writer);
+        generateFactory(metadatas, writer);
       }
     } catch (IOException e) {
       throw new RuntimeIoException(e);
     }
   }
 
-  public void generateFactory(Collection<Class<? extends WritableBean>> beanClasses, Writer writer) {
+  /**
+   * Generates the implementation of {@link BeanFactory} capable to {@link BeanFactory#create(Class) create} all
+   * instances of the given {@link WritableBean} classes.
+   *
+   * @param metadatas the {@link Collection} with the {@link BeanMetadata} instances of the {@link WritableBean}s to be
+   *        able to {@link BeanFactory#create(Class) create}.
+   * @param writer the {@link Writer} to write the generated class to.
+   */
+  public void generateFactory(Collection<BeanMetadata> metadatas, Writer writer) {
 
     try {
       writePackageDeclaration(writer, BASE_PACKAGE);
@@ -82,14 +135,12 @@ public class BeanGenerator {
       writeClassDeclaration(writer, "BeanFactoryImpl", AbstractBeanFactory.class.getSimpleName(), null);
       writer.write("  public BeanFactoryImpl() {\n");
       writer.write("    super();\n");
-      for (Class<? extends WritableBean> beanClass : beanClasses) {
+      for (BeanMetadata metadata : metadatas) {
         writer.write("    add(");
-        writer.write(beanClass.getName());
-        writer.write(".class, x -> new ");
-        writer.write(BASE_PACKAGE);
-        writer.write(".");
-        writer.write(beanClass.getName());
-        writer.write("Impl(x));\n");
+        writer.write(metadata.getBeanType().getName());
+        writer.write(".class, x -> ");
+        metadata.writeInstantiation(writer, "x");
+        writer.write(");\n");
       }
       writer.write("  }\n");
       writer.write("}\n");
@@ -102,16 +153,20 @@ public class BeanGenerator {
    * @param beanClass the {@link Class} reflecting the {@link WritableBean} to generate.
    * @param targetDir the {@link Path} to the base-directory where to generate the source-code. Sub-directories for
    *        required packages will be created automatically.
-   * @return the {@link BeanMetadata} created for the {@link WritableBean}.
+   * @return the {@link BeanInterfaceMetadata} created for the {@link WritableBean}.
    */
-  public BeanMetadata generate(Class<? extends WritableBean> beanClass, Path targetDir) {
+  public BeanInterfaceMetadata generate(Class<? extends WritableBean> beanClass, Path targetDir) {
 
+    if (!BeanInterfaceMetadata.isNonAbstractInterface(beanClass)) {
+      LOG.debug("Class is not an instantiable bean interface: {}", beanClass);
+      return null;
+    }
     LOG.debug("Generating implementation for {}", beanClass);
     try {
       String packageName = beanClass.getPackageName();
       Path packageDir = targetDir.resolve(BASE_PACKAGE + "/" + packageName.replace('.', '/'));
       Files.createDirectories(packageDir);
-      Path targetFile = packageDir.resolve(beanClass.getSimpleName() + ".java");
+      Path targetFile = packageDir.resolve(beanClass.getSimpleName() + "Impl.java");
       try (BufferedWriter writer = Files.newBufferedWriter(targetFile, StandardCharsets.UTF_8)) {
         return generate(beanClass, writer);
       }
@@ -123,13 +178,15 @@ public class BeanGenerator {
   /**
    * @param beanClass the {@link Class} reflecting the {@link WritableBean} to generate.
    * @param writer the {@link Writer} to write the Java source code to.
-   * @return the {@link BeanMetadata} created for the {@link WritableBean}.
+   * @return the {@link BeanInterfaceMetadata} created for the {@link WritableBean}.
    */
-  public BeanMetadata generate(Class<? extends WritableBean> beanClass, Writer writer) {
+  public BeanInterfaceMetadata generate(Class<? extends WritableBean> beanClass, Writer writer) {
 
     try {
-      BeanMetadata metadata = new BeanMetadata(beanClass);
-      metadata.write(writer);
+      BeanInterfaceMetadata metadata = BeanInterfaceMetadata.of(beanClass);
+      if (metadata != null) {
+        metadata.write(writer);
+      }
       return metadata;
     } catch (IOException e) {
       throw new RuntimeIoException(e);
@@ -159,7 +216,7 @@ public class BeanGenerator {
    */
   public static void writeImportClasses(Writer writer, Collection<Class<?>> importTypes) throws IOException {
 
-    writeImports(writer, importTypes.stream().map(type -> type.getSimpleName()).collect(Collectors.toList()));
+    writeImports(writer, importTypes.stream().map(type -> type.getName()).collect(Collectors.toList()));
   }
 
   /**
@@ -206,6 +263,18 @@ public class BeanGenerator {
     }
     writer.write(" {\n");
     writer.write("\n");
+  }
+
+  public static void main(String[] args) {
+
+    Path targetDir;
+    if (args.length > 0) {
+      targetDir = Paths.get(args[0]);
+    } else {
+      targetDir = Paths.get("target", "generated");
+    }
+    BeanGenerator generator = new BeanGenerator();
+    generator.generate(targetDir, null);
   }
 
 }

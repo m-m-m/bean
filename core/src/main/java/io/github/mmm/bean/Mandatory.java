@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 import io.github.mmm.validation.main.ObjectValidatorBuilder;
 
 /**
- * Annotation indicating that a property is mandatory. This annotation can not be combined with {@link PropertyMethod}
- * annotation. It is a convenience annotation to avoid the burden of implementing a default method annotated with
- * {@link PropertyMethod} just for the sake of making a property mandatory what is a quite common case.
+ * Annotation indicating that a property is mandatory. This annotation can not be combined with property default methods
+ * that act as factory for the property. It is a convenience annotation to avoid the burden of implementing a default
+ * method just for the sake of making a property mandatory what is a quite common case.
  *
  * @see ObjectValidatorBuilder#mandatory()
  * @since 1.0.0

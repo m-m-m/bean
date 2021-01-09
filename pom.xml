@@ -33,7 +33,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -48,7 +48,7 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>mmm-bean-builder</artifactId>
+        <artifactId>mmm-bean-generator</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

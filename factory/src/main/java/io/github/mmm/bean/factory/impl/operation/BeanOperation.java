@@ -8,10 +8,10 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
 import io.github.mmm.bean.BeanHelper;
-import io.github.mmm.bean.PropertyMethod;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
+import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 
 /**
@@ -77,7 +77,7 @@ public abstract class BeanOperation {
     boolean defaultMethod = method.isDefault();
     int parameterCount = method.getParameterCount();
     if (defaultMethod) {
-      if ((parameterCount == 0) && method.isAnnotationPresent(PropertyMethod.class)) {
+      if ((parameterCount == 0) && ReadableProperty.class.isAssignableFrom(method.getReturnType())) {
         return new BeanOperationProperty(methodName, method);
       }
       return new BeanOperationDefaultMethod(method);

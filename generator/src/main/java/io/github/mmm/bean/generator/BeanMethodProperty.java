@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 
-import io.github.mmm.property.factory.PropertyFactory;
-import io.github.mmm.property.factory.PropertyFactoryManager;
-
 /**
  * {@link BeanMethod} for a property access method.
  *
@@ -16,15 +13,19 @@ import io.github.mmm.property.factory.PropertyFactoryManager;
  */
 public class BeanMethodProperty extends BeanMethod {
 
+  private final Class<?> propertyType;
+
   /**
    * The constructor.
    *
    * @param method the {@link #getMethod() method}.
    * @param propertyName the {@link #getPropertyName() property name}.
+   * @param propertyType the {@link #getPropertyType() property type}.
    */
-  public BeanMethodProperty(Method method, String propertyName) {
+  public BeanMethodProperty(Method method, String propertyName, Class<?> propertyType) {
 
     super(method, propertyName);
+    this.propertyType = propertyType;
   }
 
   @Override
@@ -35,13 +36,10 @@ public class BeanMethodProperty extends BeanMethod {
     writer.write(";\n");
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public Class<?> getPropertyType() {
 
-    Class propertyClass = this.method.getReturnType();
-    PropertyFactory factory = PropertyFactoryManager.get().getFactoryForPropertyType(propertyClass);
-    return factory.getValueClass();
+    return this.propertyType;
   }
 
 }

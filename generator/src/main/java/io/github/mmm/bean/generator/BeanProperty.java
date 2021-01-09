@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 
+import io.github.mmm.property.factory.PropertyFactory;
+import io.github.mmm.property.factory.PropertyFactoryManager;
+
 /**
  * Container for a {@link BeanProperty}.
  *
@@ -117,8 +120,16 @@ public class BeanProperty {
    */
   public String getPropertyType() {
 
-    if ((this.propertyType == null) && (this.propertyMethod != null)) {
-      this.propertyType = this.propertyMethod.getMethod().getReturnType().getSimpleName();
+    if (this.propertyType == null) {
+      if (this.propertyMethod != null) {
+        this.propertyType = this.propertyMethod.getMethod().getReturnType().getSimpleName();
+      } else {
+        PropertyFactory<?, ?> factory = PropertyFactoryManager.get().getFactoryForValueType(getType());
+        if (factory != null) {
+          this.propertyType = factory.getImplementationClass().getName();
+        }
+      }
+
     }
     return this.propertyType;
   }
@@ -140,6 +151,9 @@ public class BeanProperty {
   public void writeField(Writer writer) throws IOException {
 
     writer.write("  private final ");
+    if (getPropertyType() == null) {
+      System.out.println("error");
+    }
     writer.write(getPropertyType());
     writer.write(" ");
     writer.write(this.name);

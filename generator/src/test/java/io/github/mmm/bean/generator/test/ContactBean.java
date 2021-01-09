@@ -5,7 +5,6 @@ package io.github.mmm.bean.generator.test;
 import java.time.LocalDate;
 import java.time.Period;
 
-import io.github.mmm.bean.PropertyMethod;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
@@ -23,7 +22,6 @@ public interface ContactBean extends PersonBean {
   void setBirthday(LocalDate birthday);
 
   @Override
-  @PropertyMethod
   default IntegerProperty Age() {
 
     return new IntegerProperty("Age", PropertyMetadata.ofExpression(() -> {

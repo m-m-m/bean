@@ -7,7 +7,7 @@
     <artifactId>mmm-bean-parent</artifactId>
     <version>${revision}${changelist}</version>
   </parent>
-  <artifactId>mmm-bean-generator</artifactId>
+  <artifactId>mmm-bean-generator-test</artifactId>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
   <description>Generator of mmm beans from interface for AOT compilation usage without reflection (GraalVM, TeaVM, etc.).</description>
@@ -15,13 +15,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>mmm-bean</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.github.classgraph</groupId>
-      <artifactId>classgraph</artifactId>
-      <version>4.8.98</version>
+      <artifactId>mmm-bean-generator</artifactId>
     </dependency>
   </dependencies>
-
 </project>
