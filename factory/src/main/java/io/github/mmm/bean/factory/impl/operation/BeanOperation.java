@@ -8,11 +8,10 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 
 import io.github.mmm.bean.BeanHelper;
-import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
-import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
+import io.github.mmm.property.factory.PropertyFactory;
 
 /**
  * Operation on a {@link BeanProxy}.
@@ -70,36 +69,41 @@ public abstract class BeanOperation {
    * @param prototype the {@link BeanProxyPrototype}.
    * @return the according new {@link BeanOperation}.
    */
-  public static BeanOperation create(Method method, BeanProxyPrototype prototype) {
+  public static BeanOperation of(Method method, BeanProxyPrototype prototype) {
 
     String methodName = method.getName();
-    char first = methodName.charAt(0);
-    boolean defaultMethod = method.isDefault();
-    int parameterCount = method.getParameterCount();
-    if (defaultMethod) {
-      if ((parameterCount == 0) && ReadableProperty.class.isAssignableFrom(method.getReturnType())) {
-        return new BeanOperationProperty(methodName, method);
-      }
-      return new BeanOperationDefaultMethod(method);
+    if (method.isDefault()) {
+      return createOperationProperty(method, prototype);
     }
+    int parameterCount = method.getParameterCount();
     if (parameterCount == 0) {
-      if (Character.isUpperCase(first)) {
-        return new BeanOperationProperty(methodName, method);
-      } else if (methodName.endsWith(ReadableBean.SUFFIX_PROPERTY)) {
-        String propertyName = Character.toUpperCase(first)
-            + methodName.substring(1, methodName.length() - ReadableBean.SUFFIX_PROPERTY.length());
-        return new BeanOperationProperty(propertyName, method);
+      BeanOperationProperty operation = createOperationProperty(method, prototype);
+      if (operation != null) {
+        return operation;
       } else {
-        String propertyName = BeanHelper.getPropertyForGetter(methodName);
+        String propertyName = BeanHelper.getPropertyName4Getter(methodName);
         if (propertyName != null) {
           return new BeanOperationGetter(propertyName, method);
         }
       }
     } else if (parameterCount == 1) {
-      String propertyName = BeanHelper.getPropertyForSetter(methodName);
+      String propertyName = BeanHelper.getPropertyName4Setter(methodName);
       if (propertyName != null) {
         return new BeanOperationSetter(propertyName, method);
       }
+    }
+    return null;
+  }
+
+  private static BeanOperationProperty createOperationProperty(Method method, BeanProxyPrototype prototype) {
+
+    String propertyName = BeanHelper.getPropertyName4Property(method);
+    if (propertyName == null) {
+      return null;
+    }
+    PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method);
+    if (factory != null) {
+      return new BeanOperationProperty(propertyName, method);
     }
     return null;
   }

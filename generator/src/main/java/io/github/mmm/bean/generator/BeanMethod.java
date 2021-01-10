@@ -7,10 +7,8 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 
 import io.github.mmm.bean.BeanHelper;
-import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.factory.PropertyFactory;
-import io.github.mmm.property.factory.PropertyFactoryManager;
 
 /**
  * Wrapper for a {@link Method} of a {@link io.github.mmm.bean.WritableBean}.
@@ -107,7 +105,8 @@ public abstract class BeanMethod {
   }
 
   /**
-   * @return the {@link Class} reflecting the type of the property value.
+   * @return the {@link Class} reflecting the {ReadableProperty{@link #getPropertyType() type of the property value}
+   *         (and not the {@link ReadableProperty property} itself).
    */
   public abstract Class<?> getPropertyType();
 
@@ -117,19 +116,19 @@ public abstract class BeanMethod {
    */
   public static BeanMethod of(Method method) {
 
-    boolean defaultMethod = method.isDefault();
-    int parameterCount = method.getParameterCount();
-    if (defaultMethod) {
+    if (method.isDefault()) {
       return createPropertyMethod(method);
-    } else if (parameterCount == 0) {
-      String propertyName = BeanHelper.getPropertyForGetter(method.getName());
+    }
+    int parameterCount = method.getParameterCount();
+    if (parameterCount == 0) {
+      String propertyName = BeanHelper.getPropertyName4Getter(method.getName());
       if (propertyName != null) {
         return new BeanMethodGetter(method, propertyName);
       } else {
         return createPropertyMethod(method);
       }
     } else if (parameterCount == 1) {
-      String propertyName = BeanHelper.getPropertyForSetter(method.getName());
+      String propertyName = BeanHelper.getPropertyName4Setter(method.getName());
       if (propertyName != null) {
         return new BeanMethodSetter(method, propertyName);
       }
@@ -137,29 +136,15 @@ public abstract class BeanMethod {
     return null;
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
   private static BeanMethodProperty createPropertyMethod(Method method) {
 
-    if (method.getParameterCount() == 0) {
-      String methodName = method.getName();
-      char first = methodName.charAt(0);
-      String propertyName;
-      if (Character.isUpperCase(first)) {
-        propertyName = methodName;
-        // return new BeanMethodProperty(method, methodName);
-      } else if (methodName.endsWith(ReadableBean.SUFFIX_PROPERTY)) {
-        propertyName = Character.toUpperCase(first)
-            + methodName.substring(1, methodName.length() - ReadableBean.SUFFIX_PROPERTY.length());
-      } else {
-        return null;
-      }
-      Class<?> returnType = method.getReturnType();
-      if (ReadableProperty.class.isAssignableFrom(returnType)) {
-        PropertyFactory factory = PropertyFactoryManager.get().getFactoryForPropertyType((Class) returnType);
-        if (factory != null) {
-          return new BeanMethodProperty(method, propertyName, factory.getValueClass());
-        }
-      }
+    String propertyName = BeanHelper.getPropertyName4Property(method);
+    if (propertyName == null) {
+      return null;
+    }
+    PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method);
+    if (factory != null) {
+      return new BeanMethodProperty(method, propertyName, factory.getValueClass());
     }
     return null;
   }

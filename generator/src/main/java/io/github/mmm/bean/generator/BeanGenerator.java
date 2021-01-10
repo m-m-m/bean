@@ -265,6 +265,10 @@ public class BeanGenerator {
     writer.write("\n");
   }
 
+  /**
+   * @param args the commandline arguments. The first argument is the target directory where the generated code is
+   *        written to. If no arguments are provided, code is written to "./target/generated".
+   */
   public static void main(String[] args) {
 
     Path targetDir;

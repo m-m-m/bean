@@ -14,7 +14,9 @@ import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.WritableBean;
 
 /**
+ * Scans the class-/module-path for {@link WritableBean bean} classes and interfaces.
  *
+ * @since 1.0.0
  */
 public class BeanScanner implements AutoCloseable {
 
@@ -50,12 +52,10 @@ public class BeanScanner implements AutoCloseable {
 
     Collection<Class<? extends WritableBean>> result = new ArrayList<>();
     for (ClassInfo classInfo : this.scanResult.getAllInterfaces()) {
-      // if (!classInfo.hasAnnotation(AbstractInterface.class.getName())) {
       if (isBeanInterface(classInfo)) {
         Class<? extends WritableBean> beanClass = loadClass(classInfo);
         result.add(beanClass);
       }
-      // }
     }
     return result;
   }
@@ -88,20 +88,6 @@ public class BeanScanner implements AutoCloseable {
       }
     }
     return result;
-  }
-
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public static Collection<Class<? extends WritableBean>> findBeans(ClassLoader classloader) {
-
-    Collection<Class<?>> result = new ArrayList<>();
-    try (ScanResult scanResult = new ClassGraph().enableAllInfo() // Scan classes, methods, fields, annotations
-        .scan()) { // Start the scan
-      for (ClassInfo classInfo : scanResult.getAllInterfaces()) {
-
-        System.out.println(classInfo.getName());
-      }
-    }
-    return (Collection) result;
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })

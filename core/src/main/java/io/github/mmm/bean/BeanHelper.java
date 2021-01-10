@@ -2,11 +2,14 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
+import io.github.mmm.property.factory.PropertyFactory;
+import io.github.mmm.property.factory.PropertyFactoryManager;
 
 /**
  * Class with helper methods for internal reuse to avoid redundancies.
@@ -38,7 +41,7 @@ public class BeanHelper {
    * @param getter the name of a method that is potentially a getter.
    * @return the property name for the given {@code getter} or {@code null} if not a getter.
    */
-  public static String getPropertyForGetter(String getter) {
+  public static String getPropertyName4Getter(String getter) {
 
     return getCapitalSuffixAfterPrefixes(getter, "get", "has", "is");
   }
@@ -47,9 +50,44 @@ public class BeanHelper {
    * @param setter the name of a method that is potentially a setter.
    * @return the property name for the given {@code setter} or {@code null} if not a setter.
    */
-  public static String getPropertyForSetter(String setter) {
+  public static String getPropertyName4Setter(String setter) {
 
     return getCapitalSuffixAfterPrefix(setter, "set");
+  }
+
+  /**
+   * @param method the {@link Method} to check.
+   * @return the property name for the given {@link Method} or {@code null} if not a property {@link Method}.
+   */
+  public static String getPropertyName4Property(Method method) {
+
+    if (method.getParameterCount() == 0) {
+      String methodName = method.getName();
+      char first = methodName.charAt(0);
+      if (Character.isUpperCase(first)) {
+        return methodName;
+      } else if (methodName.endsWith(ReadableBean.SUFFIX_PROPERTY)) {
+        return Character.toUpperCase(first)
+            + methodName.substring(1, methodName.length() - ReadableBean.SUFFIX_PROPERTY.length());
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param method the potential property {@link Method} to check.
+   * @return the {@link ReadableProperty#getValueClass() property value type} for the given {@link Method} or
+   *         {@code null} if not a property {@link Method}.
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public static PropertyFactory<?, ?> getPropertyFactory(Method method) {
+
+    Class<?> returnType = method.getReturnType();
+    if (ReadableProperty.class.isAssignableFrom(returnType)) {
+      PropertyFactory<?, ?> factory = PropertyFactoryManager.get().getFactoryForPropertyType((Class) returnType);
+      return factory;
+    }
+    return null;
   }
 
   /**

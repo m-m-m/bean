@@ -98,7 +98,7 @@ public class BeanProxyPrototype extends BeanProxy {
       return;
     }
     for (Method method : beanInterface.getDeclaredMethods()) {
-      BeanOperation operation = BeanOperation.create(method, this);
+      BeanOperation operation = BeanOperation.of(method, this);
       if (operation != null) {
         this.method2operationMap.put(method, operation);
         if (primary) {
