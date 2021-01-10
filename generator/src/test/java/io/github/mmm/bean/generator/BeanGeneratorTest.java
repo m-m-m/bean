@@ -29,6 +29,7 @@ public class BeanGeneratorTest extends Assertions {
     // then
     assertThat(code).isEqualTo("package beanimpl.io.github.mmm.bean.generator.test;\n" //
         + "\n" //
+        + "import io.github.mmm.bean.AbstractBean;\n" //
         + "import io.github.mmm.bean.AdvancedBean;\n" //
         + "import io.github.mmm.bean.BeanClass;\n" //
         + "import io.github.mmm.bean.generator.test.ContactBean;\n" //
