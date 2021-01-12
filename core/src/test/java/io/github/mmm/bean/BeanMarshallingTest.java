@@ -31,8 +31,7 @@ public class BeanMarshallingTest extends Assertions {
     TestBean bean = new TestBean();
     bean.Name.set(NAME);
     bean.Age.setValue(AGE);
-    MarshallingConfig configuration = new MarshallingConfig().with(MarshallingConfig.INDENTATION, null);
-    StructuredFormat jsonFormat = JsonFormat.of(configuration);
+    StructuredFormat jsonFormat = JsonFormat.of(MarshallingConfig.NO_INDENTATION);
 
     // when
     String json = jsonFormat.write(bean);
