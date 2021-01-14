@@ -6,7 +6,6 @@ import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
-import io.github.mmm.bean.impl.BeanTypeImpl;
 
 /**
  * Internal implementation of {@link WritableBean} non virtual instance used from {@link BeanProxy}.
@@ -25,7 +24,7 @@ public final class SimpleBean extends AbstractBean {
   public SimpleBean(BeanType type) {
 
     super();
-    this.type = BeanTypeImpl.asType(getClass());
+    this.type = type;
   }
 
   @Override
@@ -38,6 +37,12 @@ public final class SimpleBean extends AbstractBean {
   public final boolean isPrototype() {
 
     return false;
+  }
+
+  @Override
+  public boolean isDynamic() {
+
+    return true;
   }
 
 }
