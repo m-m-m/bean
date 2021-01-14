@@ -42,7 +42,12 @@ public final class BeanFactoryManager implements BeanFactory {
           return bean;
         }
       }
-      throw new IllegalStateException();
+      String message = "No BeanFactory available for this bean type.";
+      if (this.delegates.size() == 1) {
+        message = message
+            + " It seems you did not include dependency mmm-bean-factory or require module io.github.mmm.bean.factory.";
+      }
+      throw new IllegalStateException(message);
     } catch (Exception e) {
       throw new IllegalArgumentException("Failed to create bean of type " + type.getName(), e);
     }
