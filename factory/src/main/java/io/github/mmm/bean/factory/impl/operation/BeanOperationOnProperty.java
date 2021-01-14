@@ -70,7 +70,7 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     if (this.method.isAnnotationPresent(Mandatory.class)) {
       validator = ValidatorMandatory.get();
     }
-    PropertyMetadata metadata = PropertyMetadata.of(proxy.getBean(), validator);
+    PropertyMetadata metadata = PropertyMetadata.of(proxy.getProxy(), validator);
     return (WritableProperty<?>) PropertyFactoryManager.get().create((Class) propertyClass, valueClass,
         this.propertyName, metadata);
   }
