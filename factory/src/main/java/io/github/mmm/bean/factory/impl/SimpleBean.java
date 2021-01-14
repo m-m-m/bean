@@ -6,6 +6,7 @@ import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
+import io.github.mmm.property.AttributeReadOnly;
 
 /**
  * Internal implementation of {@link WritableBean} non virtual instance used from {@link BeanProxy}.
@@ -42,6 +43,13 @@ public final class SimpleBean extends AbstractBean {
   @Override
   public boolean isDynamic() {
 
+    return true;
+  }
+
+  @Override
+  protected boolean isLockOwnerInternal(AttributeReadOnly lock) {
+
+    // check more accurate?
     return true;
   }
 

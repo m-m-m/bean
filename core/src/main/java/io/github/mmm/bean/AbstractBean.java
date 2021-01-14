@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import io.github.mmm.bean.impl.BeanCreator;
+import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.PropertyBuilders;
@@ -209,7 +210,7 @@ public abstract class AbstractBean implements WritableBean {
     WritableProperty<?> existing;
     if ((mode != AddMode.DIRECT)) {
       PropertyMetadata<V> metadata = property.getMetadata();
-      if (metadata.getLock() != this) {
+      if (!isLockOwnerInternal(metadata.getLock())) {
         property = copyProperty(property);
       }
     }
@@ -228,6 +229,15 @@ public abstract class AbstractBean implements WritableBean {
       }
     }
     return property;
+  }
+
+  /**
+   * @param lock the {@link PropertyMetadata#getLock() lock} to check.
+   * @return {@code true} if this bean is the lock owner, {@code false} otherwise.
+   */
+  protected boolean isLockOwnerInternal(AttributeReadOnly lock) {
+
+    return (lock == this);
   }
 
   /**

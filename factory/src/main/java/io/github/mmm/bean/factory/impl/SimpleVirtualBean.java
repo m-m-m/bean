@@ -6,6 +6,7 @@ import io.github.mmm.bean.AbstractVirtualBean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
+import io.github.mmm.property.AttributeReadOnly;
 
 /**
  * Internal implementation of {@link VirtualBean} used from {@link BeanProxy}.
@@ -28,6 +29,13 @@ public final class SimpleVirtualBean extends AbstractVirtualBean {
   public SimpleVirtualBean(BeanClass type) {
 
     super(type);
+  }
+
+  @Override
+  protected boolean isLockOwnerInternal(AttributeReadOnly lock) {
+
+    // check more accurate?
+    return true;
   }
 
 }
