@@ -2,6 +2,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicLong;
 
 import io.github.mmm.bean.impl.BeanClassImpl;
@@ -95,7 +96,7 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
   }
 
   @Override
-  public Iterable<? extends WritableProperty<?>> getProperties() {
+  public Collection<? extends WritableProperty<?>> getProperties() {
 
     updateProperties();
     return super.getProperties();

@@ -27,6 +27,8 @@ public abstract class AbstractBean implements WritableBean {
 
   private final Collection<WritableProperty<?>> properties;
 
+  private transient String path;
+
   private boolean readOnly;
 
   private PropertyBuilders builders;
@@ -45,6 +47,25 @@ public abstract class AbstractBean implements WritableBean {
       this.propertiesMap = new HashMap<>();
     }
     this.properties = Collections.unmodifiableCollection(this.propertiesMap.values());
+    this.path = "";
+  }
+
+  @Override
+  public String path() {
+
+    return this.path;
+  }
+
+  @Override
+  public String path(String newPath) {
+
+    String old = this.path;
+    if (newPath == null) {
+      this.path = "";
+    } else {
+      this.path = newPath;
+    }
+    return old;
   }
 
   /**
@@ -139,7 +160,7 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   @Override
-  public Iterable<? extends WritableProperty<?>> getProperties() {
+  public Collection<? extends WritableProperty<?>> getProperties() {
 
     return this.properties;
   }

@@ -2,6 +2,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
+import java.util.Collection;
+
 import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.property.AttributeReadOnly;
@@ -10,6 +12,7 @@ import io.github.mmm.property.WritableProperty;
 import io.github.mmm.validation.Validatable;
 import io.github.mmm.validation.ValidationResult;
 import io.github.mmm.validation.ValidationResultBuilder;
+import io.github.mmm.value.WritablePath;
 
 /**
  * Read interface of a {@link Bean} holding arbitrary {@link #getProperty(String) properties}. Unlike plain old Java
@@ -37,7 +40,7 @@ import io.github.mmm.validation.ValidationResultBuilder;
  * IntelliJ, NetBeans, etc.) without plugins and therefore will also work in the future whatever may come.</li>
  * </ul>
  */
-public interface ReadableBean extends Validatable, MarshallableObject, AttributeReadOnly {
+public interface ReadableBean extends Validatable, MarshallableObject, AttributeReadOnly, WritablePath {
 
   /**
    * The optional suffix for a property method (when following JavaFx conventions what is not recommended by mmm-bean).
@@ -65,7 +68,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   /**
    * @return an {@link Iterable} of all properties of this bean.
    */
-  Iterable<? extends ReadableProperty<?>> getProperties();
+  Collection<? extends ReadableProperty<?>> getProperties();
 
   /**
    * @return the number of {@link #getProperty(String) properties} of this {@link ReadableBean}.
@@ -151,6 +154,14 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
 
     return false;
   }
+
+  /**
+   * @return the path of this bean. It will be appended as prefix to the {@link #path()} of all {@link #getProperties()
+   *         properties}. This is useful for criteria API to build queries. So e.g. set to "e." if this bean should have
+   *         the query alias "e".
+   */
+  @Override
+  String path();
 
   @Override
   default ValidationResult validate() {

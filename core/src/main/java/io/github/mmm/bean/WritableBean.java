@@ -3,6 +3,7 @@
 package io.github.mmm.bean;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
@@ -18,7 +19,7 @@ public interface WritableBean extends ReadableBean, MarshallingObject {
   WritableProperty<?> getProperty(String name);
 
   @Override
-  Iterable<? extends WritableProperty<?>> getProperties();
+  Collection<? extends WritableProperty<?>> getProperties();
 
   @Override
   default WritableProperty<?> getRequiredProperty(String name) {
