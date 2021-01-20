@@ -71,10 +71,23 @@ public class BeanIntrospector {
       return;
     }
     if (operation instanceof BeanOperationProperty) {
-      this.propertyMap.put(propertyName, operation);
+      BeanOperation existing = this.propertyMap.get(propertyName);
+      if (!(existing instanceof BeanOperationProperty)) {
+        this.propertyMap.put(propertyName, operation);
+      } // else the property method is overridden
     } else {
       this.propertyMap.putIfAbsent(propertyName, operation);
     }
+  }
+
+  /**
+   * @param name the name of the property.
+   * @return the {@link BeanOperation} that was {@link #add(BeanOperation) added} for the given property name or
+   *         {@code null} if none was found.
+   */
+  public BeanOperation getPropertyOperation(String name) {
+
+    return this.propertyMap.get(name);
   }
 
   /**

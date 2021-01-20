@@ -3,6 +3,7 @@
 package io.github.mmm.bean;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.factory.PropertyFactory;
 import io.github.mmm.property.factory.PropertyFactoryManager;
+import io.github.mmm.property.factory.SimplePropertyFactory;
 
 /**
  * Class with helper methods for internal reuse to avoid redundancies.
@@ -75,16 +77,21 @@ public class BeanHelper {
   }
 
   /**
-   * @param method the potential property {@link Method} to check.
-   * @return the {@link ReadableProperty#getValueClass() property value type} for the given {@link Method} or
-   *         {@code null} if not a property {@link Method}.
+   * @param type the {@link Class} reflecting the {@link ReadableProperty} to get the {@link PropertyFactory} for.
+   * @return the {@link PropertyFactory} for the given property {@code Class} or {@code null} if not a property.
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public static PropertyFactory<?, ?> getPropertyFactory(Method method) {
+  public static PropertyFactory<?, ?> getPropertyFactory(Class<?> type) {
 
-    Class<?> returnType = method.getReturnType();
-    if (ReadableProperty.class.isAssignableFrom(returnType)) {
-      PropertyFactory<?, ?> factory = PropertyFactoryManager.get().getFactoryForPropertyType((Class) returnType);
+    if (ReadableProperty.class.isAssignableFrom(type)) {
+      Class propertyType = type;
+      PropertyFactory<?, ?> factory = PropertyFactoryManager.get().getFactoryForPropertyType(propertyType);
+      if (factory == null) {
+        if (!type.isInterface() && !Modifier.isAbstract(type.getModifiers())) {
+          return new SimplePropertyFactory<>(propertyType);
+        }
+        throw new IllegalStateException("Missing PropertyFactory for type: " + type.getName());
+      }
       return factory;
     }
     return null;

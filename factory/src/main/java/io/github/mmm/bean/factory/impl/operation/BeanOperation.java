@@ -6,6 +6,10 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.mmm.bean.BeanHelper;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
@@ -19,6 +23,8 @@ import io.github.mmm.property.factory.PropertyFactory;
  * @since 1.0.0
  */
 public abstract class BeanOperation {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BeanOperation.class);
 
   /**
    * The constructor.
@@ -71,9 +77,20 @@ public abstract class BeanOperation {
    */
   public static BeanOperation of(Method method, BeanProxyPrototype prototype) {
 
+    if (Modifier.isStatic(method.getModifiers())) {
+      return null;
+    }
     String methodName = method.getName();
     if (method.isDefault()) {
-      return createOperationProperty(method, prototype);
+      BeanOperationProperty operation = createOperationProperty(method, prototype);
+      if (operation != null) {
+        return operation;
+      } else {
+        MethodHandle handle = createMethodHandle(method);
+        if (handle != null) {
+          return new BeanOperationDefaultMethod(handle);
+        }
+      }
     }
     int parameterCount = method.getParameterCount();
     if (parameterCount == 0) {
@@ -101,7 +118,7 @@ public abstract class BeanOperation {
     if (propertyName == null) {
       return null;
     }
-    PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method);
+    PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method.getReturnType());
     if (factory != null) {
       return new BeanOperationProperty(propertyName, method);
     }
@@ -118,6 +135,11 @@ public abstract class BeanOperation {
     try {
       return MethodHandles.lookup().findSpecial(declaringClass, method.getName(),
           MethodType.methodType(method.getReturnType(), method.getParameterTypes()), declaringClass);
+    } catch (IllegalAccessException e) {
+      LOG.error(
+          "Your Java installation is affected by this bug:\nhttps://bugs.openjdk.java.net/browse/JDK-8209078\nIt is closed even though it still exists and Java is not developed in an open-source way so I can comment on bugs and report feedback properly.",
+          e);
+      return null;
     } catch (Throwable e) {
       throw new IllegalStateException("Failed to create MethodHandle for " + method, e);
     }

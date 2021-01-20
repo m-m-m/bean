@@ -21,12 +21,12 @@ public class BeanOperationDefaultMethod extends BeanOperation {
   /**
    * The constructor.
    *
-   * @param method the {@link Method#isDefault() default} {@link Method}.
+   * @param methodHandle the {@link MethodHandle} of the {@link Method#isDefault() default} {@link Method}.
    */
-  public BeanOperationDefaultMethod(Method method) {
+  public BeanOperationDefaultMethod(MethodHandle methodHandle) {
 
     super();
-    this.methodHandle = createMethodHandle(method);
+    this.methodHandle = methodHandle;
   }
 
   @Override

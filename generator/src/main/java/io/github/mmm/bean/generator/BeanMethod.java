@@ -142,7 +142,7 @@ public abstract class BeanMethod {
     if (propertyName == null) {
       return null;
     }
-    PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method);
+    PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method.getReturnType());
     if (factory != null) {
       return new BeanMethodProperty(method, propertyName, factory.getValueClass());
     }

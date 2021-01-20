@@ -16,6 +16,7 @@ import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
 import io.github.mmm.bean.factory.impl.BeanIntrospector;
 import io.github.mmm.bean.factory.impl.MemoryCache;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
+import io.github.mmm.bean.factory.impl.operation.BeanOperationProperty;
 import io.github.mmm.bean.impl.BeanClassImpl;
 import io.github.mmm.bean.impl.BeanTypeImpl;
 import io.github.mmm.property.WritableProperty;
@@ -101,9 +102,12 @@ public class BeanProxyPrototype extends BeanProxy {
       BeanOperation operation = BeanOperation.of(method, this);
       if (operation != null) {
         this.method2operationMap.put(method, operation);
-        if (primary) {
+        // if (primary) {
+        BeanOperation propertyOperation = introspector.getPropertyOperation(operation.getPropertyName());
+        if (!(propertyOperation instanceof BeanOperationProperty)) {
           introspector.add(operation);
         }
+        // }
       }
     }
     for (Class<?> superInterface : beanInterface.getInterfaces()) {
