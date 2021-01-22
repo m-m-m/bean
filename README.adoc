@@ -6,7 +6,7 @@ image:https://travis-ci.com/m-m-m/bean.svg?branch=master["build-status",link="ht
 == mmm-bean
 
 image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
-image:https://m-m-m.github.io/javadoc.svg?status=online["apidoc",link="https://m-m-m.github.io/docs/api/io.github.mmm.bean/module-summary.html"]
+image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean/javadoc.svg["base JavaDoc", link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean]
 
 The module `mmm-bean` provides infrastructure for advanced beans based on real properties.
 It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
@@ -48,9 +48,6 @@ bean.Age.set(42);
 // Read-Only copy
 TestBean readonly = ReadableBean.copyReadOnly(bean);
 assertThat(readonly.Age.get()).isEqualTo(42);
-bean.Age.set(43);
-assertThat(bean.Age.get()).isEqualTo(43);
-assertThat(readonly.Age.get()).isEqualTo(42);
 try {
   readonly.Age.set(43);
   fail("Exception expected");
@@ -58,7 +55,7 @@ try {
 }
 // Change listener...
 bean.Age.addListener((e) -> {System.out.println(e.getOldValue() + "-->" + e.getValue());});
-bean.Age.set(44); // prints: 43 --> 44
+bean.Age.set(43); // prints: 42 --> 43
 // Copy and compare
 TestBean bean2 = new TestBean();
 for (WritableProperty<?> property : bean.getProperties()) {
@@ -81,6 +78,7 @@ This is just the beginning. There is so much more:
 * dynamic property support
 * polymorphic type hierarchies
 * optional virtual run-time type creation with protoypic inheritance
+* build in criteria- and query support (see https://github.com/m-m-m/bean/[mmm-entity])
 * alternative support for bean interfaces as dynamic proxies providing multi-inheritance and even less boiler-plate code (but more magic and overhead)
 * ...
 
