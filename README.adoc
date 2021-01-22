@@ -10,7 +10,7 @@ image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean/javadoc.svg["base JavaD
 
 The module `mmm-bean` provides infrastructure for advanced beans based on real properties.
 It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
-For motivation and details see the https://m-m-m.github.io/docs/api/io.github.mmm.bean/module-summary.html[documnetation].
+For motivation and details see the JavaDoc linked on the badge above.
 
 == Example
 
@@ -151,3 +151,74 @@ This will print the following JSON:
 
 So if you want the best of both worlds (static and dynamic typing), you have found the solution now.
 Of course you can populate an existing bean with data from JSON in an analog way and of course there is full stream support for `Reader` and `Writer`.
+
+== mmm-bean-factory
+
+image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean-factory.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
+image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-factory/javadoc.svg["base JavaDoc", link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean-factory]
+
+The module `mmm-bean-factory` provides an advanced implementation of `BeanFactory` that can create advanced beans (see above) also from interfaces.
+That is you never have to write an implementation and can simply "instantiate" your beans from the interface.
+This brings the following additional advantages:
+
+* even less or no boilerplate code
+* multi-inheritance for your data-model
+
+== Example
+
+[source,java]
+-----
+public interface Song extends WritableBean {
+
+  /** @return title of the song. */
+  StringProperty Title();
+
+  /** @return artist (band or performer) of the song. */
+  StringProperty Artist();
+
+  /** @return the genre of the song (e.g. "pop" or "rock"). */
+  StringProperty Genre();
+
+  /** @return the track number of the song on the album. */
+  IntegerProperty TrackNo();
+
+  /** @return the duration in seconds. */
+  DurationInSecondsProperty Duration();
+
+  /** @return a new instance of {@link Song}. */
+  static Song of() {
+    return BeanFactory.get().create(Song.class);
+  }
+}
+-----
+
+The only kind of boiler-plate code left is the static `of` method that acts as "constructor" for easy usage:
+
+[source,java]
+-----
+Song song = Song.of();
+song.Title().set("Bohemian Rhapsody");
+song.Artist().set("Queen");
+song.Genre().setGenre("Rock");
+song.TrackNo().set(4);
+song.DurationInSeconds().set(((5*60)+55)*60L);
+-----
+
+Now you can again do all the features you can do with our awesome beans just as explained above.
+But wait - how do you do this? With dynamic proxies?
+Then this can not be used with https://www.graalvm.org/[GraalVM] or http://teavm.org/[TeaVM], right?
+Yes, you can also use it in such environments if you read on.
+
+
+== mmm-bean-generator
+
+image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean-generator.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
+image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-generator/javadoc.svg["base JavaDoc", link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean-generator]
+
+The module `mmm-bean-generator` provides `BeanGenerator` that can scan your module- or classpath for our awesome beans and will generate Java code:
+
+* Implementations for all your bean interfaces
+* An implementation of `BeanFactory` 
+
+So you can have all the magic without deep reflection available and with ahead-of-time (AOT) compilation.
+If you are not yet convinced have a look at https://github.com/m-m-m/entity[mmm-entity].
