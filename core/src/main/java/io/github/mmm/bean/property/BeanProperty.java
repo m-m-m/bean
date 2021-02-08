@@ -61,6 +61,9 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
   protected void doSet(V newValue) {
 
     this.value = newValue;
+    if (newValue != null) {
+      newValue.path(() -> path() + PATH_SEPARATOR);
+    }
   }
 
   @Override

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import io.github.mmm.bean.impl.BeanCreator;
 import io.github.mmm.property.AttributeReadOnly;
@@ -27,7 +28,7 @@ public abstract class AbstractBean implements WritableBean {
 
   private final Collection<WritableProperty<?>> properties;
 
-  private transient String path;
+  private transient Supplier<String> pathSupplier;
 
   private boolean readOnly;
 
@@ -47,25 +48,27 @@ public abstract class AbstractBean implements WritableBean {
       this.propertiesMap = new HashMap<>();
     }
     this.properties = Collections.unmodifiableCollection(this.propertiesMap.values());
-    this.path = "";
   }
 
   @Override
   public String path() {
 
-    return this.path;
+    if (this.pathSupplier == null) {
+      return "";
+    }
+    return this.pathSupplier.get();
   }
 
   @Override
-  public String path(String newPath) {
+  public void path(String path) {
 
-    String old = this.path;
-    if (newPath == null) {
-      this.path = "";
-    } else {
-      this.path = newPath;
-    }
-    return old;
+    path(() -> path);
+  }
+
+  @Override
+  public void path(Supplier<String> pathExpression) {
+
+    this.pathSupplier = pathExpression;
   }
 
   /**

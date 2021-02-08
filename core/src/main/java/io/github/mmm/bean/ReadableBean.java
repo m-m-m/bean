@@ -66,7 +66,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   ReadableProperty<?> getProperty(String name);
 
   /**
-   * @return an {@link Iterable} of all properties of this bean.
+   * @return a {@link Collection} with all {@link ReadableProperty properties} of this bean.
    */
   Collection<? extends ReadableProperty<?>> getProperties();
 
