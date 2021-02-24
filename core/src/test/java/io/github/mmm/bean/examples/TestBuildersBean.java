@@ -11,7 +11,7 @@ import io.github.mmm.property.string.StringProperty;
 /**
  * A {@link Bean} for testing.
  */
-@Name("mmm.TestBuildersBean")
+@Name("mmm_TestBuildersBean")
 public class TestBuildersBean extends Bean {
 
   /** Full name of person. */

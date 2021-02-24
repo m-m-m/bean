@@ -23,7 +23,7 @@ public class DynamicBeanTest extends AbstractBeanTest {
     assertThat(bean.isDynamic()).isTrue();
     assertThat(bean.isReadOnly()).isFalse();
     assertThat(bean.getPropertyCount()).isEqualTo(0);
-    checkType(bean, "mmm.DynamicBean");
+    checkType(bean, "mmm_DynamicBean");
     assertThat(bean.getPropertyNameForAlias("Name")).isNull();
     DynamicBean readOnly = ReadableBean.copy(bean, true);
     assertThat(readOnly.getPropertyNameForAlias("Name")).isNull();

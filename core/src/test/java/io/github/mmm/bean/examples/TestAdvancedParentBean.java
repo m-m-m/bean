@@ -11,7 +11,7 @@ import io.github.mmm.property.string.StringProperty;
  * {@link AdvancedBean} for testing.
  */
 @SuppressWarnings("javadoc")
-@Name("mmm.TestAdvancedParentBean")
+@Name("mmm_TestAdvancedParentBean")
 public class TestAdvancedParentBean extends AdvancedBean {
 
   /** @see BeanClass#getPrototype() */

@@ -5,7 +5,7 @@ package io.github.mmm.bean;
 /**
  * A {@link Bean} that is always {@link #isDynamic() dynamic}. Only exists for simplicity.
  */
-@Name("mmm.DynamicBean")
+@Name("mmm_DynamicBean")
 public class DynamicBean extends Bean {
 
   /**

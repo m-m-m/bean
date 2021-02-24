@@ -11,7 +11,7 @@ import io.github.mmm.property.number.integers.IntegerProperty;
  * {@link AdvancedBean} for testing.
  */
 @SuppressWarnings("javadoc")
-@Name("mmm.TestAdvancedBean")
+@Name("mmm_TestAdvancedBean")
 public class TestAdvancedBean extends TestAdvancedParentBean {
 
   /** @see BeanClass#getPrototype() */

@@ -24,20 +24,20 @@ public class AdvancedBeanTest extends AbstractBeanTest {
   public void testAdvancedBeanDynamicVirtual() {
 
     // class
-    BeanClass virtucalBeanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo.VirtualBean",
+    BeanClass virtucalBeanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo_VirtualBean",
         TestAdvancedBean.PROTOTYPE.getType());
     assertThat(virtucalBeanClass.getQualifiedName()).isEqualTo("com.foo.MyVirtualBean");
-    assertThat(virtucalBeanClass.getStableName()).isEqualTo("foo.VirtualBean");
+    assertThat(virtucalBeanClass.getStableName()).isEqualTo("foo_VirtualBean");
     Collection<BeanClass> superClasses = virtucalBeanClass.getSuperClasses();
     assertThat(superClasses).hasSize(1);
     BeanClass testAdvancedBeanClass = superClasses.iterator().next();
     assertThat(testAdvancedBeanClass.getQualifiedName()).isEqualTo(TestAdvancedBean.class.getName());
-    assertThat(testAdvancedBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedBean");
+    assertThat(testAdvancedBeanClass.getStableName()).isEqualTo("mmm_TestAdvancedBean");
     superClasses = testAdvancedBeanClass.getSuperClasses();
     assertThat(superClasses).hasSize(1);
     BeanClass testAdvancedParentBeanClass = superClasses.iterator().next();
     assertThat(testAdvancedParentBeanClass.getQualifiedName()).isEqualTo(TestAdvancedParentBean.class.getName());
-    assertThat(testAdvancedParentBeanClass.getStableName()).isEqualTo("mmm.TestAdvancedParentBean");
+    assertThat(testAdvancedParentBeanClass.getStableName()).isEqualTo("mmm_TestAdvancedParentBean");
 
     // bean
     // first instance created for virtual bean class is the prototype

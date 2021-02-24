@@ -12,7 +12,7 @@ import io.github.mmm.property.string.StringProperty;
 /**
  * A {@link Bean} for testing.
  */
-@Name("mmm.TestBean")
+@Name("mmm_TestBean")
 public final class TestBean extends AdvancedBean implements PersonBean {
 
   /** Full name of person. */

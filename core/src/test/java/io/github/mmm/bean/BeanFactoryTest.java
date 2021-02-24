@@ -19,7 +19,7 @@ public class BeanFactoryTest extends AbstractBeanTest {
 
     TestBean bean = factory.create(TestBean.class);
     assertThat(bean.getClass()).isEqualTo(TestBean.class);
-    checkType(bean, "mmm.TestBean");
+    checkType(bean, "mmm_TestBean");
   }
 
 }

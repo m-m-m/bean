@@ -27,7 +27,7 @@ public class BeanTest extends AbstractBeanTest {
     assertThat(bean.isPrototype()).isFalse();
     assertThat(bean.isDynamic()).isFalse();
     assertThat(bean.isReadOnly()).isFalse();
-    checkType(bean, "mmm.TestBean");
+    checkType(bean, "mmm_TestBean");
     assertThat(bean.Name.getName()).isEqualTo("Name");
     assertThat(bean.Name.getValue()).isNull();
     checkProperty(bean, bean.Name, "John Doe");
@@ -139,7 +139,7 @@ public class BeanTest extends AbstractBeanTest {
     bean.Hobbies.getOrCreate().add(null);
     result = bean.validate();
     assertThat(result.isValid()).isFalse();
-    assertThat(result.getMessage(true)).isEqualTo("mmm.TestBuildersBean: [Composed]\n" + //
+    assertThat(result.getMessage(true)).isEqualTo("mmm_TestBuildersBean: [Composed]\n" + //
         "  Hobbies: [Composed]\n" + //
         "    #0: [Mandatory] The value has to be filled.\n" + //
         "  Age: [Range] The value needs to be in the range from 0 to 150.\n" + //
