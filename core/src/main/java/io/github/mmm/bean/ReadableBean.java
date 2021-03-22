@@ -4,6 +4,9 @@ package io.github.mmm.bean;
 
 import java.util.Collection;
 
+import io.github.mmm.bean.mapping.PropertyIdCollector;
+import io.github.mmm.bean.mapping.PropertyIdMapper;
+import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.property.AttributeReadOnly;
@@ -54,7 +57,13 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    * @see #isPolymorphic()
    * @see #write(StructuredWriter)
    */
-  String PROPERTY_TYPE = "@type";
+  String PROPERTY_TYPE_NAME = "@type";
+
+  /**
+   * Property {@link io.github.mmm.bean.mapping.PropertyIdMapping#id(ReadableProperty) ID} for
+   * {@link #PROPERTY_TYPE_NAME}.
+   */
+  int PROPERTY_TYPE_ID = 2047;
 
   /**
    * @param name the {@link WritableProperty#getName() name} of the requested property or a potential
@@ -210,13 +219,21 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
 
     writer.writeStartObject();
     if (isPolymorphic()) {
-      writer.writeName(PROPERTY_TYPE);
+      writer.writeName(PROPERTY_TYPE_NAME);
       writer.writeValueAsString(getType().getStableName());
     }
+    PropertyIdMapping idMapping = null;
+    if (writer.getFormat().isIdBased()) {
+      idMapping = PropertyIdMapper.get().getIdMapping(this);
+    }
     for (ReadableProperty<?> property : getProperties()) {
-      String name = property.getName();
+      String propertyName = property.getName();
+      int propertyId = -1;
+      if (idMapping != null) {
+        propertyId = idMapping.id(property);
+      }
       if (!property.isTransient()) {
-        writer.writeName(name);
+        writer.writeName(propertyName, propertyId);
         property.writeObject(writer, property);
       }
     }
@@ -233,6 +250,16 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    * @return a new instance of this {@link WritableBean}.
    */
   WritableBean newInstance();
+
+  /**
+   * Defines how the {@link #getProperties() properties} of this {@link ReadableBean} are mapped to numeric IDs. This is
+   * only relevant in case you want to use binary protocols ProtoBuf/GRPC.
+   *
+   * @param mapping the {@link PropertyIdCollector} used to receive the mapping.
+   */
+  default void mapPropertyIds(PropertyIdCollector mapping) {
+
+  }
 
   /**
    * @param <B> type of the {@link WritableBean}.

@@ -5,6 +5,8 @@ package io.github.mmm.bean;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
+import io.github.mmm.bean.mapping.PropertyIdMapper;
+import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
 import io.github.mmm.property.WritableProperty;
@@ -167,16 +169,29 @@ public interface WritableBean extends ReadableBean, MarshallingObject {
   @Override
   default void read(StructuredReader reader) {
 
-    if (!reader.readStartObject()) {
+    if (!reader.readStartObject() || reader.readEnd()) {
       return;
     }
+    PropertyIdMapping idMapping = null;
+    if (reader.getFormat().isIdBased()) {
+      idMapping = PropertyIdMapper.get().getIdMapping(this);
+    }
     while (!reader.readEnd()) {
-      String propertyName = reader.readName();
-      if (PROPERTY_TYPE.equals(propertyName)) {
+      String propertyName = null;
+      if (idMapping == null) {
+        propertyName = reader.readName();
+      } else {
+        int propertyId = reader.readId();
+        propertyName = idMapping.name(propertyId);
+        if (propertyName == null) {
+          propertyName = Integer.toString(propertyId);
+        }
+      }
+      if (PROPERTY_TYPE_NAME.equals(propertyName)) {
         String type = reader.readValueAsString();
         String stableName = getType().getStableName();
         if (!type.equals(stableName)) {
-          throw new IllegalStateException(PROPERTY_TYPE + "=" + type + "!=" + stableName);
+          throw new IllegalStateException(PROPERTY_TYPE_NAME + "=" + type + "!=" + stableName);
         }
       } else {
         WritableProperty<?> property = getProperty(propertyName);

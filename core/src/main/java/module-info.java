@@ -88,6 +88,8 @@ module io.github.mmm.bean {
 
   exports io.github.mmm.bean;
 
+  exports io.github.mmm.bean.mapping;
+
   exports io.github.mmm.bean.property;
 
   exports io.github.mmm.bean.impl to io.github.mmm.bean.factory;

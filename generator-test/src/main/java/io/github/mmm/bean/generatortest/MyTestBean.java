@@ -8,8 +8,9 @@ import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 
 /**
- *
+ * Test bean.
  */
+@SuppressWarnings("javadoc")
 public interface MyTestBean extends VirtualBean {
 
   @Mandatory
