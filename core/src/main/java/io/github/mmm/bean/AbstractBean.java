@@ -11,8 +11,16 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import io.github.mmm.bean.impl.BeanCreator;
+import io.github.mmm.bean.mapping.PropertyIdMapper;
+import io.github.mmm.bean.mapping.PropertyIdMapping;
+import io.github.mmm.marshall.StructuredBinaryFormat;
+import io.github.mmm.marshall.StructuredFormat;
+import io.github.mmm.marshall.StructuredWriter;
+import io.github.mmm.marshall.size.StructuredFormatSizeComputor;
+import io.github.mmm.marshall.size.StructuredFormatSizeComputorNone;
 import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.PropertyMetadata;
+import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.PropertyBuilders;
 import io.github.mmm.property.factory.PropertyFactoryManager;
@@ -34,6 +42,8 @@ public abstract class AbstractBean implements WritableBean {
 
   private PropertyBuilders builders;
 
+  private int size;
+
   /**
    * The constructor.
    */
@@ -48,6 +58,7 @@ public abstract class AbstractBean implements WritableBean {
       this.propertiesMap = new HashMap<>();
     }
     this.properties = Collections.unmodifiableCollection(this.propertiesMap.values());
+    this.size = -1;
   }
 
   @Override
@@ -296,6 +307,58 @@ public abstract class AbstractBean implements WritableBean {
    */
   protected void onPropertyAdded(WritableProperty<?> property) {
 
+  }
+
+  int computeSize(StructuredFormatSizeComputor computor, PropertyIdMapping idMapping) {
+
+    if (this.size != -1) {
+      int newSize = 0;
+      for (ReadableProperty<?> property : getProperties()) {
+        int propertySize = property.computeSize(computor);
+        if (propertySize == -1) {
+          return -1;
+        } else if (propertySize > 0) {
+          propertySize += computor.sizeOfProperty(property.getName(), idMapping.id(property));
+        }
+        newSize += propertySize;
+      }
+      this.size = newSize;
+    }
+    return this.size;
+  }
+
+  @Override
+  public void write(StructuredWriter writer) {
+
+    StructuredFormat format = writer.getFormat();
+    PropertyIdMapping idMapping = null;
+    if (format.isIdBased()) {
+      idMapping = PropertyIdMapper.get().getIdMapping(this);
+    }
+    if (format.isBinary()) {
+      StructuredFormatSizeComputor computor = ((StructuredBinaryFormat) format).getSizeComputor();
+      if (computor != StructuredFormatSizeComputorNone.get()) {
+        computeSize(computor, idMapping);
+      }
+    }
+    writer.writeStartObject(this.size);
+    if (isPolymorphic()) {
+      writer.writeName(PROPERTY_TYPE_NAME, PROPERTY_TYPE_ID);
+      writer.writeValueAsString(getType().getStableName());
+    }
+    for (ReadableProperty<?> property : getProperties()) {
+      String propertyName = property.getName();
+      int propertyId = -1;
+      if (idMapping != null) {
+        propertyId = idMapping.id(property);
+      }
+      if (!property.isTransient()) {
+        writer.writeName(propertyName, propertyId);
+        property.writeObject(writer, property);
+      }
+    }
+    writer.writeEnd();
+    this.size = -1;
   }
 
   @Override

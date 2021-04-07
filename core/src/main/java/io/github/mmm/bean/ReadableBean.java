@@ -5,8 +5,6 @@ package io.github.mmm.bean;
 import java.util.Collection;
 
 import io.github.mmm.bean.mapping.PropertyIdCollector;
-import io.github.mmm.bean.mapping.PropertyIdMapper;
-import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallableObject;
 import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.property.AttributeReadOnly;
@@ -212,32 +210,6 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
       }
     }
     return true;
-  }
-
-  @Override
-  default void write(StructuredWriter writer) {
-
-    writer.writeStartObject();
-    if (isPolymorphic()) {
-      writer.writeName(PROPERTY_TYPE_NAME);
-      writer.writeValueAsString(getType().getStableName());
-    }
-    PropertyIdMapping idMapping = null;
-    if (writer.getFormat().isIdBased()) {
-      idMapping = PropertyIdMapper.get().getIdMapping(this);
-    }
-    for (ReadableProperty<?> property : getProperties()) {
-      String propertyName = property.getName();
-      int propertyId = -1;
-      if (idMapping != null) {
-        propertyId = idMapping.id(property);
-      }
-      if (!property.isTransient()) {
-        writer.writeName(propertyName, propertyId);
-        property.writeObject(writer, property);
-      }
-    }
-    writer.writeEnd();
   }
 
   /**
