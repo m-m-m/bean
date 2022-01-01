@@ -234,6 +234,57 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   }
 
   /**
+   * Method to implement {@link #equals(Object)} directly in a bean interface as default method. For simplification it
+   * is only called if the object to compare to is not {@code null} and has the same {@link #getType() type} so you do
+   * not have to handle these cases in your custom implementation.<br>
+   * <b>ATTENTION:</b> It is rather discouraged to override this method. Simply use {@link #isEqualTo(ReadableBean)}
+   * instead of {@link #equals(Object)} when you want comparison by value (e.g. to check for duplicates).
+   *
+   * @param other the object to compare to. Will not be {@code null} and has the same {@link #getType() type} as this
+   *        bean.
+   * @return {@code true} if this and the given {@link ReadableBean} are considered equals, {@code false} otherwise.
+   * @see #equals(Object)
+   * @see #isEqualTo(ReadableBean)
+   */
+  default boolean doEquals(ReadableBean other) {
+
+    return (this == other);
+  }
+
+  /**
+   * Method to implement {@link #toString()} directly in a bean interface as default method.
+   *
+   * @return the {@link Object#toString() string representation of this bean}.
+   */
+  default String doToString() {
+
+    StringBuilder sb = new StringBuilder(getType().getStableName());
+    sb.append("(");
+    sb.append("readonly=");
+    sb.append(isReadOnly());
+    sb.append(',');
+    if (isDynamic()) {
+      sb.append("dynamic,");
+    }
+    toString(sb);
+    sb.setLength(sb.length() - 1);
+    sb.append(")");
+    return sb.toString();
+  }
+
+  /**
+   * @param sb the {@link StringBuilder} where to append the details (the properties) of this {@link Bean} for
+   *        {@link #toString()}-Representation.
+   */
+  default void toString(StringBuilder sb) {
+
+    for (ReadableProperty<?> property : getProperties()) {
+      property.toString(sb);
+      sb.append(",");
+    }
+  }
+
+  /**
    * @param <B> type of the {@link WritableBean}.
    * @param bean the {@link WritableBean} to create a {@link #newInstance() new instance} of.
    * @return the {@link #newInstance() new instance}.

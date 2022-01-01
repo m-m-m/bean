@@ -40,6 +40,7 @@ public class BeanTest extends AbstractBeanTest {
     checkProperty(bean, bean.Age, Integer.valueOf(42));
     assertThat(bean.getPropertyCount()).isEqualTo(2);
     assertThat(bean.getPropertyNameForAlias("Undefined")).isNull();
+    assertThat(bean).hasToString("mmm_TestBean(readonly=false,Age=42,Name=John Doe)");
   }
 
   /**

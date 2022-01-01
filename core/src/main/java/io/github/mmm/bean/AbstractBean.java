@@ -364,32 +364,7 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public String toString() {
 
-    StringBuilder sb = new StringBuilder(getType().getStableName());
-    sb.append("(");
-    if (isReadOnly()) {
-      sb.append("readonly,");
-    } else {
-      sb.append("mutable,");
-    }
-    if (isDynamic()) {
-      sb.append("dynamic,");
-    }
-    toString(sb);
-    sb.setLength(sb.length() - 1);
-    sb.append(")");
-    return sb.toString();
-  }
-
-  /**
-   * @param sb the {@link StringBuilder} where to append the details (the properties) of this {@link Bean} for
-   *        {@link #toString()}-Representation.
-   */
-  public void toString(StringBuilder sb) {
-
-    for (WritableProperty<?> property : getProperties()) {
-      property.toString(sb);
-      sb.append(",");
-    }
+    return doToString();
   }
 
   /**

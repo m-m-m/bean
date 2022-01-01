@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ServiceLoader;
 
+import io.github.mmm.base.config.ServiceHelper;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
@@ -26,9 +27,7 @@ public final class BeanFactoryManager implements BeanFactory {
     super();
     this.delegates = new ArrayList<>();
     ServiceLoader<BeanFactory> loader = ServiceLoader.load(BeanFactory.class);
-    for (BeanFactory factory : loader) {
-      this.delegates.add(factory);
-    }
+    ServiceHelper.add(loader, this.delegates);
   }
 
   @Override
@@ -43,7 +42,7 @@ public final class BeanFactoryManager implements BeanFactory {
         }
       }
       String message = "No BeanFactory available for this bean type.";
-      if (this.delegates.size() == 1) {
+      if (this.delegates.size() <= 1) {
         message = message
             + " It seems you did not include dependency mmm-bean-factory or require module io.github.mmm.bean.factory.";
       }
