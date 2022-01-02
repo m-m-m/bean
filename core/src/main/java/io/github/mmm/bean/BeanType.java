@@ -55,7 +55,7 @@ public interface BeanType {
    *         like the {@link #getSimpleName() simple name} and unique (at least for a single application) like the
    *         {@link #getQualifiedName() qualified name}. This name should be stable so do not change it after it has
    *         been used externally. The stable name defaults to {@link #getSimpleName() simple name} for simplicity but
-   *         may not satisfy stability. To pick a custom external name you ideally choose a short and stable namespace
+   *         may not satisfy stability. To pick a custom stable name you ideally choose a short and stable namespace
    *         prefix followed by a stable {@link #getSimpleName() simple name} without any technical clutter (avoid
    *         suffixes like {@code Impl} or {@code To}). E.g. "{@code mmm_Address}" for an {@code Address} {@link Bean}
    *         of this project ({@code io.github.mmm}).

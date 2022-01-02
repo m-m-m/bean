@@ -12,7 +12,7 @@ import io.github.mmm.property.Property;
 import io.github.mmm.property.PropertyMetadata;
 
 /**
- * Implementation of {@link BeanProperty}.
+ * Implementation of {@link WritableBeanProperty}.
  *
  * @param <V> type of the {@link WritableBean bean} {@link #getValue() value}.
  * @since 1.0.0
