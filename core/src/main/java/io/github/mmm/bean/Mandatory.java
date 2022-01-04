@@ -15,6 +15,18 @@ import io.github.mmm.validation.main.ObjectValidatorBuilder;
  * that act as factory for the property. It is a convenience annotation to avoid the burden of implementing a default
  * method just for the sake of making a property mandatory what is a quite common case.
  *
+ * However, unlike Java bean validation we prevent to create annotations for any other kind of
+ * {@link io.github.mmm.validation.Validator} as we want to keep the amount of reflection magic at an absolute minimum.
+ * Instead we propagate to use explicit but expressive Java code. So to define additional constraints for a property
+ * simply use explicit code like in the following example:
+ *
+ * <pre>
+ * default IntegerProperty Port() {
+ *
+ *   return new IntegerPropertyBuilder(this).withValidator().mandatory().range(8080, 9999).and().build("Port");
+ * }
+ * </pre>
+ *
  * @see ObjectValidatorBuilder#mandatory()
  * @since 1.0.0
  */
