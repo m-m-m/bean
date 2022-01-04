@@ -10,12 +10,13 @@ import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
 import io.github.mmm.property.WritableProperty;
+import io.github.mmm.value.WritablePath;
 
 /**
  * Writable interface of {@link ReadableBean}.
  */
 @AbstractInterface
-public interface WritableBean extends ReadableBean, MarshallingObject {
+public interface WritableBean extends ReadableBean, WritablePath, MarshallingObject {
 
   @Override
   WritableProperty<?> getProperty(String name);
@@ -214,5 +215,22 @@ public interface WritableBean extends ReadableBean, MarshallingObject {
       }
     }
   }
+
+  /**
+   * @return the optional alias of this bean. It will be appended as prefix to the {@link #path()} of all
+   *         {@link #getProperties() properties}. This is useful for API to build queries. So e.g. set to "alias" and
+   *         your contained property will have the path "alias.MyProperty".
+   */
+  @Override
+  String pathSegment();
+
+  /**
+   * Used to set an alias as described in {@link #pathSegment()}.
+   *
+   * <b>ATTENTION:</b> End users should never use this method directly but use designated methods such as
+   * {@code as(String alias)} provided by according SQL clauses.
+   */
+  @Override
+  void pathSegment(String pathSegment);
 
 }

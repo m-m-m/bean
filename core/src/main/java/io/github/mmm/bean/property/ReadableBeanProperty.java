@@ -14,7 +14,4 @@ import io.github.mmm.property.object.ReadableObjectProperty;
  */
 public interface ReadableBeanProperty<V extends WritableBean> extends ReadableObjectProperty<V> {
 
-  /** The separator for the {@link #path()}. */
-  String PATH_SEPARATOR = "$";
-
 }

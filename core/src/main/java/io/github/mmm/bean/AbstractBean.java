@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import io.github.mmm.bean.impl.BeanCreator;
 import io.github.mmm.bean.mapping.PropertyIdMapper;
@@ -24,6 +23,7 @@ import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.PropertyBuilders;
 import io.github.mmm.property.factory.PropertyFactoryManager;
+import io.github.mmm.value.ReadablePath;
 
 /**
  * Abstract base implementation of {@link WritableBean}.
@@ -36,7 +36,9 @@ public abstract class AbstractBean implements WritableBean {
 
   private final Collection<WritableProperty<?>> properties;
 
-  private transient Supplier<String> pathSupplier;
+  private transient String pathSegment;
+
+  private transient ReadablePath parentPath;
 
   private boolean readOnly;
 
@@ -62,24 +64,27 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   @Override
-  public String path() {
+  public String pathSegment() {
 
-    if (this.pathSupplier == null) {
-      return "";
-    }
-    return this.pathSupplier.get();
+    return this.pathSegment;
   }
 
   @Override
-  public void path(String path) {
+  public void pathSegment(String path) {
 
-    path(() -> path);
+    this.pathSegment = path;
   }
 
   @Override
-  public void path(Supplier<String> pathExpression) {
+  public ReadablePath parentPath() {
 
-    this.pathSupplier = pathExpression;
+    return this.parentPath;
+  }
+
+  @Override
+  public void parentPath(ReadablePath parent) {
+
+    this.parentPath = parent;
   }
 
   /**

@@ -67,7 +67,7 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
 
     this.value = newValue;
     if (newValue != null) {
-      newValue.path(() -> path() + PATH_SEPARATOR);
+      newValue.parentPath(this);
     }
   }
 
