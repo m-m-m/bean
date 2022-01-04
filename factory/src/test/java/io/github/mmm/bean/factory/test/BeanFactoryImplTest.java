@@ -2,21 +2,17 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.test;
 
-import java.time.LocalDate;
-import java.time.Period;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.github.mmm.base.exception.ReadOnlyException;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.ReadableBean;
-import io.github.mmm.property.number.integers.IntegerProperty;
 
 /**
- * Test of {@link BeanFactory}.
+ * Test of {@link BeanFactory}[Impl].
  */
-public class BeanFactoryTest extends Assertions {
+public class BeanFactoryImplTest extends Assertions {
 
   /** Test of {@link BeanFactory#create(Class)} from an interface. */
   @Test
@@ -46,21 +42,6 @@ public class BeanFactoryTest extends Assertions {
       assertThat(e.getNlsMessage().getMessage())
           .isEqualTo("Failed to modify read-only object: Property Age is readonly and cannot be modified.");
     }
-  }
-
-  /** Test of {@link BeanFactory#create(Class)} from an interface with inheritance. */
-  @Test
-  public void testCreateFromInterfaceWithInheritance() {
-
-    ContactBean bean = BeanFactory.get().create(ContactBean.class);
-    String name = "John Doe";
-    bean.setName(name);
-    int age = 20;
-    IntegerProperty ageProperty = bean.Age();
-    LocalDate bithday = LocalDate.now().minus(Period.ofYears(age));
-    assertThat(ageProperty.get()).isNull();
-    bean.setBirthday(bithday);
-    assertThat(ageProperty.get()).isEqualTo(age);
   }
 
   /** Test of {@link BeanFactory#create(Class)} with a bean class implementation. */

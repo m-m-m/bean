@@ -11,9 +11,7 @@
  *
  * @provides io.github.mmm.bean.BeanFactory
  */
-// module should actually not be open - just a temporary workaround for tooling bug or JPMS design flaw
-// https://bugs.eclipse.org/bugs/show_bug.cgi?id=536847
-open module io.github.mmm.bean.factory {
+module io.github.mmm.bean.factory {
 
   requires transitive io.github.mmm.bean;
 

@@ -31,10 +31,11 @@ public class BeanHelper {
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static void copy(AbstractBean source, AbstractBean copy, boolean readOnly) {
 
-    // TODO: also copy dynamic properties?
     for (WritableProperty property : copy.getProperties()) {
-      Object value = source.get(property.getName());
-      property.set(value);
+      if (!property.isReadOnly()) {
+        Object value = source.get(property.getName());
+        property.set(value);
+      }
     }
     if (readOnly) {
       copy.makeReadOnly();

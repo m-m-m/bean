@@ -66,13 +66,37 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
   @SuppressWarnings({ "rawtypes", "unchecked" })
   protected WritableProperty<?> createProperty(BeanProxy proxy, Class<?> propertyClass, Class<?> valueClass) {
 
-    Validator validator = null;
-    if (this.method.isAnnotationPresent(Mandatory.class)) {
-      validator = ValidatorMandatory.get();
-    }
-    PropertyMetadata metadata = PropertyMetadata.of(proxy.getProxy(), validator);
+    PropertyMetadata metadata = createMetadata(proxy, null);
     return (WritableProperty<?>) PropertyFactoryManager.get().create((Class) propertyClass, valueClass,
         this.propertyName, metadata);
+  }
+
+  /**
+   * @param proxy the {@link BeanProxy}.
+   * @param metadata the optional existing {@link PropertyMetadata} to use as template. May be {@code null}.
+   * @return the new {@link PropertyMetadata}.
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  protected PropertyMetadata createMetadata(BeanProxy proxy, PropertyMetadata metadata) {
+
+    PropertyMetadata result;
+    if (metadata == null) {
+      Validator validator = Validator.none();
+      if (this.method.isAnnotationPresent(Mandatory.class)) {
+        validator = ValidatorMandatory.get();
+      }
+      result = PropertyMetadata.of(proxy.getProxy(), validator);
+    } else {
+      result = metadata.withLock(proxy.getProxy());
+      Validator validator = metadata.getValidator();
+      if (!validator.isMandatory()) {
+        if (this.method.isAnnotationPresent(Mandatory.class)) {
+          validator = validator.append(ValidatorMandatory.get());
+          result = result.withValidator(validator);
+        }
+      }
+    }
+    return result;
   }
 
 }

@@ -2,42 +2,36 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.impl.operation;
 
-import java.lang.invoke.MethodHandle;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import io.github.mmm.bean.Bean;
-import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 
 /**
- * Operation for {@link Bean#equals(Object)}.
+ * Operation for {@link Method#isDefault() default} {@link Method}s.
  *
  * @since 1.0.0
  */
 public class BeanOperationDefaultMethod extends BeanOperation {
 
-  private final MethodHandle methodHandle;
+  private final Method method;
 
   /**
    * The constructor.
    *
-   * @param methodHandle the {@link MethodHandle} of the {@link Method#isDefault() default} {@link Method}.
+   * @param method the the {@link Method#isDefault() default} {@link Method}.
    */
-  public BeanOperationDefaultMethod(MethodHandle methodHandle) {
+  public BeanOperationDefaultMethod(Method method) {
 
     super();
-    this.methodHandle = methodHandle;
+    assert method.isDefault();
+    this.method = method;
   }
 
   @Override
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
-    WritableBean instance = proxy.getProxy();
-    if (args == null) {
-      return this.methodHandle.invoke(instance);
-    } else {
-      return this.methodHandle.bindTo(instance).invoke(args);
-    }
+    return InvocationHandler.invokeDefault(proxy.getProxy(), this.method, args);
   }
 
 }
