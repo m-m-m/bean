@@ -2,6 +2,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.test;
 
+import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
@@ -23,5 +24,10 @@ public interface PersonBean extends VirtualBean {
   Integer getAge();
 
   void setAge(Integer age);
+
+  static PersonBean of() {
+
+    return BeanFactory.get().create(PersonBean.class);
+  }
 
 }

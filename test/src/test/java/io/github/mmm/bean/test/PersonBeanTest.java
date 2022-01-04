@@ -1,24 +1,23 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.bean.factory.test;
+package io.github.mmm.bean.test;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.github.mmm.base.exception.ReadOnlyException;
-import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.ReadableBean;
 
 /**
- * Test of {@link BeanFactory}[Impl].
+ * Test of {@link PersonBean}.
  */
-public class BeanFactoryImplTest extends Assertions {
+public class PersonBeanTest extends Assertions {
 
-  /** Test of {@link BeanFactory#create(Class)} from an interface. */
+  /** Test of {@link PersonBean}. */
   @Test
-  public void testCreateFromInterface() {
+  public void test() {
 
-    PersonBean bean = BeanFactory.get().create(PersonBean.class);
+    PersonBean bean = PersonBean.of();
     assertThat(bean).isNotNull();
     assertThat(bean.Name().getName()).isEqualTo("Name");
     assertThat(bean.Name().get()).isNull();

@@ -13,7 +13,7 @@ import io.github.mmm.property.string.StringProperty;
  * A {@link Bean} for testing.
  */
 @Name("mmm_TestBean")
-public final class TestBean extends AdvancedBean implements PersonBean {
+public final class PersonClassBean extends AdvancedBean implements PersonBean {
 
   /** Full name of person. */
   public final StringProperty Name;
@@ -24,7 +24,7 @@ public final class TestBean extends AdvancedBean implements PersonBean {
   /**
    * The constructor.
    */
-  public TestBean() {
+  public PersonClassBean() {
 
     super();
     this.Name = add().newString("Name");
@@ -34,7 +34,7 @@ public final class TestBean extends AdvancedBean implements PersonBean {
   @Override
   protected AbstractBean create() {
 
-    return new TestBean();
+    return new PersonClassBean();
   }
 
   @Override

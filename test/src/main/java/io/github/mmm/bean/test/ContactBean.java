@@ -5,6 +5,7 @@ package io.github.mmm.bean.test;
 import java.time.LocalDate;
 import java.time.Period;
 
+import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
@@ -31,6 +32,11 @@ public interface ContactBean extends PersonBean {
       }
       return Period.between(birthday, LocalDate.now()).getYears();
     }));
+  }
+
+  static ContactBean of() {
+
+    return BeanFactory.get().create(ContactBean.class);
   }
 
 }
