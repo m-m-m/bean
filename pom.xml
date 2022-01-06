@@ -21,7 +21,7 @@
   <modules>
     <module>core</module>
     <module>factory</module>
-    <module>test</module>
+    <module>factory-test</module>
     <module>generator</module>
   </modules>
 

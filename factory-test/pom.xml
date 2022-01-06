@@ -7,7 +7,7 @@
     <artifactId>mmm-bean-parent</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>mmm-bean-test</artifactId>
+  <artifactId>mmm-bean-factory-test</artifactId>
   <packaging>jar</packaging>
   <!-- Fix version to prevent deploying test lib to maven central -->
   <version>0-SNAPSHOT</version>
