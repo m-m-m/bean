@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.impl.operation;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
@@ -37,10 +36,11 @@ public class BeanOperationProperty extends BeanOperationOnProperty {
 
     if (this.method.isDefault()) {
       try {
-        WritableProperty<?> property = (WritableProperty<?>) InvocationHandler.invokeDefault(proxy.getProxy(),
-            this.method);
-        property = property.copy(this.propertyName, createMetadata(proxy, property.getMetadata()));
-        return property;
+        WritableProperty<?> property = (WritableProperty<?>) invokeDefaultMethod(proxy, this.method, NO_ARGS);
+        if (property != null) {
+          property = property.copy(this.propertyName, createMetadata(proxy, property.getMetadata()));
+          return property;
+        }
       } catch (Throwable e) {
         throw new IllegalStateException(
             "Failed to create property " + this.propertyName + " from default method " + this.method, e);

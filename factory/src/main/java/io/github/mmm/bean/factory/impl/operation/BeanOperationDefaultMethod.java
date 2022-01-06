@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.impl.operation;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
@@ -31,7 +30,7 @@ public class BeanOperationDefaultMethod extends BeanOperation {
   @Override
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
-    return InvocationHandler.invokeDefault(proxy.getProxy(), this.method, args);
+    return invokeDefaultMethod(proxy, this.method, args);
   }
 
 }
