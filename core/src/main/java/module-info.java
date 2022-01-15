@@ -76,8 +76,6 @@ import io.github.mmm.property.factory.PropertyFactory;
 @SuppressWarnings("all") //
 module io.github.mmm.bean {
 
-  requires transitive io.github.mmm.property;
-
   requires transitive io.github.mmm.property.builder;
 
   uses BeanFactory;
