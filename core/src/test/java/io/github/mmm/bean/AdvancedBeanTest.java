@@ -89,10 +89,13 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     assertThat(readOnly.getProperties()).hasSize(4);
     assertThat(readOnly.getProperty("String")).isEqualTo(string);
     bean.set("String", "value");
-    assertThat(bean.get("String")).isEqualTo("value");
-    assertThat(readOnly.get("String")).isEqualTo("defaultValue");
+    String value = bean.get("String");
+    assertThat(value).isEqualTo("value");
+    value = readOnly.get("String");
+    assertThat(value).isEqualTo("defaultValue");
     bean = new TestAdvancedBean(virtucalBeanClass);
-    assertThat(bean.get("String")).isEqualTo("defaultValue");
+    value = bean.get("String");
+    assertThat(value).isEqualTo("defaultValue");
   }
 
 }

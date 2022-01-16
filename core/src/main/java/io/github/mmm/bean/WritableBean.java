@@ -9,6 +9,7 @@ import io.github.mmm.bean.mapping.PropertyIdMapper;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
+import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.value.WritablePath;
 
@@ -36,7 +37,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
 
   /**
    * Sets the value of the {@link #getRequiredProperty(String) required property} with the given {@code name} to the
-   * given value.
+   * given {@code value}.
    *
    * @param name the {@link WritableProperty#getName() name} of the property.
    * @param value new {@link WritableProperty#get() value} of the specified property.
@@ -49,8 +50,29 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
   }
 
   /**
+   * Sets the value of the {@link #getProperty(String) property} with the given {@code name} to the given {@code value}.
+   * If no such {@link #getProperty(String) property} exists, it will be {@link #createProperty(String, Class) created}
+   * {@link #isDynamic() dynamically} if the given value is not {@code null}.
+   *
+   * @param name the {@link WritableProperty#getName() name} of the property.
+   * @param value new {@link WritableProperty#get() value} of the specified property.
+   */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  default void setDynamic(String name, Object value) {
+
+    WritableProperty property = getProperty(name);
+    if (property == null) {
+      if (value == null) {
+        return;
+      }
+      property = createProperty(name, value.getClass());
+    }
+    property.set(value);
+  }
+
+  /**
    * /** Sets the value of the {@link #getOrCreateProperty(String, Class) existing or newly created property} with the
-   * given {@code name} to the given value.
+   * given {@code name} to the given {@code value}.
    *
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
@@ -65,7 +87,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
 
   /**
    * /** Sets the value of the {@link #getOrCreateProperty(String, Class, Type) existing or newly created property} with
-   * the given {@code name} to the given value.
+   * the given {@code name} to the given {@code value}.
    *
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
@@ -93,7 +115,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
 
   /**
    * Creates and {@link #addProperty(WritableProperty) adds} a {@link WritableProperty} with the given
-   * {@link WritableProperty#getValueClass() value class} dynamically.
+   * {@link WritableProperty#getValueClass() value class} {@link #isDynamic() dynamically}.
    *
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
@@ -109,7 +131,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
 
   /**
    * Creates and {@link #addProperty(WritableProperty) adds} a {@link WritableProperty} with the given
-   * {@link WritableProperty#getValueClass() value class} dynamically.
+   * {@link WritableProperty#getValueClass() value class} {@link #isDynamic() dynamically}.
    *
    * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
    * @param name the {@link WritableProperty#getName() property name}.
@@ -122,7 +144,8 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
   <V> WritableProperty<V> createProperty(String name, Class<V> valueClass, Type valueType);
 
   /**
-   * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class) creates} the specified property.
+   * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class) creates} the specified property
+   * {@link #isDynamic() dynamically}.
    *
    * @param <V> the generic type of the {@link WritableProperty#get() property value}.
    * @param name the {@link WritableProperty#getName() property name}.
@@ -139,7 +162,8 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
   }
 
   /**
-   * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class, Type) creates} the specified property.
+   * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class, Type) creates} the specified property
+   * {@link #isDynamic() dynamically}.
    *
    * @param <V> the generic type of the {@link WritableProperty#get() property value}.
    * @param name the {@link WritableProperty#getName() property name}.
@@ -232,5 +256,21 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
    */
   @Override
   void pathSegment(String pathSegment);
+
+  /**
+   * @param <B> type of the {@link WritableBean} owning the {@link WritableProperty property}.
+   * @param property the {@link WritableProperty} for which the owning {@link WritableBean} is requested.
+   * @return the {@link WritableBean} owning the given {@link WritableProperty property}. Will be {@code null} if the
+   *         {@link WritableProperty} is manually created from outside a bean.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends WritableBean> B from(WritableProperty<?> property) {
+
+    AttributeReadOnly lock = property.getMetadata().getLock();
+    if (lock instanceof WritableBean) {
+      return (B) lock;
+    }
+    return null;
+  }
 
 }

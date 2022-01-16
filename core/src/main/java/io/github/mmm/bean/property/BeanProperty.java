@@ -10,6 +10,7 @@ import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.size.StructuredFormatSizeComputor;
 import io.github.mmm.property.Property;
 import io.github.mmm.property.PropertyMetadata;
+import io.github.mmm.value.converter.TypeMapper;
 
 /**
  * Implementation of {@link WritableBeanProperty}.
@@ -22,6 +23,8 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
   private final Class<V> valueClass;
 
   private V value;
+
+  private TypeMapper<V, ?> typeMapper;
 
   /**
    * The constructor.
@@ -68,6 +71,7 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
     this.value = newValue;
     if (newValue != null) {
       newValue.parentPath(this);
+      this.typeMapper = null;
     }
   }
 
@@ -84,6 +88,18 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
     AbstractBean bean = (AbstractBean) get();
     PropertyIdMapping idMapping = PropertyIdMapper.get().getIdMapping(bean);
     return BeanHelper.computeSize(bean, computor, idMapping);
+  }
+
+  @Override
+  public TypeMapper<V, ?> getTypeMapper() {
+
+    if (this.typeMapper == null) {
+      V bean = get();
+      if (bean != null) {
+        this.typeMapper = BeanTypeMapper.of(bean);
+      }
+    }
+    return this.typeMapper;
   }
 
 }

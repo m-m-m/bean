@@ -96,18 +96,20 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   }
 
   /**
+   * @param <V> type of the {@link ReadableProperty#get() property value}.
    * @param name the {@link ReadableProperty#getName() property name}.
    * @return the {@link ReadableProperty#get() value} of the {@link #getProperty(String) property with the given name}.
    *         Will be {@code null} if no such property exists or the {@link ReadableProperty#get() property value} is
    *         {@code null}.
    */
-  default Object get(String name) {
+  @SuppressWarnings("unchecked")
+  default <V> V get(String name) {
 
     ReadableProperty<?> property = getProperty(name);
     if (property == null) {
       return null;
     }
-    return property.get();
+    return (V) property.get();
   }
 
   /**
