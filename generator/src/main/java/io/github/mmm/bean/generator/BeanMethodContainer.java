@@ -15,7 +15,7 @@ import io.github.mmm.property.factory.PropertyFactory;
  *
  * @since 1.0.0
  */
-public abstract class BeanMethod {
+public abstract class BeanMethodContainer {
 
   /** @see #getMethod() */
   protected final Method method;
@@ -31,7 +31,7 @@ public abstract class BeanMethod {
    * @param method the {@link #getMethod() method}.
    * @param propertyName the {@link #getPropertyName() property name}.
    */
-  public BeanMethod(Method method, String propertyName) {
+  public BeanMethodContainer(Method method, String propertyName) {
 
     super();
     this.method = method;
@@ -112,9 +112,9 @@ public abstract class BeanMethod {
 
   /**
    * @param method the {@link Method} to introspect.
-   * @return the corresponding {@link BeanMethod} or {@code null} if not a {@link BeanMethod} (to implement).
+   * @return the corresponding {@link BeanMethodContainer} or {@code null} if not a {@link BeanMethodContainer} (to implement).
    */
-  public static BeanMethod of(Method method) {
+  public static BeanMethodContainer of(Method method) {
 
     if (method.isDefault()) {
       return createPropertyMethod(method);
@@ -123,20 +123,20 @@ public abstract class BeanMethod {
     if (parameterCount == 0) {
       String propertyName = BeanHelper.getPropertyName4Getter(method.getName());
       if (propertyName != null) {
-        return new BeanMethodGetter(method, propertyName);
+        return new BeanMethodContainerGetter(method, propertyName);
       } else {
         return createPropertyMethod(method);
       }
     } else if (parameterCount == 1) {
       String propertyName = BeanHelper.getPropertyName4Setter(method.getName());
       if (propertyName != null) {
-        return new BeanMethodSetter(method, propertyName);
+        return new BeanMethodContainerSetter(method, propertyName);
       }
     }
     return null;
   }
 
-  private static BeanMethodProperty createPropertyMethod(Method method) {
+  private static BeanMethodContainerProperty createPropertyMethod(Method method) {
 
     String propertyName = BeanHelper.getPropertyName4Property(method);
     if (propertyName == null) {
@@ -144,17 +144,17 @@ public abstract class BeanMethod {
     }
     PropertyFactory<?, ?> factory = BeanHelper.getPropertyFactory(method.getReturnType());
     if (factory != null) {
-      return new BeanMethodProperty(method, propertyName, factory.getValueClass());
+      return new BeanMethodContainerProperty(method, propertyName, factory.getValueClass());
     }
     return null;
   }
 
   /**
-   * @param other the {@link BeanMethod} to compare.
-   * @return {@code true} if {@code this} {@link BeanMethod} is more specialized than the given one (e.g. it overrides
+   * @param other the {@link BeanMethodContainer} to compare.
+   * @return {@code true} if {@code this} {@link BeanMethodContainer} is more specialized than the given one (e.g. it overrides
    *         the given method), {@code false} otherwise.
    */
-  public boolean isSpecialized(BeanMethod other) {
+  public boolean isSpecialized(BeanMethodContainer other) {
 
     if (other.method.getDeclaringClass().isAssignableFrom(this.method.getDeclaringClass())) {
       return true;

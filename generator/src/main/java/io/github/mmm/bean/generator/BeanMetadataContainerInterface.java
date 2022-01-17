@@ -24,19 +24,19 @@ import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.WritableBean;
 
 /**
- * Collector for introspection data of {@link WritableBean beans}.
+ * {@link BeanMetadataContainer} for an {@link Class#isInterface() interface}.
  *
  * @since 1.0.0
  */
-public class BeanInterfaceMetadata extends BeanMetadata {
+public class BeanMetadataContainerInterface extends BeanMetadataContainer {
 
-  private static final Logger LOG = LoggerFactory.getLogger(BeanInterfaceMetadata.class);
+  private static final Logger LOG = LoggerFactory.getLogger(BeanMetadataContainerInterface.class);
 
   private final Class<? extends AbstractBean> superClass;
 
   private final Set<String> importTypes;
 
-  private final Map<String, BeanProperty> properties;
+  private final Map<String, BeanPropertyContainer> properties;
 
   private final Set<Class<?>> typesVisited;
 
@@ -45,7 +45,7 @@ public class BeanInterfaceMetadata extends BeanMetadata {
    *
    * @param beanClass primary bean type.
    */
-  private BeanInterfaceMetadata(Class<? extends WritableBean> beanClass) {
+  private BeanMetadataContainerInterface(Class<? extends WritableBean> beanClass) {
 
     super(beanClass);
     this.importTypes = new TreeSet<>();
@@ -90,14 +90,14 @@ public class BeanInterfaceMetadata extends BeanMetadata {
     }
   }
 
-  private BeanProperty getProperty(String name) {
+  private BeanPropertyContainer getProperty(String name) {
 
-    return this.properties.computeIfAbsent(name, x -> new BeanProperty(name));
+    return this.properties.computeIfAbsent(name, x -> new BeanPropertyContainer(name));
   }
 
   private void introspect(Method method) {
 
-    BeanMethod beanMethod = BeanMethod.of(method);
+    BeanMethodContainer beanMethod = BeanMethodContainer.of(method);
     if (beanMethod != null) {
       String propertyName = beanMethod.getPropertyName();
       getProperty(propertyName).add(beanMethod);
@@ -174,7 +174,7 @@ public class BeanInterfaceMetadata extends BeanMetadata {
    */
   public void writeFields(Writer writer) throws IOException {
 
-    for (BeanProperty property : this.properties.values()) {
+    for (BeanPropertyContainer property : this.properties.values()) {
       property.writeField(writer);
     }
   }
@@ -199,7 +199,7 @@ public class BeanInterfaceMetadata extends BeanMetadata {
       writer.write("type");
     }
     writer.write(");\n");
-    for (BeanProperty property : this.properties.values()) {
+    for (BeanPropertyContainer property : this.properties.values()) {
       property.writeFieldInitializer(writer);
     }
     writer.write("  }\n");
@@ -213,7 +213,7 @@ public class BeanInterfaceMetadata extends BeanMetadata {
    */
   public void writeMethods(Writer writer) throws IOException {
 
-    for (BeanProperty property : this.properties.values()) {
+    for (BeanPropertyContainer property : this.properties.values()) {
       property.writeMethods(writer);
     }
     writer.write("\n");
@@ -274,13 +274,13 @@ public class BeanInterfaceMetadata extends BeanMetadata {
 
   /**
    * @param beanClass the {@link Class} reflecting the {@link WritableBean} to get metadata for.
-   * @return the {@link BeanInterfaceMetadata} for the given {@link Class} or {@code null} if not a
+   * @return the {@link BeanMetadataContainerInterface} for the given {@link Class} or {@code null} if not a
    *         {@link #isNonAbstractInterface(Class) non-abstract interface}.
    */
-  public static BeanInterfaceMetadata of(Class<? extends WritableBean> beanClass) {
+  public static BeanMetadataContainerInterface of(Class<? extends WritableBean> beanClass) {
 
     if (isNonAbstractInterface(beanClass)) {
-      return new BeanInterfaceMetadata(beanClass);
+      return new BeanMetadataContainerInterface(beanClass);
     }
     return null;
   }

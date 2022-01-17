@@ -30,6 +30,7 @@ import io.github.mmm.base.exception.RuntimeIoException;
 import io.github.mmm.bean.AbstractBeanFactory;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
+import io.github.mmm.bean.factory.scanner.BeanScanner;
 
 /**
  * Code generator to create implementations of {@link WritableBean} sub-interfaces and {@link BeanFactory} Java
@@ -56,18 +57,18 @@ public class BeanGenerator {
    */
   public void generate(Path targetDir, ClassLoader classloader) {
 
-    List<BeanMetadata> metadataList = new ArrayList<>();
+    List<BeanMetadataContainer> metadataList = new ArrayList<>();
     try (BeanScanner scanner = new BeanScanner(classloader)) {
       Collection<Class<? extends WritableBean>> beanClasses = scanner.findBeanInterfaces();
       for (Class<? extends WritableBean> beanClass : beanClasses) {
-        BeanMetadata metadata = generate(beanClass, targetDir);
+        BeanMetadataContainer metadata = generate(beanClass, targetDir);
         if (metadata != null) {
           metadataList.add(metadata);
         }
       }
       beanClasses = scanner.findBeanClasses();
       for (Class<? extends WritableBean> beanClass : beanClasses) {
-        BeanMetadata metadata = BeanClassMetadata.of(beanClass);
+        BeanMetadataContainer metadata = BeanMetadataContainerClass.of(beanClass);
         if (metadata != null) {
           metadataList.add(metadata);
         }
@@ -83,11 +84,11 @@ public class BeanGenerator {
    */
   public void generate(Collection<Class<? extends WritableBean>> beanClasses, Path targetDir) {
 
-    List<BeanMetadata> metadataList = new ArrayList<>();
+    List<BeanMetadataContainer> metadataList = new ArrayList<>();
     for (Class<? extends WritableBean> beanClass : beanClasses) {
-      BeanMetadata metadata = generate(beanClass, targetDir);
+      BeanMetadataContainer metadata = generate(beanClass, targetDir);
       if (metadata == null) {
-        metadata = BeanClassMetadata.of(beanClass);
+        metadata = BeanMetadataContainerClass.of(beanClass);
       }
       if (metadata != null) {
         metadataList.add(metadata);
@@ -100,12 +101,12 @@ public class BeanGenerator {
    * Generates the implementation of {@link BeanFactory} capable to {@link BeanFactory#create(Class) create} all
    * instances of the given {@link WritableBean} classes.
    *
-   * @param metadatas the {@link Collection} with the {@link BeanMetadata} instances of the {@link WritableBean}s to be
-   *        able to {@link BeanFactory#create(Class) create}.
+   * @param metadatas the {@link Collection} with the {@link BeanMetadataContainer} instances of the
+   *        {@link WritableBean}s to be able to {@link BeanFactory#create(Class) create}.
    * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
    *        required packages will be created automatically.
    */
-  public void generateFactory(Collection<BeanMetadata> metadatas, Path targetDir) {
+  public void generateFactory(Collection<BeanMetadataContainer> metadatas, Path targetDir) {
 
     try {
       Path packageDir = targetDir.resolve(BASE_PACKAGE);
@@ -123,11 +124,11 @@ public class BeanGenerator {
    * Generates the implementation of {@link BeanFactory} capable to {@link BeanFactory#create(Class) create} all
    * instances of the given {@link WritableBean} classes.
    *
-   * @param metadatas the {@link Collection} with the {@link BeanMetadata} instances of the {@link WritableBean}s to be
-   *        able to {@link BeanFactory#create(Class) create}.
+   * @param metadatas the {@link Collection} with the {@link BeanMetadataContainer} instances of the
+   *        {@link WritableBean}s to be able to {@link BeanFactory#create(Class) create}.
    * @param writer the {@link Writer} to write the generated class to.
    */
-  public void generateFactory(Collection<BeanMetadata> metadatas, Writer writer) {
+  public void generateFactory(Collection<BeanMetadataContainer> metadatas, Writer writer) {
 
     try {
       writePackageDeclaration(writer, BASE_PACKAGE);
@@ -135,7 +136,7 @@ public class BeanGenerator {
       writeClassDeclaration(writer, "BeanFactoryImpl", AbstractBeanFactory.class.getSimpleName(), null);
       writer.write("  public BeanFactoryImpl() {\n");
       writer.write("    super();\n");
-      for (BeanMetadata metadata : metadatas) {
+      for (BeanMetadataContainer metadata : metadatas) {
         writer.write("    add(");
         writer.write(metadata.getBeanType().getName());
         writer.write(".class, x -> ");
@@ -153,11 +154,11 @@ public class BeanGenerator {
    * @param beanClass the {@link Class} reflecting the {@link WritableBean} to generate.
    * @param targetDir the {@link Path} to the base-directory where to generate the source-code. Sub-directories for
    *        required packages will be created automatically.
-   * @return the {@link BeanInterfaceMetadata} created for the {@link WritableBean}.
+   * @return the {@link BeanMetadataContainerInterface} created for the {@link WritableBean}.
    */
-  public BeanInterfaceMetadata generate(Class<? extends WritableBean> beanClass, Path targetDir) {
+  public BeanMetadataContainerInterface generate(Class<? extends WritableBean> beanClass, Path targetDir) {
 
-    if (!BeanInterfaceMetadata.isNonAbstractInterface(beanClass)) {
+    if (!BeanMetadataContainerInterface.isNonAbstractInterface(beanClass)) {
       LOG.debug("Class is not an instantiable bean interface: {}", beanClass);
       return null;
     }
@@ -178,12 +179,12 @@ public class BeanGenerator {
   /**
    * @param beanClass the {@link Class} reflecting the {@link WritableBean} to generate.
    * @param writer the {@link Writer} to write the Java source code to.
-   * @return the {@link BeanInterfaceMetadata} created for the {@link WritableBean}.
+   * @return the {@link BeanMetadataContainerInterface} created for the {@link WritableBean}.
    */
-  public BeanInterfaceMetadata generate(Class<? extends WritableBean> beanClass, Writer writer) {
+  public BeanMetadataContainerInterface generate(Class<? extends WritableBean> beanClass, Writer writer) {
 
     try {
-      BeanInterfaceMetadata metadata = BeanInterfaceMetadata.of(beanClass);
+      BeanMetadataContainerInterface metadata = BeanMetadataContainerInterface.of(beanClass);
       if (metadata != null) {
         metadata.write(writer);
       }

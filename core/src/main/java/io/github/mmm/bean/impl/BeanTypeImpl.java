@@ -56,7 +56,7 @@ public class BeanTypeImpl implements BeanType {
    * @param stableName the {@link #getStableName() stable name} or {@code null} to determine automatically.
    * @return the {@link #getStableName() stable name}.
    */
-  public static String getStableName(Class<? extends WritableBean> javaClass, String stableName) {
+  public static String getStableName(Class<?> javaClass, String stableName) {
 
     if (stableName != null) {
       return stableName;

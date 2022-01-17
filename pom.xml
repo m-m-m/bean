@@ -34,6 +34,12 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- fast classpath scanning -->
+      <dependency>
+        <groupId>io.github.classgraph</groupId>
+        <artifactId>classgraph</artifactId>
+        <version>4.8.138</version>
+      </dependency>
       <!-- own modules -->
       <dependency>
         <groupId>${project.groupId}</groupId>

@@ -12,6 +12,8 @@ module io.github.mmm.bean.generator {
 
   requires transitive io.github.mmm.bean;
 
+  requires io.github.mmm.bean.factory;
+
   requires io.github.classgraph;
 
   // provides BeanFactory with BeanFactoryImpl;

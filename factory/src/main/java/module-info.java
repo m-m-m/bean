@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -10,11 +9,18 @@
  * beans as interfaces. To instantiate such bean, you need to use {@link io.github.mmm.bean.BeanFactory#create(Class)}.
  *
  * @provides io.github.mmm.bean.BeanFactory
+ * @provides io.github.mmm.bean.mapping.ClassNameMapper
  */
 module io.github.mmm.bean.factory {
 
   requires transitive io.github.mmm.bean;
 
+  requires io.github.classgraph;
+
   provides io.github.mmm.bean.BeanFactory with io.github.mmm.bean.factory.impl.BeanFactoryImpl;
+
+  provides io.github.mmm.bean.mapping.ClassNameMapper with io.github.mmm.bean.factory.impl.mapper.ClassNameMapperImpl;
+
+  exports io.github.mmm.bean.factory.scanner;
 
 }

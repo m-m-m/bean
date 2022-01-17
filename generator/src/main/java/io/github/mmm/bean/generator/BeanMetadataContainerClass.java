@@ -12,9 +12,11 @@ import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.WritableBean;
 
 /**
+ * {@link BeanMetadataContainer} for a regular {@link Class} (no {@link Class#isInterface() interface}).
  *
+ * @since 1.0.0
  */
-public class BeanClassMetadata extends BeanMetadata {
+public class BeanMetadataContainerClass extends BeanMetadataContainer {
 
   private final boolean hasBeanClassConstructor;
 
@@ -23,7 +25,7 @@ public class BeanClassMetadata extends BeanMetadata {
    *
    * @param beanClass the {@link #getBeanType() bean type}.
    */
-  private BeanClassMetadata(Class<? extends WritableBean> beanClass, boolean hasBeanClassConstructor) {
+  private BeanMetadataContainerClass(Class<? extends WritableBean> beanClass, boolean hasBeanClassConstructor) {
 
     super(beanClass);
     this.hasBeanClassConstructor = hasBeanClassConstructor;
@@ -62,11 +64,11 @@ public class BeanClassMetadata extends BeanMetadata {
 
   /**
    * @param beanClass the {@link Class} reflecting the {@link WritableBean} to get metadata for.
-   * @return the {@link BeanInterfaceMetadata} for the given {@link Class} or {@code null} if not a
+   * @return the {@link BeanMetadataContainerInterface} for the given {@link Class} or {@code null} if not a
    *         {@link #isNonAbstractClass(Class) non-abstract class} or not having public non-arg or {@link BeanClass}
    *         constructor.
    */
-  public static BeanClassMetadata of(Class<? extends WritableBean> beanClass) {
+  public static BeanMetadataContainerClass of(Class<? extends WritableBean> beanClass) {
 
     if (isNonAbstractClass(beanClass)) {
       Constructor<?> nonArgConstructor = null;
@@ -80,7 +82,7 @@ public class BeanClassMetadata extends BeanMetadata {
         }
       }
       if ((nonArgConstructor != null) || (beanClassConstructor != null)) {
-        return new BeanClassMetadata(beanClass, (beanClassConstructor != null));
+        return new BeanMetadataContainerClass(beanClass, (beanClassConstructor != null));
       }
     }
     return null;

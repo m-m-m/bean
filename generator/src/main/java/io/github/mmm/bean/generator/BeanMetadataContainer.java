@@ -15,7 +15,7 @@ import io.github.mmm.bean.WritableBean;
  *
  * @since 1.0.0
  */
-public abstract class BeanMetadata {
+public abstract class BeanMetadataContainer {
 
   /** @see #getBeanType() */
   protected final Class<? extends WritableBean> beanType;
@@ -28,7 +28,7 @@ public abstract class BeanMetadata {
    *
    * @param beanClass the {@link #getBeanType() bean type}.
    */
-  protected BeanMetadata(Class<? extends WritableBean> beanClass) {
+  protected BeanMetadataContainer(Class<? extends WritableBean> beanClass) {
 
     super();
     this.beanType = beanClass;

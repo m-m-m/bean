@@ -10,19 +10,19 @@ import io.github.mmm.property.factory.PropertyFactory;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 
 /**
- * Container for a {@link BeanProperty}.
+ * Container for a {@link BeanPropertyContainer}.
  *
  * @since 1.0.0
  */
-public class BeanProperty {
+public class BeanPropertyContainer {
 
   private final String name;
 
-  private BeanMethodProperty propertyMethod;
+  private BeanMethodContainerProperty propertyMethod;
 
-  private BeanMethodGetter getterMethod;
+  private BeanMethodContainerGetter getterMethod;
 
-  private BeanMethodSetter setterMethod;
+  private BeanMethodContainerSetter setterMethod;
 
   private Class<?> type;
 
@@ -33,7 +33,7 @@ public class BeanProperty {
    *
    * @param name the {@link #getName() Name}.
    */
-  public BeanProperty(String name) {
+  public BeanPropertyContainer(String name) {
 
     super();
     this.name = name;
@@ -50,7 +50,7 @@ public class BeanProperty {
   /**
    * @return propertyMethod
    */
-  public BeanMethodProperty getPropertyMethod() {
+  public BeanMethodContainerProperty getPropertyMethod() {
 
     return this.propertyMethod;
   }
@@ -58,7 +58,7 @@ public class BeanProperty {
   /**
    * @return getterMethod
    */
-  public BeanMethodGetter getGetterMethod() {
+  public BeanMethodContainerGetter getGetterMethod() {
 
     return this.getterMethod;
   }
@@ -66,26 +66,26 @@ public class BeanProperty {
   /**
    * @return setterMethod
    */
-  public BeanMethodSetter getSetterMethod() {
+  public BeanMethodContainerSetter getSetterMethod() {
 
     return this.setterMethod;
   }
 
   /**
-   * @param method the {@link BeanMethod} to register in this {@link BeanProperty}.
+   * @param method the {@link BeanMethodContainer} to register in this {@link BeanPropertyContainer}.
    */
-  public void add(BeanMethod method) {
+  public void add(BeanMethodContainer method) {
 
-    if (method instanceof BeanMethodProperty) {
-      this.propertyMethod = specialize(this.propertyMethod, (BeanMethodProperty) method);
-    } else if (method instanceof BeanMethodGetter) {
-      this.getterMethod = specialize(this.getterMethod, (BeanMethodGetter) method);
-    } else if (method instanceof BeanMethodSetter) {
-      this.setterMethod = specialize(this.setterMethod, (BeanMethodSetter) method);
+    if (method instanceof BeanMethodContainerProperty) {
+      this.propertyMethod = specialize(this.propertyMethod, (BeanMethodContainerProperty) method);
+    } else if (method instanceof BeanMethodContainerGetter) {
+      this.getterMethod = specialize(this.getterMethod, (BeanMethodContainerGetter) method);
+    } else if (method instanceof BeanMethodContainerSetter) {
+      this.setterMethod = specialize(this.setterMethod, (BeanMethodContainerSetter) method);
     }
   }
 
-  private <M extends BeanMethod> M specialize(M existing, M update) {
+  private <M extends BeanMethodContainer> M specialize(M existing, M update) {
 
     if (existing != null) {
       if (!update.isSpecialized(existing)) {
@@ -134,7 +134,7 @@ public class BeanProperty {
     return this.propertyType;
   }
 
-  private Class<?> getType(BeanMethod method) {
+  private Class<?> getType(BeanMethodContainer method) {
 
     if (method != null) {
       return method.getPropertyType();

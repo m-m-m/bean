@@ -7,21 +7,25 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 
 /**
- * {@link BeanMethod} for a regular getter method.
+ * {@link BeanMethodContainer} for a property access method.
  *
  * @since 1.0.0
  */
-public class BeanMethodGetter extends BeanMethod {
+public class BeanMethodContainerProperty extends BeanMethodContainer {
+
+  private final Class<?> propertyType;
 
   /**
    * The constructor.
    *
    * @param method the {@link #getMethod() method}.
    * @param propertyName the {@link #getPropertyName() property name}.
+   * @param propertyType the {@link #getPropertyType() property type}.
    */
-  public BeanMethodGetter(Method method, String propertyName) {
+  public BeanMethodContainerProperty(Method method, String propertyName, Class<?> propertyType) {
 
     super(method, propertyName);
+    this.propertyType = propertyType;
   }
 
   @Override
@@ -29,13 +33,13 @@ public class BeanMethodGetter extends BeanMethod {
 
     writer.write("    return this.");
     writer.write(this.propertyName);
-    writer.write(".get();\n");
+    writer.write(";\n");
   }
 
   @Override
   public Class<?> getPropertyType() {
 
-    return this.method.getReturnType();
+    return this.propertyType;
   }
 
 }

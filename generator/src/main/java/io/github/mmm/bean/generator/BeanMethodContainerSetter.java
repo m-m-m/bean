@@ -7,11 +7,11 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 
 /**
- * {@link BeanMethod} for a regular setter method.
+ * {@link BeanMethodContainer} for a regular setter method.
  *
  * @since 1.0.0
  */
-public class BeanMethodSetter extends BeanMethod {
+public class BeanMethodContainerSetter extends BeanMethodContainer {
 
   private final Class<?> propertyType;
 
@@ -21,7 +21,7 @@ public class BeanMethodSetter extends BeanMethod {
    * @param method the {@link #getMethod() method}.
    * @param propertyName the {@link #getPropertyName() property name}.
    */
-  public BeanMethodSetter(Method method, String propertyName) {
+  public BeanMethodContainerSetter(Method method, String propertyName) {
 
     super(method, propertyName);
     this.propertyType = this.method.getParameterTypes()[0];
