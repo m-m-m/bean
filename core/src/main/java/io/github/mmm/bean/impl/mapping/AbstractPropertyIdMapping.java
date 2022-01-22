@@ -18,7 +18,7 @@ public abstract class AbstractPropertyIdMapping implements PropertyIdMapping {
     int id = id(name);
     if (id == -1) {
       int len = name.length();
-      if ((len > 0) && (len < 9) && (CharFilter.LATIN_DIGIT_FILTER.accept(name.charAt(0)))) {
+      if ((len > 0) && (len < 9) && (CharFilter.LATIN_DIGIT.accept(name.charAt(0)))) {
         try {
           id = Integer.parseInt(name);
         } catch (NumberFormatException e) {
