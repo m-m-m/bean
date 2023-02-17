@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import io.github.mmm.base.exception.ReadOnlyException;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.ReadableBean;
+import io.github.mmm.property.string.StringProperty;
 
 /**
  * Test of {@link BeanFactory}[Impl].
@@ -44,4 +45,25 @@ public class BeanFactoryImplTest extends Assertions {
     }
   }
 
+  /**
+   * Test of aliases (via {@link io.github.mmm.bean.PropertyAlias} annotation) from bean interface {@link PersonBean}.
+   */
+  @Test
+  public void testCreateFromInterfaceWithAlias() {
+
+    PersonBean bean = BeanFactory.get().create(PersonBean.class);
+    assertThat(bean).isNotNull();
+    // name
+    StringProperty nameProperty = bean.Name();
+    assertThat(nameProperty.getName()).isEqualTo("Name");
+    assertThat(bean.getAliases().getName("LegacyName")).isEqualTo("Name");
+    assertThat(bean.getAliases().getName("@alternativeName")).isEqualTo("Name");
+    assertThat(bean.getProperty("LegacyName")).isSameAs(nameProperty);
+    assertThat(bean.getProperty("@alternativeName")).isSameAs(nameProperty);
+    assertThat(bean.getAliases().getAliases("Name")).containsExactlyInAnyOrder("LegacyName", "@alternativeName");
+    // age
+    assertThat(bean.getAliases().getName("IceAge")).isEqualTo("Age");
+    assertThat(bean.getAliases().getAliases("Age")).containsExactlyInAnyOrder("IceAge");
+    assertThat(bean.getProperty("IceAge")).isSameAs(bean.Age());
+  }
 }

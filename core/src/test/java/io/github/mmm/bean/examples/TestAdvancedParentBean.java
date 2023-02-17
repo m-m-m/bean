@@ -4,14 +4,14 @@ package io.github.mmm.bean.examples;
 
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanClass;
-import io.github.mmm.bean.Name;
+import io.github.mmm.bean.BeanName;
 import io.github.mmm.property.string.StringProperty;
 
 /**
  * {@link AdvancedBean} for testing.
  */
 @SuppressWarnings("javadoc")
-@Name("mmm_TestAdvancedParentBean")
+@BeanName("mmm_TestAdvancedParentBean")
 public class TestAdvancedParentBean extends AdvancedBean {
 
   /** @see BeanClass#getPrototype() */

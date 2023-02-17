@@ -15,6 +15,7 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
 import io.github.mmm.bean.factory.impl.BeanIntrospector;
 import io.github.mmm.bean.factory.impl.MemoryCache;
+import io.github.mmm.bean.factory.impl.bean.SimpleBeanAliasAccess;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationProperty;
 import io.github.mmm.bean.impl.BeanClassImpl;
@@ -67,6 +68,9 @@ public class BeanProxyPrototype extends BeanProxy {
     for (BeanOperation operation : this.propertyOperations) {
       WritableProperty<?> property = operation.createProperty(beanProxy);
       beanProxy.bean.addProperty(property);
+    }
+    for (BeanOperation operation : this.propertyOperations) {
+      operation.registerAliases((SimpleBeanAliasAccess) beanProxy.bean);
     }
   }
 

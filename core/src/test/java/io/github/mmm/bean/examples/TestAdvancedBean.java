@@ -4,14 +4,14 @@ package io.github.mmm.bean.examples;
 
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanClass;
-import io.github.mmm.bean.Name;
+import io.github.mmm.bean.BeanName;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
 /**
  * {@link AdvancedBean} for testing.
  */
 @SuppressWarnings("javadoc")
-@Name("mmm_TestAdvancedBean")
+@BeanName("mmm_TestAdvancedBean")
 public class TestAdvancedBean extends TestAdvancedParentBean {
 
   /** @see BeanClass#getPrototype() */

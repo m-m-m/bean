@@ -24,9 +24,9 @@ public class DynamicBeanTest extends AbstractBeanTest {
     assertThat(bean.isReadOnly()).isFalse();
     assertThat(bean.getPropertyCount()).isEqualTo(0);
     checkType(bean, "mmm_DynamicBean");
-    assertThat(bean.getPropertyNameForAlias("Name")).isNull();
+    assertThat(bean.getAliases().getName("Name")).isNull();
     DynamicBean readOnly = ReadableBean.copy(bean, true);
-    assertThat(readOnly.getPropertyNameForAlias("Name")).isNull();
+    assertThat(readOnly.getAliases().getName("Name")).isNull();
 
     WritableProperty<String> nameProperty = bean.getOrCreateProperty("Name", String.class);
     checkProperty(bean, nameProperty, "John Doe");

@@ -59,7 +59,7 @@ public interface BeanType {
    *         prefix followed by a stable {@link #getSimpleName() simple name} without any technical clutter (avoid
    *         suffixes like {@code Impl} or {@code To}). E.g. "{@code mmm_Address}" for an {@code Address} {@link Bean}
    *         of this project ({@code io.github.mmm}).
-   * @see Name
+   * @see BeanName
    */
   String getStableName();
 

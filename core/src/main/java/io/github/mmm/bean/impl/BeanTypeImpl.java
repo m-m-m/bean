@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.mmm.bean.BeanType;
-import io.github.mmm.bean.Name;
+import io.github.mmm.bean.BeanName;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 
@@ -61,7 +61,7 @@ public class BeanTypeImpl implements BeanType {
     if (stableName != null) {
       return stableName;
     }
-    Name name = javaClass.getAnnotation(Name.class);
+    BeanName name = javaClass.getAnnotation(BeanName.class);
     if (name == null) {
       return javaClass.getSimpleName();
     } else {

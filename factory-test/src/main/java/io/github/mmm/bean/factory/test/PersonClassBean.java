@@ -5,14 +5,14 @@ package io.github.mmm.bean.factory.test;
 import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.Bean;
-import io.github.mmm.bean.Name;
+import io.github.mmm.bean.BeanName;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 
 /**
  * A {@link Bean} for testing.
  */
-@Name("mmm_TestBean")
+@BeanName("mmm_TestBean")
 public final class PersonClassBean extends AdvancedBean implements PersonBean {
 
   /** Full name of person. */

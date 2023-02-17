@@ -10,8 +10,8 @@ import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
-import io.github.mmm.bean.factory.impl.SimpleBean;
-import io.github.mmm.bean.factory.impl.SimpleVirtualBean;
+import io.github.mmm.bean.factory.impl.bean.SimpleBean;
+import io.github.mmm.bean.factory.impl.bean.SimpleVirtualBean;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 
 /**
@@ -47,6 +47,21 @@ public abstract class BeanProxy implements InvocationHandler {
     } else {
       this.bean = new SimpleBean(beanType);
     }
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param beanFactory the owning {@link BeanFactoryImpl}.
+   * @param bean the {@link AbstractBean}.
+   * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
+   */
+  public BeanProxy(BeanFactoryImpl beanFactory, AbstractBean bean, Class<?>... interfaces) {
+
+    super();
+    this.proxy = beanFactory.createProxy(this, interfaces);
+    this.beanFactory = beanFactory;
+    this.bean = bean;
   }
 
   /**

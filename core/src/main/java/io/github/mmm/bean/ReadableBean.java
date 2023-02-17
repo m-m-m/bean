@@ -64,7 +64,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
 
   /**
    * @param name the {@link WritableProperty#getName() name} of the requested property or a potential
-   *        {@link #getPropertyNameForAlias(String) alias} of the property.
+   *        {@link #getAliases() alias} of the property.
    * @return the requested {@link WritableProperty} or {@code null} if no such property exists.
    * @see WritableBean#addProperty(WritableProperty)
    * @see WritableBean#getOrCreateProperty(String, Class)
@@ -113,17 +113,10 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   }
 
   /**
-   * An alias is an alternative for a {@link #getProperty(String) property} {@link ReadableProperty#getName() name}. It
-   * allows to support a property under a legacy name after it has been renamed as well as to use a technical name
-   * containing special characters (e.g. "@" or ".") for very specific cases.
-   *
-   * @param alias the alias name.
-   * @return the resolved {@link WritableProperty#getName() property name} or {@code null} if no such alias is defined.
+   * @return the {@link BeanAliasMap} with potential aliases for {@link #getProperty(String) property}
+   *         {@link ReadableProperty#getName() name}s.
    */
-  default String getPropertyNameForAlias(String alias) {
-
-    return null;
-  }
+  BeanAliasMap getAliases();
 
   /**
    * @return the {@link BeanType} reflecting this {@link Bean}.

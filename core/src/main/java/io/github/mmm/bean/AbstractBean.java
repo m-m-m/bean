@@ -7,8 +7,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import io.github.mmm.bean.impl.AbstractBeanAliasMap;
+import io.github.mmm.bean.impl.BeanAliasMapEmpty;
 import io.github.mmm.bean.impl.BeanCreator;
 import io.github.mmm.bean.mapping.PropertyIdMapper;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
@@ -36,6 +39,8 @@ public abstract class AbstractBean implements WritableBean {
 
   private final Collection<WritableProperty<?>> properties;
 
+  private AbstractBeanAliasMap aliases;
+
   private transient String pathSegment;
 
   private transient ReadablePath parentPath;
@@ -53,13 +58,12 @@ public abstract class AbstractBean implements WritableBean {
 
     super();
     if (isThreadSafe()) {
-      // temporary workaround for https://github.com/konsoletyper/teavm/issues/445
-      // this.propertiesMap = new ConcurrentHashMap<>();
-      this.propertiesMap = new HashMap<>();
+      this.propertiesMap = new ConcurrentHashMap<>();
     } else {
       this.propertiesMap = new HashMap<>();
     }
     this.properties = Collections.unmodifiableCollection(this.propertiesMap.values());
+    this.aliases = BeanAliasMapEmpty.INSTANCE;
     this.size = -1;
   }
 
@@ -131,10 +135,11 @@ public abstract class AbstractBean implements WritableBean {
       // copy dynamic properties
       for (WritableProperty property : this.properties) {
         if (instance.getProperty(property.getName()) == null) {
-          property = copyProperty(property);
+          property = instance.copyProperty(property);
           instance.addProperty(property);
         }
       }
+      instance.aliases = this.aliases;
     }
     return instance;
   }
@@ -187,11 +192,13 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public WritableProperty<?> getProperty(String name) {
 
-    String resolvedAlias = getPropertyNameForAlias(name);
-    if (resolvedAlias != null) {
-      name = resolvedAlias;
-    }
     WritableProperty<?> property = this.propertiesMap.get(name);
+    if (property == null) {
+      String resolvedAlias = this.aliases.getName(name);
+      if (resolvedAlias != null) {
+        property = this.propertiesMap.get(resolvedAlias);
+      }
+    }
     return property;
   }
 
@@ -364,6 +371,34 @@ public abstract class AbstractBean implements WritableBean {
     }
     writer.writeEnd();
     this.size = -1;
+  }
+
+  /**
+   * @param propertyName the {@link ReadableProperty#getName() property name}.
+   * @param alias the {@link BeanAliasMap#getAliases(String) alias} to add.
+   */
+  protected void registerAlias(String propertyName, String alias) {
+
+    assert (this.propertiesMap.containsKey(propertyName));
+    assert (!this.propertiesMap.containsKey(alias));
+    this.aliases = this.aliases.add(propertyName, alias);
+  }
+
+  /**
+   * @param propertyName the {@link ReadableProperty#getName() property name}.
+   * @param propertyAliases the {@link BeanAliasMap#getAliases(String) aliases} to add.
+   */
+  protected void registerAliases(String propertyName, String... propertyAliases) {
+
+    for (String alias : propertyAliases) {
+      registerAlias(propertyName, alias);
+    }
+  }
+
+  @Override
+  public BeanAliasMap getAliases() {
+
+    return this.aliases;
   }
 
   @Override

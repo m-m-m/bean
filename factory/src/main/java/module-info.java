@@ -23,4 +23,6 @@ module io.github.mmm.bean.factory {
 
   exports io.github.mmm.bean.factory.scanner;
 
+  exports io.github.mmm.bean.factory.impl.bean to io.github.mmm.bean;
+
 }

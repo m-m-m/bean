@@ -1,6 +1,6 @@
 /* Copyright (c) The m-m-m Team, Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0 */
-package io.github.mmm.bean.factory.impl;
+package io.github.mmm.bean.factory.impl.bean;
 
 import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanType;
@@ -13,7 +13,7 @@ import io.github.mmm.property.AttributeReadOnly;
  *
  * @since 1.0.0
  */
-public final class SimpleBean extends AbstractBean {
+public final class SimpleBean extends AbstractBean implements SimpleBeanAliasAccess {
 
   private final BeanType type;
 
@@ -51,6 +51,12 @@ public final class SimpleBean extends AbstractBean {
 
     // check more accurate?
     return true;
+  }
+
+  @Override
+  public void registerAliases(String propertyName, String... propertyAliases) {
+
+    super.registerAliases(propertyName, propertyAliases);
   }
 
 }

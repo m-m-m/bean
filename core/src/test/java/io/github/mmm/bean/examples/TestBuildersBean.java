@@ -3,7 +3,7 @@
 package io.github.mmm.bean.examples;
 
 import io.github.mmm.bean.Bean;
-import io.github.mmm.bean.Name;
+import io.github.mmm.bean.BeanName;
 import io.github.mmm.property.container.list.ListProperty;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
@@ -11,7 +11,7 @@ import io.github.mmm.property.string.StringProperty;
 /**
  * A {@link Bean} for testing.
  */
-@Name("mmm_TestBuildersBean")
+@BeanName("mmm_TestBuildersBean")
 public class TestBuildersBean extends Bean {
 
   /** Full name of person. */

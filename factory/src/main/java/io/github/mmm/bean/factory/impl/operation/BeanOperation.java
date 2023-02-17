@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.mmm.bean.BeanHelper;
+import io.github.mmm.bean.factory.impl.bean.SimpleBeanAliasAccess;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
 import io.github.mmm.property.WritableProperty;
@@ -110,6 +111,13 @@ public abstract class BeanOperation {
   public WritableProperty<?> createProperty(BeanProxy proxy) {
 
     return null;
+  }
+
+  /**
+   * @param bean the {@link SimpleBeanAliasAccess} where to register potential aliases.
+   */
+  public void registerAliases(SimpleBeanAliasAccess bean) {
+
   }
 
   /**

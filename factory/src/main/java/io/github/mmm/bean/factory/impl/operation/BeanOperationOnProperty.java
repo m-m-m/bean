@@ -7,6 +7,8 @@ import java.util.Objects;
 
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.Mandatory;
+import io.github.mmm.bean.PropertyAlias;
+import io.github.mmm.bean.factory.impl.bean.SimpleBeanAliasAccess;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
@@ -97,6 +99,15 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
       }
     }
     return result;
+  }
+
+  @Override
+  public void registerAliases(SimpleBeanAliasAccess bean) {
+
+    PropertyAlias aliasAnnotation = this.method.getAnnotation(PropertyAlias.class);
+    if (aliasAnnotation != null) {
+      bean.registerAliases(getPropertyName(), aliasAnnotation.value());
+    }
   }
 
 }
