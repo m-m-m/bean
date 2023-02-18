@@ -4,6 +4,7 @@ package io.github.mmm.bean.factory.impl.operation;
 
 import java.lang.reflect.Method;
 
+import io.github.mmm.bean.factory.impl.GenericTypeInfo;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.WritableProperty;
 
@@ -46,7 +47,7 @@ public class BeanOperationProperty extends BeanOperationOnProperty {
             "Failed to create property " + this.propertyName + " from default method " + this.method, e);
       }
     }
-    return createProperty(proxy, this.method.getReturnType(), null);
+    return createPropertyByPropertyType(proxy, GenericTypeInfo.ofReturnType(this.method));
   }
 
 }

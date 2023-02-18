@@ -1,6 +1,6 @@
 package io.github.mmm.bean;
 
-import java.util.Collection;
+import java.util.List;
 
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
@@ -26,10 +26,10 @@ public interface BeanAliasMap {
    * Inverse operation of {@link #getName(String)}.
    *
    * @param name the primary {@link WritableProperty#getName() property name}.
-   * @return a {@link Collection} with all registered {@link #getName(String) aliases} for the given {@code name}. Will
-   *         be empty if no such {@link #getName(String) alias} is defined.
+   * @return a {@link List} with all registered {@link #getName(String) aliases} for the given {@code name}. Will be
+   *         empty if no such {@link #getName(String) alias} is defined.
    * @see #getName(String)
    */
-  Collection<String> getAliases(String name);
+  List<String> getAliases(String name);
 
 }

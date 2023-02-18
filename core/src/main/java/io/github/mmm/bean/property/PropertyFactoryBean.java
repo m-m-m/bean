@@ -47,7 +47,8 @@ public class PropertyFactoryBean<V extends WritableBean> extends AbstractPropert
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
-  public BeanProperty<V> create(String name, Class<? extends V> valueClass, PropertyMetadata<V> metadata) {
+  public BeanProperty<V> create(String name, Class<? extends V> valueClass, PropertyMetadata<V> metadata,
+      WritableProperty<?> valueProperty) {
 
     return new BeanProperty<>(name, (Class) valueClass, metadata);
   }

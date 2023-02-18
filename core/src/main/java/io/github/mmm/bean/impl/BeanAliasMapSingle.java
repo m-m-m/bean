@@ -1,8 +1,7 @@
 package io.github.mmm.bean.impl;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 import io.github.mmm.bean.BeanAliasMap;
 
@@ -15,7 +14,7 @@ public class BeanAliasMapSingle extends AbstractBeanAliasMap {
 
   private final String alias;
 
-  private final Set<String> aliases;
+  private final List<String> aliases;
 
   /**
    * The constructor.
@@ -28,7 +27,7 @@ public class BeanAliasMapSingle extends AbstractBeanAliasMap {
     super();
     this.name = name;
     this.alias = alias;
-    this.aliases = Collections.singleton(this.alias);
+    this.aliases = Collections.singletonList(this.alias);
   }
 
   @Override
@@ -41,12 +40,12 @@ public class BeanAliasMapSingle extends AbstractBeanAliasMap {
   }
 
   @Override
-  public Collection<String> getAliases(String propertyName) {
+  public List<String> getAliases(String propertyName) {
 
     if (this.name.equals(propertyName)) {
       return this.aliases;
     }
-    return Collections.emptySet();
+    return Collections.emptyList();
   }
 
   @Override

@@ -4,6 +4,7 @@ package io.github.mmm.bean.factory.impl.operation;
 
 import java.lang.reflect.Method;
 
+import io.github.mmm.bean.factory.impl.GenericTypeInfo;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.WritableProperty;
 
@@ -66,7 +67,7 @@ public class BeanOperationGetter extends BeanOperationOnProperty {
   @Override
   public WritableProperty<?> createProperty(BeanProxy proxy) {
 
-    return createProperty(proxy, null, this.method.getReturnType());
+    return createPropertyByValueType(proxy, GenericTypeInfo.ofReturnType(this.method));
   }
 
 }

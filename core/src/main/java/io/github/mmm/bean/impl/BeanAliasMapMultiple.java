@@ -1,11 +1,10 @@
 package io.github.mmm.bean.impl;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,7 @@ public class BeanAliasMapMultiple extends AbstractBeanAliasMap {
 
   private final Map<String, String> alias2nameMap;
 
-  private final Map<String, Set<String>> aliasesMap;
+  private final Map<String, List<String>> aliasesMap;
 
   /**
    * The constructor.
@@ -42,8 +41,11 @@ public class BeanAliasMapMultiple extends AbstractBeanAliasMap {
     String duplicate = this.alias2nameMap.put(alias, name);
     if (duplicate != null) {
       LOG.error("Duplicate alias '{}' for name '{}' and '{}'.", alias, duplicate, name);
+      if (name.equals(duplicate)) {
+        return;
+      }
     }
-    Set<String> aliases = this.aliasesMap.computeIfAbsent(name, x -> new HashSet<>());
+    List<String> aliases = this.aliasesMap.computeIfAbsent(name, x -> new ArrayList<>());
     aliases.add(alias);
   }
 
@@ -54,13 +56,13 @@ public class BeanAliasMapMultiple extends AbstractBeanAliasMap {
   }
 
   @Override
-  public Collection<String> getAliases(String name) {
+  public List<String> getAliases(String name) {
 
-    Set<String> aliases = this.aliasesMap.get(name);
+    List<String> aliases = this.aliasesMap.get(name);
     if (aliases == null) {
       return Collections.emptyList();
     } else {
-      return Collections.unmodifiableSet(aliases);
+      return Collections.unmodifiableList(aliases);
     }
   }
 

@@ -3,15 +3,21 @@
 package io.github.mmm.bean.factory.impl.operation;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
+import java.util.Collection;
 import java.util.Objects;
 
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.Mandatory;
 import io.github.mmm.bean.PropertyAlias;
+import io.github.mmm.bean.factory.impl.GenericTypeInfo;
 import io.github.mmm.bean.factory.impl.bean.SimpleBeanAliasAccess;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
+import io.github.mmm.property.container.collection.ReadableCollectionProperty;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 import io.github.mmm.validation.Validator;
 import io.github.mmm.validation.main.ValidatorMandatory;
@@ -59,18 +65,83 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
 
   /**
    * @param proxy the {@link BeanProxy}.
-   * @param propertyClass the {@link Class} reflecting the {@link WritableProperty} or {@code null} if
-   *        {@code valueClass} is given.
-   * @param valueClass the {@link Class} reflecting the {@link WritableProperty#getValueClass() value class} or
-   *        {@code null} if {@code propertyClass} is given.
+   * @param propertyType the {@link GenericTypeInfo} of the the {@link WritableProperty} or {@code null} if
+   *        {@code valueType} is given.
    * @return the new {@link WritableProperty}.
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
-  protected WritableProperty<?> createProperty(BeanProxy proxy, Class<?> propertyClass, Class<?> valueClass) {
+  protected WritableProperty<?> createPropertyByPropertyType(BeanProxy proxy, GenericTypeInfo propertyType) {
 
     PropertyMetadata metadata = createMetadata(proxy, null);
-    return (WritableProperty<?>) PropertyFactoryManager.get().create((Class) propertyClass, valueClass,
-        this.propertyName, metadata);
+    Class propertyClass = propertyType.getRawClass();
+    WritableProperty<?> valueProperty = null;
+    if (ReadableCollectionProperty.class.isAssignableFrom(propertyClass)) {
+      Type type = propertyType.getGenericType();
+      if (type instanceof ParameterizedType) {
+        Type[] generics = ((ParameterizedType) type).getActualTypeArguments();
+        if (generics.length == 1) {
+          Type childType = generics[0];
+          GenericTypeInfo childGenericType = asRawClass(childType, childType);
+          if (childGenericType != null) {
+            valueProperty = createPropertyByValueType(proxy, childGenericType);
+          }
+        }
+      }
+    }
+    WritableProperty<?> property = (WritableProperty<?>) PropertyFactoryManager.get().create(propertyClass, null,
+        this.propertyName, metadata, valueProperty);
+    return property;
+  }
+
+  /**
+   * @param proxy the {@link BeanProxy}.
+   * @param valueType the {@link GenericTypeInfo} of the {@link WritableProperty#getValueClass() value class} or
+   *        {@code null} if {@code propertyType} is given.
+   * @return the new {@link WritableProperty}.
+   */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  protected WritableProperty<?> createPropertyByValueType(BeanProxy proxy, GenericTypeInfo valueType) {
+
+    PropertyMetadata metadata = createMetadata(proxy, null);
+    WritableProperty valueProperty = null;
+    Class<?> valueClass = valueType.getRawClass();
+    if (Collection.class.isAssignableFrom(valueClass)) {
+      Type type = valueType.getGenericType();
+      if (type instanceof ParameterizedType) {
+        Type[] generics = ((ParameterizedType) type).getActualTypeArguments();
+        if (generics.length == 1) {
+          Type childType = generics[0];
+          GenericTypeInfo childGenericType = asRawClass(childType, childType);
+          if (childGenericType != null) {
+            valueProperty = createPropertyByValueType(proxy, childGenericType);
+          }
+        }
+      }
+    }
+
+    WritableProperty<?> property = (WritableProperty<?>) PropertyFactoryManager.get().create(null, valueClass,
+        this.propertyName, metadata, valueProperty);
+    return property;
+  }
+
+  // We are fully aware that this in not a correct solution for the problem.
+  // However, the JDK does not offer an API to solve this problem and we already solved it earlier but with a very
+  // high complexity. As we actually want to go away from deep reflection, we avoid the complexity here.
+  // If you have a bean using a generic returning ListProperty<T> this will simply not be able to resolve the real class
+  // for T
+  private GenericTypeInfo asRawClass(Type type, Type root) {
+
+    if (type instanceof Class) {
+      return GenericTypeInfo.of((Class<?>) type, root);
+    } else if (type instanceof ParameterizedType) {
+      return asRawClass(((ParameterizedType) type).getRawType(), root);
+    } else if (type instanceof WildcardType) {
+      Type[] bounds = ((WildcardType) type).getUpperBounds();
+      if (bounds.length > 0) {
+        return asRawClass(bounds[0], root);
+      }
+    }
+    return null;
   }
 
   /**

@@ -1,7 +1,7 @@
 package io.github.mmm.bean.impl;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import io.github.mmm.bean.BeanAliasMap;
 
@@ -25,9 +25,9 @@ public class BeanAliasMapEmpty extends AbstractBeanAliasMap {
   }
 
   @Override
-  public Collection<String> getAliases(String name) {
+  public List<String> getAliases(String name) {
 
-    return Collections.emptySet();
+    return Collections.emptyList();
   }
 
   @Override
