@@ -18,6 +18,7 @@ import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.container.collection.ReadableCollectionProperty;
+import io.github.mmm.property.enumeration.ReadableEnumProperty;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 import io.github.mmm.validation.Validator;
 import io.github.mmm.validation.main.ValidatorMandatory;
@@ -75,6 +76,7 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     PropertyMetadata metadata = createMetadata(proxy, null);
     Class propertyClass = propertyType.getRawClass();
     WritableProperty<?> valueProperty = null;
+    Class<?> valueClass = null;
     if (ReadableCollectionProperty.class.isAssignableFrom(propertyClass)) {
       Type type = propertyType.getGenericType();
       if (type instanceof ParameterizedType) {
@@ -87,8 +89,21 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
           }
         }
       }
+    } else if (ReadableEnumProperty.class.isAssignableFrom(propertyClass)) {
+      Type type = propertyType.getGenericType();
+      if (type instanceof ParameterizedType) {
+        Type[] generics = ((ParameterizedType) type).getActualTypeArguments();
+        if (generics.length == 1) {
+          Type childType = generics[0];
+          if (childType instanceof Class) {
+            valueClass = (Class<?>) childType;
+          } else {
+            valueClass = null;
+          }
+        }
+      }
     }
-    WritableProperty<?> property = (WritableProperty<?>) PropertyFactoryManager.get().create(propertyClass, null,
+    WritableProperty<?> property = (WritableProperty<?>) PropertyFactoryManager.get().create(propertyClass, valueClass,
         this.propertyName, metadata, valueProperty);
     return property;
   }
