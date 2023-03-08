@@ -5,9 +5,9 @@ package io.github.mmm.bean;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Function;
 
 import io.github.mmm.bean.impl.AbstractBeanAliasMap;
@@ -58,9 +58,9 @@ public abstract class AbstractBean implements WritableBean {
 
     super();
     if (isThreadSafe()) {
-      this.propertiesMap = new ConcurrentHashMap<>();
+      this.propertiesMap = new ConcurrentSkipListMap<>();
     } else {
-      this.propertiesMap = new HashMap<>();
+      this.propertiesMap = new TreeMap<>();
     }
     this.properties = Collections.unmodifiableCollection(this.propertiesMap.values());
     this.aliases = BeanAliasMapEmpty.INSTANCE;
