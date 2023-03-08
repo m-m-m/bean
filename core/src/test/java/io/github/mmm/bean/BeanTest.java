@@ -141,9 +141,9 @@ public class BeanTest extends AbstractBeanTest {
     result = bean.validate();
     assertThat(result.isValid()).isFalse();
     assertThat(result.getMessage(true)).isEqualTo("mmm_TestBuildersBean: [Composed]\n" + //
+        "  Age: [Range] The value needs to be in the range from 0 to 150.\n" + //
         "  Hobbies: [Composed]\n" + //
         "    #0: [Mandatory] The value has to be filled.\n" + //
-        "  Age: [Range] The value needs to be in the range from 0 to 150.\n" + //
         "  Name: [Mandatory] The value has to be filled.");
   }
 
