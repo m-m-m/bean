@@ -91,6 +91,21 @@ public abstract class AbstractBean implements WritableBean {
     this.parentPath = parent;
   }
 
+  @Override
+  public String path(boolean fixed) {
+
+    if (fixed) {
+      ReadablePath parent = parentPath();
+      if (parent == null) {
+        return getType().getSimpleName();
+      }
+      PathBuilder builder = new QualifiedNamePathBuilder();
+      path(builder);
+      return builder.toString();
+    }
+    return WritableBean.super.path(fixed);
+  }
+
   /**
    * @return {@code true} if the {@link Bean} shall be thread-safe (use concurrent collections, etc.), {@code false}
    *         otherwise.
@@ -474,6 +489,44 @@ public abstract class AbstractBean implements WritableBean {
       }
       return this.result;
     }
+  }
+
+  private static class QualifiedNamePathBuilder implements PathBuilder {
+
+    private final StringBuilder buffer = new StringBuilder();
+
+    @Override
+    public void add(ReadablePath path) {
+
+      String segment = null;
+      if (path instanceof AbstractBean) {
+        segment = ((AbstractBean) path).getType().getSimpleName();
+      } else {
+        segment = path.pathSegment();
+      }
+      add(segment);
+    }
+
+    @Override
+    public void add(String segment) {
+
+      if ((segment == null) || segment.isEmpty()) {
+        assert (this.buffer.length() == 0);
+        return;
+      }
+      if (this.buffer.length() > 0) {
+        this.buffer.append('.');
+      }
+      assert ((segment != null) && !segment.isEmpty());
+      this.buffer.append(segment);
+    }
+
+    @Override
+    public String toString() {
+
+      return this.buffer.toString();
+    }
+
   }
 
 }
