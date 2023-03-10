@@ -511,7 +511,6 @@ public abstract class AbstractBean implements WritableBean {
     public void add(String segment) {
 
       if ((segment == null) || segment.isEmpty()) {
-        assert (this.buffer.length() == 0);
         return;
       }
       if (this.buffer.length() > 0) {
