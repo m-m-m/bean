@@ -1,4 +1,4 @@
-package io.github.mmm.bean.impl;
+package io.github.mmm.bean.impl.alias;
 
 import io.github.mmm.bean.BeanAliasMap;
 

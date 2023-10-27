@@ -1,4 +1,4 @@
-package io.github.mmm.bean.impl;
+package io.github.mmm.bean.impl.alias;
 
 import java.util.ArrayList;
 import java.util.Collections;

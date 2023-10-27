@@ -10,15 +10,18 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
+import io.github.mmm.bean.impl.properties.BeanProperties;
+import io.github.mmm.bean.impl.properties.BeanPropertiesMap;
 
 /**
  * A {@link BeanClass} reflects a {@link Bean} (similar to a Java {@link Class}).
  */
-public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
+public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
 
   private static final Map<String, BeanClassImpl> CLASS_MAP = new ConcurrentHashMap<>();
 
@@ -191,6 +194,14 @@ public final class BeanClassImpl extends BeanTypeImpl implements BeanClass {
     }
     Objects.requireNonNull(prototype, "prototype");
     this.prototype = prototype;
+  }
+
+  @SuppressWarnings("exports")
+  @Override
+  public BeanProperties create(AbstractBean bean) {
+
+    boolean threadSafe = BeanAccessor.isThreadSafe(bean);
+    return new BeanPropertiesMap(threadSafe);
   }
 
   /**

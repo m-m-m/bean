@@ -3,27 +3,29 @@
 package io.github.mmm.bean.impl;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanType;
-import io.github.mmm.bean.BeanName;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
+import io.github.mmm.bean.impl.properties.BeanProperties;
+import io.github.mmm.bean.impl.properties.BeanPropertiesArray;
+import io.github.mmm.bean.impl.properties.BeanPropertiesMap;
+import io.github.mmm.bean.impl.properties.BeanPropertyNames;
 
 /**
  * Implementation of {@link BeanType}.
  *
  * @see ReadableBean#getType()
  */
-public class BeanTypeImpl implements BeanType {
+public class BeanTypeImpl extends AbstractBeanType {
 
-  // temporary workaround for teaVM
   private static final Map<String, BeanTypeImpl> CLASS_MAP = new ConcurrentHashMap<>();
 
-  private final Class<? extends WritableBean> javaClass;
+  private BeanPropertyNames propertyNames;
 
-  private final String stableName;
+  private BeanPropertiesMap properties;
 
   /**
    * The constructor.
@@ -33,10 +35,7 @@ public class BeanTypeImpl implements BeanType {
    */
   protected BeanTypeImpl(Class<? extends WritableBean> javaClass, String stableName) {
 
-    super();
-    Objects.requireNonNull(javaClass, "javaClass");
-    this.javaClass = javaClass;
-    this.stableName = getStableName(javaClass, stableName);
+    super(javaClass, stableName);
   }
 
   /**
@@ -46,88 +45,25 @@ public class BeanTypeImpl implements BeanType {
    */
   protected BeanTypeImpl(BeanTypeImpl template) {
 
-    super();
-    this.javaClass = template.javaClass;
-    this.stableName = template.stableName;
+    super(template);
   }
 
-  /**
-   * @param javaClass the {@link Class} reflecting the {@link WritableBean}.
-   * @param stableName the {@link #getStableName() stable name} or {@code null} to determine automatically.
-   * @return the {@link #getStableName() stable name}.
-   */
-  public static String getStableName(Class<?> javaClass, String stableName) {
+  @SuppressWarnings("exports")
+  @Override
+  public BeanProperties create(AbstractBean bean) {
 
-    if (stableName != null) {
-      return stableName;
-    }
-    BeanName name = javaClass.getAnnotation(BeanName.class);
-    if (name == null) {
-      return javaClass.getSimpleName();
+    if (bean.isDynamic()) {
+      return new BeanPropertiesMap(BeanAccessor.isThreadSafe(bean));
+    } else if (this.properties == null) {
+      // use map for prototype (first instance)
+      this.properties = new BeanPropertiesMap(BeanAccessor.isThreadSafe(bean));
+      return this.properties;
     } else {
-      return name.value();
+      if (this.propertyNames == null) {
+        this.propertyNames = this.properties.createNames();
+      }
+      return new BeanPropertiesArray(this.propertyNames);
     }
-  }
-
-  @Override
-  public Class<? extends WritableBean> getJavaClass() {
-
-    return this.javaClass;
-  }
-
-  @Override
-  public String getPackageName() {
-
-    return this.javaClass.getPackageName();
-  }
-
-  @Override
-  public String getSimpleName() {
-
-    return this.javaClass.getSimpleName();
-  }
-
-  @Override
-  public String getStableName() {
-
-    return this.stableName;
-  }
-
-  @Override
-  public String getQualifiedName() {
-
-    return this.javaClass.getName();
-  }
-
-  @Override
-  public boolean isVirtual() {
-
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-
-    return this.javaClass.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-
-    if (obj == this) {
-      return true;
-    } else if ((obj == null) || !(obj instanceof BeanTypeImpl)) {
-      return false;
-    }
-    BeanTypeImpl other = (BeanTypeImpl) obj;
-    return (this.javaClass.equals(other.javaClass)) //
-        && (this.stableName.equals(other.stableName));
-  }
-
-  @Override
-  public String toString() {
-
-    return getQualifiedName();
   }
 
   /**

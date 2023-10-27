@@ -3,16 +3,15 @@
 package io.github.mmm.bean;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Function;
 
-import io.github.mmm.bean.impl.AbstractBeanAliasMap;
-import io.github.mmm.bean.impl.BeanAliasMapEmpty;
 import io.github.mmm.bean.impl.BeanCreator;
+import io.github.mmm.bean.impl.alias.AbstractBeanAliasMap;
+import io.github.mmm.bean.impl.alias.BeanAliasMapEmpty;
+import io.github.mmm.bean.impl.properties.BeanProperties;
+import io.github.mmm.bean.impl.properties.BeanPropertiesFactory;
 import io.github.mmm.bean.mapping.PropertyIdMapper;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.StructuredBinaryFormat;
@@ -35,9 +34,7 @@ import io.github.mmm.value.ReadablePath;
  */
 public abstract class AbstractBean implements WritableBean {
 
-  private final Map<String, WritableProperty<?>> propertiesMap;
-
-  private final Collection<WritableProperty<?>> properties;
+  private /* final */ BeanProperties properties;
 
   private AbstractBeanAliasMap aliases;
 
@@ -57,12 +54,6 @@ public abstract class AbstractBean implements WritableBean {
   public AbstractBean() {
 
     super();
-    if (isThreadSafe()) {
-      this.propertiesMap = new ConcurrentSkipListMap<>();
-    } else {
-      this.propertiesMap = new TreeMap<>();
-    }
-    this.properties = Collections.unmodifiableCollection(this.propertiesMap.values());
     this.aliases = BeanAliasMapEmpty.INSTANCE;
     this.size = -1;
   }
@@ -141,6 +132,15 @@ public abstract class AbstractBean implements WritableBean {
     }
   }
 
+  private BeanProperties getBeanProperties() {
+
+    if (this.properties == null) {
+      BeanPropertiesFactory factory = (BeanPropertiesFactory) getType();
+      this.properties = factory.create(this);
+    }
+    return this.properties;
+  }
+
   @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public AbstractBean newInstance() {
@@ -148,7 +148,7 @@ public abstract class AbstractBean implements WritableBean {
     AbstractBean instance = create();
     if (isDynamic()) {
       // copy dynamic properties
-      for (WritableProperty property : this.properties) {
+      for (WritableProperty property : getBeanProperties().get()) {
         if (instance.getProperty(property.getName()) == null) {
           property = instance.copyProperty(property);
           instance.addProperty(property);
@@ -201,17 +201,18 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public Collection<? extends WritableProperty<?>> getProperties() {
 
-    return this.properties;
+    return getBeanProperties().get();
   }
 
   @Override
   public WritableProperty<?> getProperty(String name) {
 
-    WritableProperty<?> property = this.propertiesMap.get(name);
+    // TODO move aliases to properties to avoid duplicate toLowercase overhead
+    WritableProperty<?> property = getBeanProperties().get(name);
     if (property == null) {
       String resolvedAlias = this.aliases.getName(name);
       if (resolvedAlias != null) {
-        property = this.propertiesMap.get(resolvedAlias);
+        property = getBeanProperties().get(resolvedAlias);
       }
     }
     return property;
@@ -220,7 +221,7 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public int getPropertyCount() {
 
-    return this.propertiesMap.size();
+    return getBeanProperties().get().size();
   }
 
   @Override
@@ -269,7 +270,6 @@ public abstract class AbstractBean implements WritableBean {
    */
   <V, P extends WritableProperty<V>> P add(P property, AddMode mode) {
 
-    WritableProperty<?> existing;
     if ((mode != AddMode.DIRECT)) {
       PropertyMetadata<V> metadata = property.getMetadata();
       if (!isLockOwnerInternal(metadata.getLock())) {
@@ -277,14 +277,11 @@ public abstract class AbstractBean implements WritableBean {
       }
     }
     if (mode.isAddInstance()) {
-      existing = this.propertiesMap.putIfAbsent(property.getName(), property);
-      if (existing != null) {
-        throw new IllegalArgumentException("Duplicate property " + property.getName());
-      }
+      getBeanProperties().add(property);
       onPropertyAdded(property);
     } else {
       PropertyFunction<P> function = new PropertyFunction<>(property, mode);
-      this.propertiesMap.computeIfAbsent(property.getName(), function);
+      getBeanProperties().addIfAbsent(property.getName(), function);
       if (function.result != null) {
         property = function.result;
         onPropertyAdded(property);
@@ -394,9 +391,25 @@ public abstract class AbstractBean implements WritableBean {
    */
   protected void registerAlias(String propertyName, String alias) {
 
-    assert (this.propertiesMap.containsKey(propertyName));
-    assert (!this.propertiesMap.containsKey(alias));
+    assert (getBeanProperties().get(propertyName) != null);
+    addAlias(propertyName, alias);
+  }
+
+  private void addAlias(String propertyName, String alias) {
+
+    assert verifyAlias(alias);
     this.aliases = this.aliases.add(propertyName, alias);
+  }
+
+  private boolean verifyAlias(String alias) {
+
+    WritableProperty<?> property = getBeanProperties().get(alias);
+    if (property == null) {
+      return true;
+    } else if (!property.getName().equals(alias)) {
+      return true;
+    }
+    throw new IllegalStateException("Illegal alias '" + alias + "' pointing to an existing property name!");
   }
 
   /**
@@ -405,8 +418,10 @@ public abstract class AbstractBean implements WritableBean {
    */
   protected void registerAliases(String propertyName, String... propertyAliases) {
 
+    assert (getBeanProperties().get(propertyName) != null) : "No property with name '" + propertyName
+        + "' found to map by aliases " + Arrays.toString(propertyAliases);
     for (String alias : propertyAliases) {
-      registerAlias(propertyName, alias);
+      addAlias(propertyName, alias);
     }
   }
 
@@ -420,6 +435,17 @@ public abstract class AbstractBean implements WritableBean {
   public String toString() {
 
     return doToString();
+  }
+
+  /**
+   * Internal method to get access to {@link #isThreadSafe()}.
+   *
+   * @param bean the {@link AbstractBean}.
+   * @return the value of {@link #isThreadSafe()}.
+   */
+  protected static boolean isThreadSafe(AbstractBean bean) {
+
+    return bean.isThreadSafe();
   }
 
   /**
