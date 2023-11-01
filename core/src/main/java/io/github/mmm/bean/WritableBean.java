@@ -3,12 +3,16 @@
 package io.github.mmm.bean;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import io.github.mmm.bean.mapping.PropertyIdMapper;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
+import io.github.mmm.marshall.StructuredReader.State;
+import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.value.WritablePath;
@@ -271,6 +275,54 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
       return (B) lock;
     }
     return null;
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean} to read.
+   * @param template an instance of the {@link WritableBean} to read acting as template.
+   * @param reader the {@link StructuredReader} to read the data from.
+   * @return the {@link List} with the the unmarshalled {@link WritableBean beans}.
+   */
+  static <B extends WritableBean> List<B> readArray(B template, StructuredReader reader) {
+
+    List<B> list = new ArrayList<>();
+    readArray(template, reader, list);
+    return list;
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean} to read.
+   * @param template an instance of the {@link WritableBean} to read acting as template.
+   * @param reader the {@link StructuredReader} to read the data from.
+   * @param collection the {@link Collection} where to {@link Collection#add(Object) add} the unmarshalled
+   *        {@link WritableBean beans}.
+   */
+  static <B extends WritableBean> void readArray(B template, StructuredReader reader, Collection<B> collection) {
+
+    reader.require(State.START_ARRAY, true);
+    while (!reader.readEndArray()) {
+      B bean = ReadableBean.newInstance(template);
+      bean.read(reader);
+      collection.add(bean);
+    }
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean} to write.
+   * @param beans the {@link Collection} with the {@link WritableBean beans} to write.
+   * @param writer the {@link StructuredWriter} to write to.
+   */
+  static <B extends WritableBean> void writeArray(Collection<B> beans, StructuredWriter writer) {
+
+    writer.writeStartArray();
+    for (B bean : beans) {
+      if (bean == null) {
+        writer.writeValueAsNull();
+      } else {
+        bean.write(writer);
+      }
+    }
+    writer.writeEnd();
   }
 
 }
