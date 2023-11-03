@@ -8,6 +8,7 @@ import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.factory.AbstractPropertyFactory;
 import io.github.mmm.property.factory.PropertyFactory;
+import io.github.mmm.property.factory.PropertyTypeInfo;
 
 /**
  * Implementation of {@link PropertyFactory} for {@link BeanProperty}.
@@ -19,7 +20,7 @@ public class PropertyFactoryBean<V extends WritableBean> extends AbstractPropert
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
-  public Class<? extends V> getValueClass() {
+  public Class<V> getValueClass() {
 
     return (Class) WritableBean.class;
   }
@@ -47,10 +48,9 @@ public class PropertyFactoryBean<V extends WritableBean> extends AbstractPropert
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
-  public BeanProperty<V> create(String name, Class<? extends V> valueClass, PropertyMetadata<V> metadata,
-      WritableProperty<?> valueProperty) {
+  public BeanProperty<V> create(String name, PropertyTypeInfo<V> typeInfo, PropertyMetadata<V> metadata) {
 
-    return new BeanProperty<>(name, (Class) valueClass, metadata);
+    return new BeanProperty<>(name, (Class) typeInfo.getValueClass(), metadata);
   }
 
   @Override

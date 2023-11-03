@@ -2,10 +2,12 @@ package io.github.mmm.bean.factory.impl;
 
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 
 /**
- * Interface for a simple wrapper of {@link #getRawClass()} and {@link #getGenericType()}.
+ * Simple wrapper of {@link #getRawClass()} and {@link #getGenericType()}.
  */
 public class GenericTypeInfo {
 
@@ -86,4 +88,53 @@ public class GenericTypeInfo {
     return new GenericTypeInfoParameter(executable, parameterIndex);
   }
 
+  /**
+   * @param type the {@link #getGenericType() generic type}. The {@link #getRawClass() raw class} will be derived from
+   *        this {@link Type}.
+   * @param containingType the {@link Type} containing the {@link Type} to resolve. E.g. the {@link Class} the
+   *        {@link Type} to resolve has been retrieved from from field, return type, parameter, type-parameter, etc.
+   * @return the {@link GenericTypeInfo} with the {@link GenericTypeInfo#getRawClass() raw class} derived from the given
+   *         {@link Type}. Will be {@code null} if we can not properly resolve the raw class (e.g. TypeVariables are not
+   *         supported).
+   */
+  public static GenericTypeInfo ofGeneric(Type type, Type containingType) {
+
+    Class<?> rawClass = getRawClass(type, containingType);
+    if (rawClass == null) {
+      return null;
+    }
+    return of(rawClass, type);
+  }
+
+  /**
+   * @param type the generic {@link Type} to resolve as raw {@link Class}.
+   * @param containingType the {@link Type} containing the {@link Type} to resolve. E.g. the {@link Class} the
+   *        {@link Type} to resolve has been retrieved from from field, return type, parameter, type-parameter, etc.
+   * @return the resolved raw {@link Class} of {@code null} if we can not properly resolve the raw class (e.g.
+   *         TypeVariable is not supported).
+   */
+  public static Class<?> getRawClass(Type type, Type containingType) {
+
+    return getRawClass(type, containingType, type);
+  }
+
+  // We are fully aware that this in not a correct solution for the problem.
+  // However, the JDK does not offer an API to solve this problem and we already solved it earlier but with a very
+  // high complexity. As we actually want to go away from deep reflection, we avoid the complexity here.
+  // If you have a bean using a generic returning ListProperty<T> this will simply not be able to resolve the real class
+  // for T
+  private static Class<?> getRawClass(Type type, Type containingType, Type root) {
+
+    if (type instanceof Class<?> clazz) {
+      return clazz;
+    } else if (type instanceof ParameterizedType pType) {
+      return getRawClass(pType.getRawType(), containingType, root);
+    } else if (type instanceof WildcardType wType) {
+      Type[] bounds = wType.getUpperBounds();
+      if (bounds.length > 0) {
+        return getRawClass(bounds[0], containingType, root);
+      }
+    }
+    return null;
+  }
 }

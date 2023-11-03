@@ -24,21 +24,45 @@ public class BeanHelper {
 
   /**
    * @param source the source bean to copy from.
-   * @param copy the target bean to copy to.
+   * @param target the target bean to copy to.
    * @param readOnly - {@code true} if the copy shall be read-only, {@code false} otherwise.
    * @see ReadableBean#copy(boolean)
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public static void copy(AbstractBean source, AbstractBean copy, boolean readOnly) {
+  public static void copy(AbstractBean source, AbstractBean target, boolean readOnly) {
 
-    for (WritableProperty property : copy.getProperties()) {
-      if (!property.isReadOnly()) {
-        Object value = source.get(property.getName());
-        property.set(value);
-      }
-    }
+    copyUnsafe(source, target);
     if (readOnly) {
-      copy.makeReadOnly();
+      target.makeReadOnly();
+    }
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean bean} to copy.
+   * @param source the source {@link WritableBean bean} to copy from.
+   * @param target the target {@link WritableBean bean} to copy to.
+   * @see ReadableBean#copy(boolean)
+   */
+  public static <B extends WritableBean> void copy(B source, B target) {
+
+    copyUnsafe(source, target);
+  }
+
+  /**
+   * @param source the source {@link WritableBean bean} to copy from.
+   * @param target the target {@link WritableBean bean} to copy to.
+   * @see ReadableBean#copy(boolean)
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public static void copyUnsafe(ReadableBean source, WritableBean target) {
+
+    for (WritableProperty targetProperty : target.getProperties()) {
+      if (!targetProperty.isReadOnly()) {
+        String name = targetProperty.getName();
+        ReadableProperty<?> sourceProperty = source.getProperty(name);
+        if (sourceProperty != null) {
+          targetProperty.copyValue(sourceProperty);
+        }
+      }
     }
   }
 

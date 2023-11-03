@@ -285,8 +285,18 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   }
 
   /**
-   * @param <B> type of the {@link WritableBean}.
-   * @param bean the {@link WritableBean} to {@link #copy(boolean) copy}.
+   * @param <B> type of the {@link ReadableBean}.
+   * @param bean the {@link ReadableBean bean} to {@link #copy(boolean) copy}.
+   * @return the {@link #copy(boolean) copy}.
+   */
+  static <B extends ReadableBean> B copy(B bean) {
+
+    return copy(bean, false);
+  }
+
+  /**
+   * @param <B> type of the {@link ReadableBean}.
+   * @param bean the {@link ReadableBean bean} to {@link #copy(boolean) copy}.
    * @param readOnly - {@code true} if the copy shall be {@link #isReadOnly() read-only}.
    * @return the {@link #copy(boolean) copy}.
    */
@@ -300,13 +310,24 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   }
 
   /**
-   * @param <B> type of the {@link WritableBean}.
-   * @param bean the {@link WritableBean} to {@link #copy(boolean) copy}.
+   * @param <B> type of the {@link ReadableBean}.
+   * @param bean the {@link ReadableBean bean} to {@link #copy(boolean) copy}.
    * @return the {@link #isReadOnly() read-only} {@link #copy(boolean) copy}.
    */
   static <B extends ReadableBean> B copyReadOnly(B bean) {
 
     return copy(bean, true);
+  }
+
+  /**
+   * @param <B> type of the {@link ReadableBean}.
+   * @param bean the {@link ReadableBean bean} to get the Java {@link Class} for.
+   * @return the {@link Class} reflecting the given {@link ReadableBean bean}.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends ReadableBean> Class<B> getClass(B bean) {
+
+    return (Class<B>) bean.getType().getJavaClass();
   }
 
 }

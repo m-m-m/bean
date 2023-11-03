@@ -15,6 +15,15 @@ import io.github.mmm.bean.impl.BeanFactoryManager;
 public interface BeanFactory {
 
   /**
+   * Creates a new instance of the {@link WritableBean} for the given {@link Class}.<br>
+   * <b>ATTENTION:</b><br>
+   * When creating beans from only an interface you will receive a dynamic proxy instance in JVM runtime mode. In
+   * environments where dynamic proxies are not available {@code mmm-bean-generator} provides a tooling for you to
+   * generate according implementations during AOT compile time (e.g. for GraalVM or TeaVM). In any case some unknown
+   * implementation will work behind the scene and therefore you should not rely on the {@link #getClass()} method of a
+   * {@link WritableBean bean} instance. Instead you should use {@link ReadableBean#getClass(ReadableBean)} to get the
+   * proper expected result.
+   *
    * @param <B> type of the {@link WritableBean}.
    * @param type the {@link Class} reflecting the {@link WritableBean}.
    * @return a new instance of the {@link WritableBean} specified by the given {@link Class}. If {@code type} is an
