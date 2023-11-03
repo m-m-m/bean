@@ -325,7 +325,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    * @return the {@link Class} reflecting the given {@link ReadableBean bean}.
    */
   @SuppressWarnings("unchecked")
-  static <B extends ReadableBean> Class<B> getClass(B bean) {
+  static <B extends ReadableBean> Class<B> getJavaClass(B bean) {
 
     return (Class<B>) bean.getType().getJavaClass();
   }

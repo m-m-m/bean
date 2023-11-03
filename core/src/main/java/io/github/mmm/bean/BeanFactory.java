@@ -21,7 +21,7 @@ public interface BeanFactory {
    * environments where dynamic proxies are not available {@code mmm-bean-generator} provides a tooling for you to
    * generate according implementations during AOT compile time (e.g. for GraalVM or TeaVM). In any case some unknown
    * implementation will work behind the scene and therefore you should not rely on the {@link #getClass()} method of a
-   * {@link WritableBean bean} instance. Instead you should use {@link ReadableBean#getClass(ReadableBean)} to get the
+   * {@link WritableBean bean} instance. Instead you should use {@link ReadableBean#getJavaClass(ReadableBean)} to get the
    * proper expected result.
    *
    * @param <B> type of the {@link WritableBean}.
