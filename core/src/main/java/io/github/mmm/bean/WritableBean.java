@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import io.github.mmm.bean.mapping.PropertyIdMapper;
-import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
-import io.github.mmm.marshall.StructuredReader.State;
+import io.github.mmm.marshall.StructuredState;
 import io.github.mmm.marshall.StructuredWriter;
+import io.github.mmm.marshall.id.StructuredIdMapping;
+import io.github.mmm.marshall.id.StructuredIdMappingObject;
 import io.github.mmm.property.AttributeReadOnly;
+import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.value.WritablePath;
 
@@ -21,7 +22,7 @@ import io.github.mmm.value.WritablePath;
  * Writable interface of {@link ReadableBean}.
  */
 @AbstractInterface
-public interface WritableBean extends ReadableBean, WritablePath, MarshallingObject {
+public interface WritableBean extends ReadableBean, WritablePath, MarshallingObject, StructuredIdMappingObject {
 
   @Override
   WritableProperty<?> getProperty(String name);
@@ -194,45 +195,42 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
     return createProperty(name, valueClass, valueType);
   }
 
+  @Override
+  BeanType getType();
+
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
-  default void read(StructuredReader reader) {
+  default WritableBean read(StructuredReader reader) {
 
-    if (!reader.readStartObject() || reader.readEnd()) {
-      return;
+    if (!reader.readStartObject(this) || reader.readEnd()) {
+      return this;
     }
-    PropertyIdMapping idMapping = null;
-    if (reader.getFormat().isIdBased()) {
-      idMapping = PropertyIdMapper.get().getIdMapping(this);
-    }
+    WritableBean result = this;
+    int propertyCount = 0;
     while (!reader.readEnd()) {
-      String propertyName = null;
-      if (idMapping == null) {
-        propertyName = reader.readName();
-      } else {
-        int propertyId = reader.readId();
-        propertyName = idMapping.name(propertyId);
-        if (propertyName == null) {
-          propertyName = Integer.toString(propertyId);
-        }
-      }
-      if (PROPERTY_TYPE_NAME.equals(propertyName)) {
+      String propertyName = reader.readName();
+      if (StructuredReader.TYPE.equals(propertyName)) {
         String type = reader.readValueAsString();
         String stableName = getType().getStableName();
-        if (!type.equals(stableName)) {
-          throw new IllegalStateException(PROPERTY_TYPE_NAME + "=" + type + "!=" + stableName);
+        if (propertyCount > 0) {
+          propertyCount++; // 1-based index for human reader
+          throw new IllegalStateException("Property " + StructuredReader.TYPE + " of " + getType()
+              + " must come first but was " + propertyCount + ". property!");
+        } else if (!type.equals(stableName)) {
+          // TODO implement polymorphism
+          // result = BeanFactory.get().create(stableName);
+          throw new IllegalStateException(StructuredReader.TYPE + "=" + type + "!=" + stableName);
         }
       } else {
-        WritableProperty<?> property = getProperty(propertyName);
+        WritableProperty<?> property = result.getProperty(propertyName);
         if (property == null) {
           if (isDynamic()) {
             Object value = reader.readValue(true);
-            if (value == null) {
-              return; // ignore...
+            if (value != null) {
+              Class<? extends Object> valueClass = value.getClass();
+              property = createProperty(propertyName, valueClass);
+              ((WritableProperty) property).set(value);
             }
-            Class<? extends Object> valueClass = value.getClass();
-            property = createProperty(propertyName, valueClass);
-            ((WritableProperty) property).set(value);
           } else {
             // LOG.debug("ignoring undefined property {}.{}", getBeanClass(), propertyName);
             reader.skipValue();
@@ -241,7 +239,43 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
           property.readObject(reader);
         }
       }
+      propertyCount++;
     }
+    return result;
+  }
+
+  @Override
+  default void write(StructuredWriter writer) {
+
+    writer.writeStartObject(this);
+    if (isPolymorphic()) {
+      writer.writeName(StructuredWriter.TYPE);
+      writer.writeValueAsString(getType().getStableName());
+    }
+    for (ReadableProperty<?> property : getProperties()) {
+      if (!property.isTransient()) {
+        String propertyName = property.getName();
+        writer.writeName(propertyName);
+        property.writeObject(writer, property);
+      }
+    }
+    writer.writeEnd();
+  }
+
+  @Override
+  default StructuredIdMapping defineIdMapping() {
+
+    // TODO: how to signal to use default mapping if not overridden and properly implemented?
+    return null;
+  }
+
+  @Override
+  default Object asTypeKey() {
+
+    if (isDynamic()) {
+      return getType();
+    }
+    return getType().getJavaClass();
   }
 
   /**
@@ -299,7 +333,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
    */
   static <B extends WritableBean> void readArray(B template, StructuredReader reader, Collection<B> collection) {
 
-    reader.require(State.START_ARRAY, true);
+    reader.require(StructuredState.START_ARRAY, true);
     while (!reader.readEndArray()) {
       B bean = ReadableBean.newInstance(template);
       bean.read(reader);

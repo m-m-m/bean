@@ -4,12 +4,7 @@ package io.github.mmm.bean.property;
 
 import java.util.Objects;
 
-import io.github.mmm.bean.AbstractBean;
-import io.github.mmm.bean.BeanHelper;
 import io.github.mmm.bean.WritableBean;
-import io.github.mmm.bean.mapping.PropertyIdMapper;
-import io.github.mmm.bean.mapping.PropertyIdMapping;
-import io.github.mmm.marshall.size.StructuredFormatSizeComputor;
 import io.github.mmm.property.Property;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.value.converter.TypeMapper;
@@ -108,15 +103,6 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
   public Class<V> getValueClass() {
 
     return this.valueClass;
-  }
-
-  @Override
-  public int computeSize(StructuredFormatSizeComputor computor) {
-
-    // delegates to the bean to prevent computing the size multiple times
-    AbstractBean bean = (AbstractBean) get();
-    PropertyIdMapping idMapping = PropertyIdMapper.get().getIdMapping(bean);
-    return BeanHelper.computeSize(bean, computor, idMapping);
   }
 
   @Override

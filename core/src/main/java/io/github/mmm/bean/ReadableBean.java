@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import io.github.mmm.bean.mapping.PropertyIdCollector;
 import io.github.mmm.marshall.MarshallableObject;
-import io.github.mmm.marshall.StructuredWriter;
 import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
@@ -46,21 +45,6 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    * The optional suffix for a property method (when following JavaFx conventions what is not recommended by mmm-bean).
    */
   String SUFFIX_PROPERTY = "Property";
-
-  /**
-   * Virtual {@link ReadableProperty#getName() property name} for the {@link #getType() type information} of a
-   * {@link #isPolymorphic() polymorphic} {@link Bean}.
-   *
-   * @see #isPolymorphic()
-   * @see #write(StructuredWriter)
-   */
-  String PROPERTY_TYPE_NAME = "@type";
-
-  /**
-   * Property {@link io.github.mmm.bean.mapping.PropertyIdMapping#id(ReadableProperty) ID} for
-   * {@link #PROPERTY_TYPE_NAME}.
-   */
-  int PROPERTY_TYPE_ID = 2047;
 
   /**
    * @param name the {@link WritableProperty#getName() name} of the requested property or a potential

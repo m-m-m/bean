@@ -6,8 +6,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.github.mmm.bean.examples.TestBean;
-import io.github.mmm.marshall.JsonFormat;
 import io.github.mmm.marshall.MarshallingConfig;
+import io.github.mmm.marshall.StandardFormat;
 import io.github.mmm.marshall.StructuredTextFormat;
 
 /**
@@ -31,7 +31,7 @@ public class BeanMarshallingTest extends Assertions {
     TestBean bean = new TestBean();
     bean.Name.set(NAME);
     bean.Age.setValue(AGE);
-    StructuredTextFormat jsonFormat = JsonFormat.of(MarshallingConfig.NO_INDENTATION);
+    StructuredTextFormat jsonFormat = StandardFormat.json(MarshallingConfig.NO_INDENTATION);
 
     // when
     String json = jsonFormat.write(bean);
@@ -48,7 +48,7 @@ public class BeanMarshallingTest extends Assertions {
 
     // given
     TestBean bean = new TestBean();
-    StructuredTextFormat jsonFormat = JsonFormat.of();
+    StructuredTextFormat jsonFormat = StandardFormat.json();
 
     // when
     jsonFormat.read(JSON, bean);

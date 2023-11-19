@@ -7,8 +7,6 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
-import io.github.mmm.bean.mapping.PropertyIdMapping;
-import io.github.mmm.marshall.size.StructuredFormatSizeComputor;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.factory.PropertyFactory;
@@ -170,16 +168,4 @@ public class BeanHelper {
     return names;
   }
 
-  /**
-   * ATTENTION: This is an internal method that should not be used from outside of this project.
-   *
-   * @param bean the {@link ReadableBean}.
-   * @param computor the {@link StructuredFormatSizeComputor}.
-   * @param idMapping the {@link PropertyIdMapping}.
-   * @return the computed size.
-   */
-  public static int computeSize(ReadableBean bean, StructuredFormatSizeComputor computor, PropertyIdMapping idMapping) {
-
-    return ((AbstractBean) bean).computeSize(computor, idMapping);
-  }
 }
