@@ -62,7 +62,7 @@ for (WritableProperty<?> property : bean.getProperties()) {
   bean2.set(property.getName(), property.getValue());
 }
 // default equals and hashCode from Object for fast usage in collections
-assertThat(bean).isNotEqualTo(bean2); 
+assertThat(bean).isNotEqualTo(bean2);
 // build in support for sematical equals comparing by value
 assertThat(bean.isEqualTo(bean2)).isTrue();
 -----
@@ -78,7 +78,7 @@ This is just the beginning. There is so much more:
 * dynamic property support
 * polymorphic type hierarchies
 * optional virtual run-time type creation with protoypic inheritance
-* build in criteria- and query support (see https://github.com/m-m-m/bean/[mmm-entity])
+* build in criteria- and query support (see https://github.com/m-m-m/orm/[mmm-orm])
 * alternative support for bean interfaces as dynamic proxies providing multi-inheritance and even less boiler-plate code (but more magic and overhead)
 * ...
 
@@ -218,7 +218,7 @@ image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-generator/javadoc.svg["
 The module `mmm-bean-generator` provides `BeanGenerator` that can scan your module- or classpath for our awesome beans and will generate Java code:
 
 * Implementations for all your bean interfaces
-* An implementation of `BeanFactory` 
+* An implementation of `BeanFactory`
 
 So you can have all the magic without deep reflection available and with ahead-of-time (AOT) compilation.
 If you are not yet convinced have a look at https://github.com/m-m-m/entity[mmm-entity].
