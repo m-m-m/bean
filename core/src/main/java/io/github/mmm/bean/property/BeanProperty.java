@@ -4,9 +4,11 @@ package io.github.mmm.bean.property;
 
 import java.util.Objects;
 
+import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.Property;
 import io.github.mmm.property.PropertyMetadata;
+import io.github.mmm.value.ReadableValue;
 import io.github.mmm.value.converter.TypeMapper;
 
 /**
@@ -97,6 +99,16 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
       newValue.parentPath(this);
       this.typeMapper = null;
     }
+  }
+
+  @Override
+  public void copyValue(ReadableValue<V> other) {
+
+    V bean = other.get();
+    if (bean != null) {
+      bean = ReadableBean.copy(bean);
+    }
+    set(bean);
   }
 
   @Override
