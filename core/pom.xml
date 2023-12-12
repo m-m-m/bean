@@ -21,6 +21,10 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>mmm-property-builder</artifactId>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>mmm-base-metainfo</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

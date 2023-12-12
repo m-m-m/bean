@@ -110,6 +110,16 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   BeanType getType();
 
   /**
+   * @return the {@link Class} reflecting this bean. Please note that {@link VirtualBean}s may implement multiple
+   *         interfaces as a virtual type that does not physically exist as Java {@link Class} and in such case the
+   *         method will return the primary of these {@link Class}es (interfaces).
+   */
+  default Class<?> getJavaClass() {
+
+    return getType().getJavaClass();
+  }
+
+  /**
    * @return {@code true} if this {@link Bean} is dynamic meaning that is not strictly typed but allows to dynamically
    *         add properties, {@code false} otherwise.
    * @see VirtualBean
@@ -311,7 +321,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   @SuppressWarnings("unchecked")
   static <B extends ReadableBean> Class<B> getJavaClass(B bean) {
 
-    return (Class<B>) bean.getType().getJavaClass();
+    return (Class<B>) bean.getJavaClass();
   }
 
 }

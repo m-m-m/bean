@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -87,23 +86,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
    */
   default <V> void set(String name, V value, Class<V> valueClass) {
 
-    set(name, value, valueClass, valueClass);
-  }
-
-  /**
-   * /** Sets the value of the {@link #getOrCreateProperty(String, Class, Type) existing or newly created property} with
-   * the given {@code name} to the given {@code value}.
-   *
-   * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
-   * @param name the {@link WritableProperty#getName() property name}.
-   * @param value new {@link WritableProperty#get() value} of the specified property.
-   * @param valueClass the {@link WritableProperty#getValueClass() value class}.
-   * @param valueType the {@link Type} reflecting the {@link WritableProperty#get() property value}.
-   * @see #set(String, Object)
-   */
-  default <V> void set(String name, V value, Class<V> valueClass, Type valueType) {
-
-    WritableProperty<V> property = getOrCreateProperty(name, valueClass, valueType);
+    WritableProperty<V> property = getOrCreateProperty(name, valueClass);
     property.set(value);
   }
 
@@ -129,24 +112,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
    * @throws IllegalStateException if this {@link WritableBean} already has such property, is {@link #isReadOnly()
    *         read-only}, or not {@link #isDynamic() dynamic}.
    */
-  default <V> WritableProperty<V> createProperty(String name, Class<V> valueClass) {
-
-    return createProperty(name, valueClass, valueClass);
-  }
-
-  /**
-   * Creates and {@link #addProperty(WritableProperty) adds} a {@link WritableProperty} with the given
-   * {@link WritableProperty#getValueClass() value class} {@link #isDynamic() dynamically}.
-   *
-   * @param <V> the generic type of the {@link WritableProperty#getValueClass() value class}.
-   * @param name the {@link WritableProperty#getName() property name}.
-   * @param valueClass the {@link WritableProperty#getValueClass() value class}.
-   * @param valueType the {@link Type} reflecting the {@link WritableProperty#get() property value}.
-   * @return the newly created and added property.
-   * @throws IllegalStateException if this {@link WritableBean} already has such property, is {@link #isReadOnly()
-   *         read-only}, or not {@link #isDynamic() dynamic}.
-   */
-  <V> WritableProperty<V> createProperty(String name, Class<V> valueClass, Type valueType);
+  <V> WritableProperty<V> createProperty(String name, Class<V> valueClass);
 
   /**
    * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class) creates} the specified property
@@ -161,27 +127,8 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
    * @throws IllegalStateException if the requested property does not exist but this {@link WritableBean} is
    *         {@link #isReadOnly() read-only}, or not {@link #isDynamic() dynamic}.
    */
-  default <V> WritableProperty<V> getOrCreateProperty(String name, Class<V> valueClass) {
-
-    return getOrCreateProperty(name, valueClass, valueClass);
-  }
-
-  /**
-   * {@link #getProperty(String) Gets} or {@link #createProperty(String, Class, Type) creates} the specified property
-   * {@link #isDynamic() dynamically}.
-   *
-   * @param <V> the generic type of the {@link WritableProperty#get() property value}.
-   * @param name the {@link WritableProperty#getName() property name}.
-   * @param valueClass the {@link Class} reflecting the {@link WritableProperty#get() property value}.
-   * @param valueType the {@link Type} reflecting the {@link WritableProperty#get() property value}.
-   * @return the requested property. Will be created if it does not already {@link #getProperty(String) exist}.
-   * @throws IllegalArgumentException if the requested property already exists but has an incompatible
-   *         {@link WritableProperty#getValueClass() value class}.
-   * @throws IllegalStateException if the requested property does not exist but this {@link WritableBean} is
-   *         {@link #isReadOnly() read-only}, or not {@link #isDynamic() dynamic}.
-   */
   @SuppressWarnings("unchecked")
-  default <V> WritableProperty<V> getOrCreateProperty(String name, Class<V> valueClass, Type valueType) {
+  default <V> WritableProperty<V> getOrCreateProperty(String name, Class<V> valueClass) {
 
     WritableProperty<?> property = getProperty(name);
     if (property != null) {
@@ -192,7 +139,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
             + property.getValueClass().getName() + " was requested for mismatching value class " + valueClass);
       }
     }
-    return createProperty(name, valueClass, valueType);
+    return createProperty(name, valueClass);
   }
 
   @Override

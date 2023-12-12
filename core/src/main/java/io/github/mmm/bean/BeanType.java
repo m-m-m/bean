@@ -2,6 +2,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
+import io.github.mmm.base.metainfo.MetaInfo;
+
 /**
  * A {@link BeanType} reflects a {@link Bean} (similar to a Java {@link Class}).
  *
@@ -70,5 +72,10 @@ public interface BeanType {
    * @see VirtualBean
    */
   boolean isVirtual();
+
+  /**
+   * @return the {@link MetaInfo} of the bean.
+   */
+  MetaInfo getMetaInfo();
 
 }

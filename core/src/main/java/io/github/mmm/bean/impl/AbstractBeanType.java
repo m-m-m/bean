@@ -4,6 +4,7 @@ package io.github.mmm.bean.impl;
 
 import java.util.Objects;
 
+import io.github.mmm.base.metainfo.MetaInfo;
 import io.github.mmm.bean.BeanName;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.ReadableBean;
@@ -20,6 +21,8 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
   private final Class<? extends WritableBean> javaClass;
 
   private final String stableName;
+
+  private MetaInfo metaInfo;
 
   /**
    * The constructor.
@@ -99,6 +102,23 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
   public boolean isVirtual() {
 
     return false;
+  }
+
+  @Override
+  public MetaInfo getMetaInfo() {
+
+    if (this.metaInfo == null) {
+      return getOrCreateMetaInfo();
+    }
+    return this.metaInfo;
+  }
+
+  private synchronized MetaInfo getOrCreateMetaInfo() {
+
+    if (this.metaInfo == null) {
+      this.metaInfo = MetaInfo.empty().with(this.javaClass);
+    }
+    return this.metaInfo;
   }
 
   @Override

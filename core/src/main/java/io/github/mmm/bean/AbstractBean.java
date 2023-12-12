@@ -2,7 +2,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
@@ -215,11 +214,11 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   @Override
-  public <V> WritableProperty<V> createProperty(String name, Class<V> valueClass, Type valueType) {
+  public <V> WritableProperty<V> createProperty(String name, Class<V> valueClass) {
 
     requireWritable();
     requireDynamic();
-    PropertyMetadata<V> metadata = PropertyMetadata.of(this, null, null, valueType);
+    PropertyMetadata<V> metadata = PropertyMetadata.of(this, null, null);
     WritableProperty<V> property = PropertyFactoryManager.get().create(valueClass, name, metadata);
     property = add(property);
     return property;

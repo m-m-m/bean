@@ -73,6 +73,8 @@ module io.github.mmm.bean {
 
   requires transitive io.github.mmm.property.builder;
 
+  requires transitive io.github.mmm.base.metainfo;
+
   uses io.github.mmm.bean.BeanFactory;
 
   uses io.github.mmm.bean.mapping.ClassNameMapper;

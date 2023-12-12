@@ -5,6 +5,7 @@ package io.github.mmm.bean.factory.impl.operation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+import io.github.mmm.base.metainfo.MetaInfo;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.Mandatory;
 import io.github.mmm.bean.PropertyAlias;
@@ -34,6 +35,8 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
 
   /** @see #getMethod() */
   protected final Method method;
+
+  private MetaInfo metaInfo;
 
   /**
    * The constructor.
@@ -134,7 +137,29 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
         }
       }
     }
+    MetaInfo metaInformation = getMetaInfo();
+    if (!metaInformation.isEmpty()) {
+      assert (result.getMetaInfo().isEmpty());
+      result = result.withMetaInfo(metaInformation);
+    }
     return result;
+  }
+
+  private MetaInfo getMetaInfo() {
+
+    if (this.metaInfo == null) {
+      return getOrCreateMetaInfo();
+    }
+    return this.metaInfo;
+  }
+
+  private synchronized MetaInfo getOrCreateMetaInfo() {
+
+    if (this.metaInfo == null) {
+      this.metaInfo = MetaInfo.empty().with(this.method);
+    }
+    return this.metaInfo;
+
   }
 
   @Override

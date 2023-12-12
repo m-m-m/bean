@@ -28,6 +28,9 @@ public class ContactBeanTest extends Assertions {
     LocalDate bithday = LocalDate.now().minus(Period.ofYears(age));
     assertThat(ageProperty.get()).isNull();
     assertThat(bean.Age()).isSameAs(ageProperty);
+    assertThat(bean.getType().getMetaInfo().get("table")).isEqualTo("CONTACT");
+    assertThat(bean.Birthday().getMetadata().getMetaInfo().get("column")).isEqualTo("DATE_OF_BIRTH");
+    assertThat(bean.Birthday().getMetadata().getMetaInfo().getAsLong("precision")).isEqualTo(7L);
     bean.setBirthday(bithday);
     assertThat(ageProperty.get()).isEqualTo(age);
     // ensure expression for age property is recreated on copy not pointing to original bean
