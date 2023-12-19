@@ -4,7 +4,7 @@ package io.github.mmm.bean.impl.mapping;
 
 import java.util.ServiceLoader;
 
-import io.github.mmm.base.config.ServiceHelper;
+import io.github.mmm.base.service.ServiceHelper;
 import io.github.mmm.bean.mapping.ClassNameMapper;
 
 /**

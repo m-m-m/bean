@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ServiceLoader;
 
-import io.github.mmm.base.config.ServiceHelper;
+import io.github.mmm.base.service.ServiceHelper;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
@@ -27,7 +27,7 @@ public final class BeanFactoryManager implements BeanFactory {
     super();
     this.delegates = new ArrayList<>();
     ServiceLoader<BeanFactory> loader = ServiceLoader.load(BeanFactory.class);
-    ServiceHelper.add(loader, this.delegates);
+    ServiceHelper.all(loader, this.delegates);
   }
 
   @Override
