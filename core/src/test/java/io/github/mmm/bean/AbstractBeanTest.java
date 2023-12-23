@@ -26,7 +26,7 @@ public abstract class AbstractBeanTest extends Assertions {
     assertThat(type.getSimpleName()).isEqualTo(javaClass.getSimpleName());
     assertThat(type.getQualifiedName()).isEqualTo(javaClass.getName());
     if (stableName == null) {
-      stableName = BeanTypeImpl.getStableName(javaClass, stableName);
+      stableName = BeanTypeImpl.getStableName(javaClass);
     }
     assertThat(type.getStableName()).isEqualTo(stableName);
     assertThat(type.toString()).isEqualTo(javaClass.getName());

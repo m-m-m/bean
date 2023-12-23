@@ -55,11 +55,20 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
    * @param stableName the {@link #getStableName() stable name} or {@code null} to determine automatically.
    * @return the {@link #getStableName() stable name}.
    */
-  public static String getStableName(Class<?> javaClass, String stableName) {
+  private static String getStableName(Class<?> javaClass, String stableName) {
 
     if (stableName != null) {
       return stableName;
     }
+    return getStableName(javaClass);
+  }
+
+  /**
+   * @param javaClass the {@link Class} reflecting the {@link WritableBean}.
+   * @return the {@link #getStableName() stable name}.
+   */
+  public static String getStableName(Class<?> javaClass) {
+
     BeanName name = javaClass.getAnnotation(BeanName.class);
     if (name == null) {
       return javaClass.getSimpleName();

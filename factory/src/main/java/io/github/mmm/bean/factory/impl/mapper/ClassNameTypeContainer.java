@@ -13,9 +13,15 @@ public class ClassNameTypeContainer {
 
   final Class<?> javaClass;
 
+  final String qualifiedName;
+
+  final String simpleName;
+
   final String name;
 
   final ClassType classType;
+
+  final int priority;
 
   /**
    * The constructor.
@@ -25,38 +31,25 @@ public class ClassNameTypeContainer {
    */
   public ClassNameTypeContainer(Class<?> javaClass, ClassType classType) {
 
-    this(javaClass, classType, null);
-  }
-
-  /**
-   * The constructor.
-   *
-   * @param javaClass the java {@link Class}.
-   * @param classType the {@link ClassType}.
-   * @param name the {@link io.github.mmm.bean.mapping.ClassNameMapper#getName(Class) class name}.
-   */
-  public ClassNameTypeContainer(Class<?> javaClass, ClassType classType, String name) {
-
     super();
     this.javaClass = javaClass;
-    if (name == null) {
-      this.name = computeName(javaClass, classType);
-    } else {
-      this.name = name;
-    }
     this.classType = classType;
-  }
-
-  private static String computeName(Class<?> javaClass, ClassType classType) {
-
+    this.simpleName = javaClass.getSimpleName();
     if (classType == ClassType.BEAN) {
-      return BeanTypeImpl.getStableName(javaClass, null);
+      this.qualifiedName = BeanTypeImpl.getStableName(javaClass);
+    } else {
+      this.qualifiedName = javaClass.getName();
     }
-    String name = javaClass.getName();
-    if (name.startsWith("java.") || name.startsWith("io.github.mmm.")) {
-      name = javaClass.getSimpleName();
+    if (this.qualifiedName.startsWith("java.")) {
+      this.priority = 3;
+      this.name = this.simpleName;
+    } else if (this.qualifiedName.startsWith("io.github.mmm.")) {
+      this.priority = 2;
+      this.name = this.simpleName;
+    } else {
+      this.priority = 1;
+      this.name = this.qualifiedName;
     }
-    return name;
   }
 
 }

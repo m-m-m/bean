@@ -3,11 +3,11 @@ package io.github.mmm.bean.factory.impl.mapper;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.mmm.base.collection.AbstractIterator;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.base.exception.ObjectNotFoundException;
 import io.github.mmm.bean.mapping.ClassNameMapper;
@@ -62,14 +62,30 @@ public class ClassNameMapperImpl implements ClassNameMapper {
 
   void add(ClassNameTypeContainer container) {
 
-    LOG.debug("Adding class {} for name {} and type {}.", container.javaClass, container.name, container.classType);
+    LOG.debug("Adding class {} for name {} and type {}.", container.javaClass, container.qualifiedName,
+        container.classType);
     ClassNameTypeContainer duplicateContainer = this.class2containerMap.put(container.javaClass, container);
     if (duplicateContainer != null) {
-      throw new DuplicateObjectException(container.javaClass.getName(), container.name, duplicateContainer.name);
+      throw new DuplicateObjectException(container.javaClass.getName(), container.qualifiedName,
+          duplicateContainer.qualifiedName);
     }
     Class<?> duplicateClass = this.name2typeMap.put(container.name, container.javaClass);
     if (duplicateClass != null) {
       throw new DuplicateObjectException(container.name, container.javaClass.getName(), duplicateClass.getName());
+    }
+    if (container.name != container.simpleName) {
+      Class<?> mappedClass = this.name2typeMap.putIfAbsent(container.simpleName, container.javaClass);
+      if (mappedClass != null) {
+        duplicateContainer = this.class2containerMap.get(mappedClass);
+        Class<?> unmappedClass = container.javaClass;
+        if (container.priority > duplicateContainer.priority) {
+          this.name2typeMap.put(container.simpleName, container.javaClass);
+          unmappedClass = mappedClass;
+          mappedClass = container.javaClass;
+        }
+        LOG.warn("Duplicate simple name {} mapped to class {} and not to {}", container.simpleName, mappedClass,
+            unmappedClass);
+      }
     }
   }
 
@@ -111,40 +127,22 @@ public class ClassNameMapperImpl implements ClassNameMapper {
     return new ClassIterator(this.class2containerMap.values().iterator(), classType);
   }
 
-  private static class ClassIterator implements Iterator<Class<?>> {
+  private static class ClassIterator extends AbstractIterator<Class<?>> {
 
     private final Iterator<ClassNameTypeContainer> it;
 
     private final ClassType classType;
-
-    private Class<?> next;
 
     private ClassIterator(Iterator<ClassNameTypeContainer> it, ClassType classType) {
 
       super();
       this.it = it;
       this.classType = classType;
-      this.next = findNext();
+      findFirst();
     }
 
     @Override
-    public boolean hasNext() {
-
-      return this.next != null;
-    }
-
-    @Override
-    public Class<?> next() {
-
-      if (this.next == null) {
-        throw new NoSuchElementException();
-      }
-      Class<?> result = this.next;
-      this.next = findNext();
-      return result;
-    }
-
-    private Class<?> findNext() {
+    protected Class<?> findNext() {
 
       while (this.it.hasNext()) {
         ClassNameTypeContainer container = this.it.next();
