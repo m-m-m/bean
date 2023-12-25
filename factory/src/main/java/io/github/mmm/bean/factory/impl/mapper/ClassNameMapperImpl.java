@@ -100,6 +100,16 @@ public class ClassNameMapperImpl implements ClassNameMapper {
   }
 
   @Override
+  public String getNameOrQualified(Class<?> javaClass) {
+
+    ClassNameTypeContainer container = this.class2containerMap.get(javaClass);
+    if (container == null) {
+      return javaClass.getName();
+    }
+    return container.name;
+  }
+
+  @Override
   public Class<?> getClass(String name) {
 
     Class<?> javaClass = this.name2typeMap.get(name);

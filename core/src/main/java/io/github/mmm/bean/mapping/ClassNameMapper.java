@@ -26,6 +26,15 @@ public abstract interface ClassNameMapper {
   String getName(Class<?> javaClass);
 
   /**
+   * @param javaClass the {@link Class} reflecting the type (class, interface, etc.) to map.
+   * @return the name of the given {@link Class}. By default this is the {@link Class#getName() qualified name} but it
+   *         may also be the {@link Class#getSimpleName() simple name} or something else as long as it is unique. If the
+   *         given {@link Class} is not {@link #contains(Class) mapped}, the {@link Class#getName() qualified name} of
+   *         the given {@link Class} is returned.
+   */
+  String getNameOrQualified(Class<?> javaClass);
+
+  /**
    * @param name the {@link #getName(Class) name} of the {@link Class}.
    * @return the {@link Class} reflecting the type with the given {@code name}. Will be {@code null} if the type is not
    *         mapped. For security reasons by design no reflective lookup (class-loading) is triggered. This allows to
