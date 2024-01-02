@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.github.mmm.base.exception.ObjectNotFoundException;
 import io.github.mmm.marshall.MarshallingObject;
 import io.github.mmm.marshall.StructuredReader;
 import io.github.mmm.marshall.StructuredState;
@@ -34,7 +35,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
 
     WritableProperty<?> property = getProperty(name);
     if (property == null) {
-      throw new IllegalArgumentException("Missing property: " + name);
+      throw new ObjectNotFoundException("Property@" + getJavaClass().getName(), name);
     }
     return property;
   }
