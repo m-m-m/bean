@@ -12,6 +12,7 @@ import io.github.mmm.property.WritableProperty;
 import io.github.mmm.validation.Validatable;
 import io.github.mmm.validation.ValidationResult;
 import io.github.mmm.validation.ValidationResultBuilder;
+import io.github.mmm.value.ReadablePath;
 
 /**
  * Read interface of a {@link Bean} holding arbitrary {@link #getProperty(String) properties}. Unlike plain old Java
@@ -39,7 +40,7 @@ import io.github.mmm.validation.ValidationResultBuilder;
  * IntelliJ, NetBeans, etc.) without plugins and therefore will also work in the future whatever may come.</li>
  * </ul>
  */
-public interface ReadableBean extends Validatable, MarshallableObject, AttributeReadOnly {
+public interface ReadableBean extends Validatable, MarshallableObject, AttributeReadOnly, ReadablePath {
 
   /**
    * The optional suffix for a property method (when following JavaFx conventions what is not recommended by mmm-bean).
@@ -173,7 +174,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    *         has the same type and all {@link #getProperty(String) properties} are {@link Object#equals(Object) equal},
    *         {@code false} otherwise.
    */
-  default boolean isEqualTo(ReadableBean other) {
+  default boolean isEqual(ReadableBean other) {
 
     if (other == null) {
       return false;
@@ -185,7 +186,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
     for (ReadableProperty<?> property : getProperties()) {
       String name = property.getName();
       ReadableProperty<?> otherProperty = other.getProperty(name);
-      if (!property.equals(otherProperty)) {
+      if (!property.isEqual(otherProperty)) {
         return false;
       }
     }
@@ -217,14 +218,14 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    * Method to implement {@link #equals(Object)} directly in a bean interface as default method. For simplification it
    * is only called if the object to compare to is not {@code null} and has the same {@link #getType() type} so you do
    * not have to handle these cases in your custom implementation.<br>
-   * <b>ATTENTION:</b> It is rather discouraged to override this method. Simply use {@link #isEqualTo(ReadableBean)}
+   * <b>ATTENTION:</b> It is rather discouraged to override this method. Simply use {@link #isEqual(ReadableBean)}
    * instead of {@link #equals(Object)} when you want comparison by value (e.g. to check for duplicates).
    *
    * @param other the object to compare to. Will not be {@code null} and has the same {@link #getType() type} as this
    *        bean.
    * @return {@code true} if this and the given {@link ReadableBean} are considered equals, {@code false} otherwise.
    * @see #equals(Object)
-   * @see #isEqualTo(ReadableBean)
+   * @see #isEqual(ReadableBean)
    */
   default boolean doEquals(ReadableBean other) {
 

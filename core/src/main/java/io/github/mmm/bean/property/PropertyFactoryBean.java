@@ -50,7 +50,11 @@ public class PropertyFactoryBean<V extends WritableBean> extends AbstractPropert
   @Override
   public BeanProperty<V> create(String name, PropertyTypeInfo<V> typeInfo, PropertyMetadata<V> metadata) {
 
-    return new BeanProperty<>(name, (Class) typeInfo.getValueClass(), metadata);
+    Class valueClass = typeInfo.getValueClass();
+    if (valueClass == null) {
+      valueClass = typeInfo.getTypeArgumentClass(0);
+    }
+    return new BeanProperty<>(name, valueClass, metadata);
   }
 
   @Override

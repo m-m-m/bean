@@ -8,6 +8,7 @@ import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.Property;
 import io.github.mmm.property.PropertyMetadata;
+import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.value.ReadableValue;
 import io.github.mmm.value.converter.TypeMapper;
 
@@ -127,6 +128,25 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
       }
     }
     return this.typeMapper;
+  }
+
+  @Override
+  public boolean isEqual(ReadableProperty<?> obj) {
+
+    if (this == obj) {
+      return true;
+    } else if ((obj == null) || (getClass() != obj.getClass())) {
+      return false;
+    }
+    BeanProperty<?> other = (BeanProperty<?>) obj;
+    if (!Objects.equals(getName(), other.getName())) {
+      return false;
+    } else if ((this.value == null) || (other.value == null)) {
+      return this.value == other.value;
+    } else if (!this.value.isEqual(other.value)) {
+      return false;
+    }
+    return true;
   }
 
 }
