@@ -84,8 +84,8 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     }
     typeInfo = new PropertyTypeInfoByProperty(propertyType, this, proxy);
 
-    WritableProperty<?> property = (WritableProperty<?>) PropertyFactoryManager.get().create(propertyClass, typeInfo,
-        this.propertyName, metadata);
+    WritableProperty<?> property = PropertyFactoryManager.get().create(propertyClass, typeInfo, this.propertyName,
+        metadata);
     return property;
   }
 
@@ -107,8 +107,7 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     }
     typeInfo = new PropertyTypeInfoByValue(valueType, this, proxy);
 
-    WritableProperty<?> property = (WritableProperty<?>) PropertyFactoryManager.get().create(null, typeInfo,
-        this.propertyName, metadata);
+    WritableProperty<?> property = PropertyFactoryManager.get().create(null, typeInfo, this.propertyName, metadata);
     return property;
   }
 
