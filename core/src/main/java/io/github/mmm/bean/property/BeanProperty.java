@@ -4,6 +4,7 @@ package io.github.mmm.bean.property;
 
 import java.util.Objects;
 
+import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.Property;
@@ -89,6 +90,10 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
   @Override
   protected V doGet() {
 
+    if ((this.value == null) && (this.valueClass != null)) {
+      doSet(BeanFactory.get().create(this.valueClass));
+      fireEvent();
+    }
     return this.value;
   }
 

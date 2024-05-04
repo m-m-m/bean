@@ -2,6 +2,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.property;
 
+import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.object.ReadableObjectProperty;
@@ -13,5 +14,15 @@ import io.github.mmm.property.object.ReadableObjectProperty;
  * @since 1.0.0
  */
 public interface ReadableBeanProperty<V extends WritableBean> extends ReadableObjectProperty<V> {
+
+  @Override
+  default V getStaticSafeValue() {
+
+    Class<V> valueClass = getValueClass();
+    if (valueClass == null) {
+      return null;
+    }
+    return BeanFactory.get().create(valueClass);
+  }
 
 }
