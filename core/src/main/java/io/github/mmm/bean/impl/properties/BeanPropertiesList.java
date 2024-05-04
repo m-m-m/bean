@@ -12,7 +12,7 @@ import io.github.mmm.property.WritableProperty;
 /**
  * Implementation of {@link BeanProperties} using {@link List}.
  */
-public class BeanPropertiesList extends AbstractBeanProperties {
+public class BeanPropertiesList extends BeanProperties {
 
   private final List<WritableProperty<?>> propertiesList;
 

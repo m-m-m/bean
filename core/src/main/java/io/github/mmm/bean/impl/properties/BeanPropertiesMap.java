@@ -12,7 +12,7 @@ import io.github.mmm.property.WritableProperty;
 /**
  * Implementation of {@link BeanProperties} based on a {@link Map}.
  */
-public class BeanPropertiesMap extends AbstractBeanProperties {
+public class BeanPropertiesMap extends BeanProperties {
 
   private final Map<String, WritableProperty<?>> propertiesMap;
 
@@ -63,19 +63,6 @@ public class BeanPropertiesMap extends AbstractBeanProperties {
 
     String key = normalize(name);
     return this.propertiesMap.computeIfAbsent(key, factory);
-  }
-
-  /**
-   * @return a new {@link BeanPropertyNames} instance with the names of the current properties.
-   */
-  public BeanPropertyNames createNames() {
-
-    String[] names = new String[this.propertiesMap.size()];
-    int i = 0;
-    for (WritableProperty<?> property : this.propertiesMap.values()) {
-      names[i++] = normalize(property.getName());
-    }
-    return new BeanPropertyNamesArray(names);
   }
 
 }

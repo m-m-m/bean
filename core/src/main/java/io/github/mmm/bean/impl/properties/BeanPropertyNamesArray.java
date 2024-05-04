@@ -21,7 +21,7 @@ public class BeanPropertyNamesArray implements BeanPropertyNames {
   @Override
   public int indexOf(String name) {
 
-    String key = AbstractBeanProperties.normalize(name);
+    String key = BeanProperties.normalize(name);
     int low = 0;
     int high = this.names.length - 1;
 

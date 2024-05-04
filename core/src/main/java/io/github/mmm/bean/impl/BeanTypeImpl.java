@@ -10,8 +10,9 @@ import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.impl.properties.BeanProperties;
-import io.github.mmm.bean.impl.properties.BeanPropertiesArray;
+import io.github.mmm.bean.impl.properties.BeanPropertiesDynamicArray;
 import io.github.mmm.bean.impl.properties.BeanPropertiesMap;
+import io.github.mmm.bean.impl.properties.BeanPropertiesStaticArray;
 import io.github.mmm.bean.impl.properties.BeanPropertyNames;
 
 /**
@@ -25,7 +26,7 @@ public class BeanTypeImpl extends AbstractBeanType {
 
   private BeanPropertyNames propertyNames;
 
-  private BeanPropertiesMap properties;
+  private BeanProperties properties;
 
   /**
    * The constructor.
@@ -52,18 +53,30 @@ public class BeanTypeImpl extends AbstractBeanType {
   @Override
   public BeanProperties create(AbstractBean bean) {
 
-    if (bean.isDynamic()) {
-      return new BeanPropertiesMap(BeanAccessor.isThreadSafe(bean));
-    } else if (this.properties == null) {
-      // use map for prototype (first instance)
-      this.properties = new BeanPropertiesMap(BeanAccessor.isThreadSafe(bean));
-      return this.properties;
-    } else {
+    boolean threadSafe = BeanAccessor.isThreadSafe(bean);
+    boolean dynamic = bean.isDynamic();
+    BeanProperties result;
+    if (!dynamic && this.properties != null) {
       if (this.propertyNames == null) {
         this.propertyNames = this.properties.createNames();
       }
-      return new BeanPropertiesArray(this.propertyNames);
+      result = new BeanPropertiesStaticArray(this.propertyNames);
+    } else {
+      if (threadSafe) {
+        return new BeanPropertiesMap(true);
+      } else {
+        int capacity = 8;
+        if (this.properties != null) {
+          capacity = this.properties.get().size() + 2;
+        }
+        result = new BeanPropertiesDynamicArray(capacity);
+      }
+      if (this.properties == null) {
+        // store for prototype (first instance)
+        this.properties = result;
+      }
     }
+    return result;
   }
 
   /**

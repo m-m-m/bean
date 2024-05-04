@@ -9,8 +9,7 @@ import java.util.List;
 import io.github.mmm.bean.impl.BeanClassImpl;
 
 /**
- * {@link BeanClass} extends {@link BeanType} for a {@link VirtualBean} with extended information. It it also a
- * {@link WritableBean} itself and acts as prototype for the {@link VirtualBean} instances.
+ * {@link BeanClass} extends {@link BeanType} for a {@link VirtualBean} with extended information.
  *
  * @see VirtualBean#getType()
  * @since 1.0.0
