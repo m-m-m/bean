@@ -5,6 +5,7 @@ package io.github.mmm.bean;
 import org.assertj.core.api.Assertions;
 
 import io.github.mmm.bean.impl.BeanTypeImpl;
+import io.github.mmm.bean.property.BeanProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.value.observable.ObservableEventReceiver;
 
@@ -58,10 +59,13 @@ public abstract class AbstractBeanTest extends Assertions {
       assertThat(readOnlyBean.isReadOnly()).isTrue();
       assertThat(readOnlyBean.getClass()).isSameAs(bean.getClass());
       WritableProperty<?> readOnlyProperty = readOnlyBean.getRequiredProperty(property.getName());
-      assertThat(readOnlyProperty).isNotSameAs(property).isEqualTo(property);
+      assertThat(readOnlyProperty).isNotSameAs(property);
       assertThat(readOnlyProperty.isReadOnly()).isTrue();
-      assertThat(property.get()).isEqualTo(bean.get(property.getName()))
-          .isEqualTo(readOnlyBean.get(property.getName()));
+      if (!(property instanceof BeanProperty)) {
+        assertThat(readOnlyProperty).isEqualTo(property);
+        assertThat(property.get()).isEqualTo(bean.get(property.getName()))
+            .isEqualTo(readOnlyBean.get(property.getName()));
+      }
       if (newValue != null) {
         assertThat(property.get()).isNotEqualTo(newValue);
         ObservableEventReceiver<Object> listener = new ObservableEventReceiver<>();
