@@ -43,8 +43,12 @@ public class MemoryCache<K, V> {
 
     this.lock.lock();
     try {
-      WeakReference<V> weakReference = this.cache.computeIfAbsent(key, x -> new WeakReference<>(factory.get()));
-      V value = weakReference.get();
+      // WeakReference<V> weakReference = this.cache.computeIfAbsent(key, x -> new WeakReference<>(factory.get()));
+      WeakReference<V> weakReference = this.cache.get(key);
+      V value = null;
+      if (weakReference != null) {
+        value = weakReference.get();
+      }
       if (value == null) {
         value = factory.get();
         weakReference = new WeakReference<>(value);
