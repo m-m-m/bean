@@ -27,7 +27,18 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
    */
   public AbstractVirtualBean() {
 
-    this(null);
+    this(null, null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public AbstractVirtualBean(WritableBean writable) {
+
+    this(writable, null);
   }
 
   /**
@@ -37,7 +48,19 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
    */
   public AbstractVirtualBean(BeanClass type) {
 
-    super();
+    this(null, type);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   * @param type the {@link #getType() type}.
+   */
+  public AbstractVirtualBean(WritableBean writable, BeanClass type) {
+
+    super(writable);
     if (type == null) {
       Class<? extends AbstractVirtualBean> javaClass = getClass();
       this.type = BeanClassImpl.asClass(javaClass);
@@ -74,9 +97,9 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
   }
 
   @Override
-  protected AbstractBean create() {
+  protected AbstractBean create(WritableBean writable) {
 
-    AbstractVirtualBean bean = (AbstractVirtualBean) super.create();
+    AbstractVirtualBean bean = (AbstractVirtualBean) super.create(writable);
     bean.type = this.type;
     return bean;
   }

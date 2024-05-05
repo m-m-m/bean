@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanClass;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 import io.github.mmm.property.temporal.localdate.LocalDateProperty;
@@ -25,11 +26,34 @@ public class ContactBeanImpl extends AdvancedBean implements ContactBean {
   /**
    * The constructor.
    *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public ContactBeanImpl(WritableBean writable) {
+
+    this(writable, null);
+  }
+
+  /**
+   * The constructor.
+   *
    * @param type - the {@link #getType() type}.
    */
   public ContactBeanImpl(BeanClass type) {
 
-    super(type);
+    this(null, type);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   * @param type - the {@link #getType() type}.
+   */
+  public ContactBeanImpl(WritableBean writable, BeanClass type) {
+
+    super(writable, type);
     this.Birthday = add().newLocalDate("Birthday");
     this.Name = add().newString("Name");
     this.Age = add(ContactBean.super.Age());
@@ -84,9 +108,9 @@ public class ContactBeanImpl extends AdvancedBean implements ContactBean {
   }
 
   @Override
-  protected AbstractBean create() {
+  protected AbstractBean create(WritableBean writable) {
 
-    return new ContactBeanImpl(getType());
+    return new ContactBeanImpl(writable, getType());
   }
 
 }

@@ -34,18 +34,20 @@ public abstract class BeanProxy implements InvocationHandler {
    * The constructor.
    *
    * @param beanFactory the owning {@link BeanFactoryImpl}.
+   * @param writable the {@link WritableBean} to wrap as {@link WritableBean#isReadOnly() read-only} bean or
+   *        {@code null} to create a mutable bean.
    * @param beanType the {@link BeanType}.
    * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
    */
-  public BeanProxy(BeanFactoryImpl beanFactory, BeanType beanType, Class<?>... interfaces) {
+  public BeanProxy(BeanFactoryImpl beanFactory, WritableBean writable, BeanType beanType, Class<?>... interfaces) {
 
     super();
     this.proxy = beanFactory.createProxy(this, interfaces);
     this.beanFactory = beanFactory;
     if (beanType instanceof BeanClass) {
-      this.bean = new SimpleVirtualBean((BeanClass) beanType);
+      this.bean = new SimpleVirtualBean(writable, (BeanClass) beanType);
     } else {
-      this.bean = new SimpleBean(beanType);
+      this.bean = new SimpleBean(writable, beanType);
     }
   }
 

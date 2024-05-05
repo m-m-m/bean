@@ -5,6 +5,7 @@ package io.github.mmm.bean.factory.impl.bean;
 import io.github.mmm.bean.AbstractVirtualBean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.AttributeReadOnly;
 
@@ -24,11 +25,13 @@ public final class SimpleVirtualBean extends AbstractVirtualBean implements Simp
   /**
    * The constructor.
    *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
    * @param type the {@link #getType() type}.
    */
-  public SimpleVirtualBean(BeanClass type) {
+  public SimpleVirtualBean(WritableBean writable, BeanClass type) {
 
-    super(type);
+    super(writable, type);
   }
 
   @Override

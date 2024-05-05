@@ -21,13 +21,15 @@ import io.github.mmm.value.ReadablePath;
  * <li><b>Simple</b> - no need to write boiler-plate code for implementation such as getters, setters, equals, or
  * hashCode.</li>
  * <li><b>Generic</b> - fast, easy and reliable introspection via {@link #getProperties() iteration of all properties}.
- * No more greedy and slow reflection at runtime (after bootstrapping).</li>
+ * No more greedy and slow reflection at runtime (after bootstrapping or AOT compilation).</li>
  * <li><b>Dynamic</b> - supports combination of Java's strong typing with {@link #isDynamic() dynamic} beans. E.g. if
  * read data from Database, XML, or JSON you can still map "undefined" properties in your {@link Bean}. This way a
  * client can receive an object from a newer version of a database or service with added properties that will be kept in
  * the object and send back when the {@link Bean} is written back.</li>
- * <li><b>ReadOnly-Support</b> - create a {@link #isReadOnly() read-only} {@link #copy(boolean) copy} of your object to
- * pass by reference without side-effects.</li>
+ * <li><b>ReadOnly-Support</b> - create a {@link #isReadOnly() read-only} {@link WritableBean#getReadOnly() view} of
+ * your bean to pass by reference without side-effects.</li>
+ * <li><b>Copy-Support</b> - create a {@link #copy() copy} of your bean before passing around to avoid side-effects or
+ * to create a mutable copy from a {@link #isReadOnly() read-only} bean.</li>
  * <li><b>Powerful</b> - {@link WritableProperty} supports listeners and bindings as well as
  * {@link WritableProperty#getValueClass() generic type information}.</li>
  * <li><b>Validation</b> - build-in {@link #validate() validation support}.</li>
@@ -194,10 +196,9 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   }
 
   /**
-   * @param readOnly - {@code true} if the copy shall be {@link #isReadOnly() read-only}.
    * @return a copy of this {@link WritableBean} that has the same values for all {@link #getProperties() properties}.
    */
-  WritableBean copy(boolean readOnly);
+  WritableBean copy();
 
   /**
    * @return a new instance of this {@link WritableBean}.
@@ -281,37 +282,16 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
 
   /**
    * @param <B> type of the {@link ReadableBean}.
-   * @param bean the {@link ReadableBean bean} to {@link #copy(boolean) copy}.
-   * @return the {@link #copy(boolean) copy}.
-   */
-  static <B extends ReadableBean> B copy(B bean) {
-
-    return copy(bean, false);
-  }
-
-  /**
-   * @param <B> type of the {@link ReadableBean}.
-   * @param bean the {@link ReadableBean bean} to {@link #copy(boolean) copy}.
-   * @param readOnly - {@code true} if the copy shall be {@link #isReadOnly() read-only}.
-   * @return the {@link #copy(boolean) copy}.
+   * @param bean the {@link ReadableBean bean} to {@link #copy() copy}.
+   * @return the {@link #copy() copy}.
    */
   @SuppressWarnings("unchecked")
-  static <B extends ReadableBean> B copy(B bean, boolean readOnly) {
+  static <B extends ReadableBean> B copy(B bean) {
 
     if (bean == null) {
       return null;
     }
-    return (B) bean.copy(readOnly);
-  }
-
-  /**
-   * @param <B> type of the {@link ReadableBean}.
-   * @param bean the {@link ReadableBean bean} to {@link #copy(boolean) copy}.
-   * @return the {@link #isReadOnly() read-only} {@link #copy(boolean) copy}.
-   */
-  static <B extends ReadableBean> B copyReadOnly(B bean) {
-
-    return copy(bean, true);
+    return (B) bean.copy();
   }
 
   /**

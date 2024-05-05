@@ -55,7 +55,7 @@ public abstract class AbstractBeanTest extends Assertions {
     String propertyName = property.getName();
     assertThat(bean.getRequiredProperty(propertyName)).isSameAs(property);
     if (!bean.isReadOnly()) {
-      WritableBean readOnlyBean = bean.copy(true);
+      WritableBean readOnlyBean = bean.getReadOnly();
       assertThat(readOnlyBean.isReadOnly()).isTrue();
       assertThat(readOnlyBean.getClass()).isSameAs(bean.getClass());
       WritableProperty<?> readOnlyProperty = readOnlyBean.getRequiredProperty(property.getName());

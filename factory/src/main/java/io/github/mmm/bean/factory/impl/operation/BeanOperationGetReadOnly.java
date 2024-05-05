@@ -2,23 +2,21 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.factory.impl.operation;
 
-import io.github.mmm.bean.AbstractBean;
-import io.github.mmm.bean.BeanHelper;
-import io.github.mmm.bean.ReadableBean;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyInstance;
 
 /**
- * {@link BeanOperation} for {@link ReadableBean#copy()}.
+ * {@link BeanOperation} for {@link WritableBean#getReadOnly()}.
  *
  * @since 1.0.0
  */
-public class BeanOperationCopy extends BeanOperation {
+public class BeanOperationGetReadOnly extends BeanOperation {
 
   /**
    * The constructor.
    */
-  public BeanOperationCopy() {
+  public BeanOperationGetReadOnly() {
 
     super();
   }
@@ -26,9 +24,7 @@ public class BeanOperationCopy extends BeanOperation {
   @Override
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
-    BeanProxyInstance instance = proxy.getPrototype().newInstance();
-    AbstractBean copy = instance.getBean();
-    BeanHelper.copy(proxy.getBean(), copy);
+    BeanProxyInstance instance = new BeanProxyInstance(proxy);
     return instance.getProxy();
   }
 

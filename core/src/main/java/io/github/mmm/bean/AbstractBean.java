@@ -11,6 +11,7 @@ import io.github.mmm.bean.impl.alias.AbstractBeanAliasMap;
 import io.github.mmm.bean.impl.alias.BeanAliasMapEmpty;
 import io.github.mmm.bean.impl.properties.BeanProperties;
 import io.github.mmm.bean.impl.properties.BeanPropertiesFactory;
+import io.github.mmm.bean.impl.properties.BeanPropertiesReadOnly;
 import io.github.mmm.property.AttributeReadOnly;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.ReadableProperty;
@@ -20,7 +21,11 @@ import io.github.mmm.property.factory.PropertyFactoryManager;
 import io.github.mmm.value.ReadablePath;
 
 /**
- * Abstract base implementation of {@link WritableBean}.
+ * Abstract base implementation of {@link WritableBean}.<br>
+ * <b>ATTENTION:</b><br>
+ * If you plan to implement beans as Java class instead of using interfaces, you always need to have a public
+ * constructor with {@link WritableBean} as a single argument. Otherwise {@link #getReadOnly() read-only} support can
+ * not work.
  *
  * @see Bean
  */
@@ -34,16 +39,23 @@ public abstract class AbstractBean implements WritableBean {
 
   private transient ReadablePath parentPath;
 
-  private boolean readOnly;
+  private AbstractBean readOnly;
 
   private PropertyBuilders builders;
 
   /**
    * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
    */
-  public AbstractBean() {
+  public AbstractBean(WritableBean writable) {
 
     super();
+    if (writable != null) {
+      this.properties = new BeanPropertiesReadOnly(writable);
+      this.readOnly = this;
+    }
     this.aliases = BeanAliasMapEmpty.INSTANCE;
   }
 
@@ -87,8 +99,13 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   /**
-   * @return {@code true} if the {@link Bean} shall be thread-safe (use concurrent collections, etc.), {@code false}
-   *         otherwise.
+   * @return {@code true} if the {@link Bean} will be access concurrently and is required to be thread-safe (use
+   *         concurrent collections, etc.), {@code false} otherwise. Please note we strongly encourage you not use
+   *         {@link Bean}s concurrently and overriding this method to return {@code true}. We also will not thoroughly
+   *         test such concurrency and just support it as best-guess implementation since it is relatively easy for us
+   *         but rather impossible to solve from the outside. So in case you are blocked by a concurrency issue that you
+   *         do not want to solve otherwise, you may consider overriding this method to return {@code true} for your
+   *         beans. Please also be warned that this causes quite some overhead and will reduce performance.
    */
   protected boolean isThreadSafe() {
 
@@ -130,11 +147,20 @@ public abstract class AbstractBean implements WritableBean {
     return this.properties;
   }
 
+  @Override
+  public final AbstractBean getReadOnly() {
+
+    if (this.readOnly == null) {
+      this.readOnly = create(this);
+    }
+    return this.readOnly;
+  }
+
   @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public AbstractBean newInstance() {
 
-    AbstractBean instance = create();
+    AbstractBean instance = create(null);
     if (isDynamic()) {
       // copy dynamic properties
       for (WritableProperty property : getBeanProperties().get()) {
@@ -149,26 +175,23 @@ public abstract class AbstractBean implements WritableBean {
   }
 
   @Override
-  public WritableBean copy(boolean isReadOnly) {
+  public WritableBean copy() {
 
-    if (this.readOnly && isReadOnly) {
-      return this;
-    }
     AbstractBean copy = newInstance();
-    BeanHelper.copy(this, copy, isReadOnly);
+    BeanHelper.copy(this, copy);
     return copy;
   }
 
-  void makeReadOnly() {
-
-    assert (!this.readOnly);
-    this.readOnly = true;
-  }
+  // void makeReadOnly() {
+  //
+  // assert (!this.readOnly);
+  // this.readOnly = true;
+  // }
 
   @Override
   public final boolean isReadOnly() {
 
-    return this.readOnly;
+    return (this.readOnly == this);
   }
 
   /**
@@ -176,12 +199,14 @@ public abstract class AbstractBean implements WritableBean {
    * performance please override this method. Please note, that if you do so, you also need to override this method
    * again for all sub-classes of the hierarchy.
    *
+   * @param writable the {@link AdvancedBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
    * @return the new {@link Bean} instance. Has to be of the same type as the {@link #getClass() current class}.
    */
-  protected AbstractBean create() {
+  protected AbstractBean create(WritableBean writable) {
 
     try {
-      return BeanCreator.doCreate(getClass());
+      return BeanCreator.doCreate(getClass(), writable);
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
@@ -257,8 +282,12 @@ public abstract class AbstractBean implements WritableBean {
    * @param mode the {@link AddMode}.
    * @return the given {@code property}.
    */
+  @SuppressWarnings("unchecked")
   <V, P extends WritableProperty<V>> P add(P property, AddMode mode) {
 
+    if (this.readOnly == this) {
+      return (P) this.properties.get(property.getName());
+    }
     if ((mode != AddMode.DIRECT)) {
       PropertyMetadata<V> metadata = property.getMetadata();
       if (!isLockOwnerInternal(metadata.getLock())) {

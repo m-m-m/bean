@@ -2,8 +2,10 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean.examples;
 
+import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.BeanName;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.container.list.ListProperty;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
@@ -28,7 +30,18 @@ public class TestBuildersBean extends Bean {
    */
   public TestBuildersBean() {
 
-    super();
+    this(null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link AbstractBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public TestBuildersBean(WritableBean writable) {
+
+    super(writable);
     this.Name = add().newString().withValidator().mandatory().and().build("Name");
     this.Age = add().newInteger().withValidator().range(0, 150).and().build("Age");
     this.Hobbies = add().newString().withValidator().mandatory().pattern("[a-zA-Z ]").and().asList().build("Hobbies");

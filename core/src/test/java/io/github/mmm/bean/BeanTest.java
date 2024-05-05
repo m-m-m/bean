@@ -67,7 +67,7 @@ public class BeanTest extends AbstractBeanTest {
     LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
     assertThat(bean.getPropertyCount()).isEqualTo(3);
     assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
-    TestBean readOnly = ReadableBean.copy(bean, true);
+    TestBean readOnly = WritableBean.getReadOnly(bean);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
     assertThat(readOnly.Name.isReadOnly()).isTrue();
@@ -115,7 +115,7 @@ public class BeanTest extends AbstractBeanTest {
     LocalDateProperty birthday = bean.addProperty(new LocalDateProperty("Birthday"));
     assertThat(bean.getProperty("Birthday")).isSameAs(birthday);
     assertThat(bean.getProperties()).hasSize(4);
-    TestBuildersBean readOnly = ReadableBean.copy(bean, true);
+    TestBuildersBean readOnly = WritableBean.getReadOnly(bean);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
     assertThat(readOnly.getRequiredProperty("Name").isReadOnly()).isTrue();

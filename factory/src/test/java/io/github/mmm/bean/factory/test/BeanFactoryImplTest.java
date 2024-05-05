@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.mmm.base.exception.ReadOnlyException;
 import io.github.mmm.bean.BeanFactory;
-import io.github.mmm.bean.ReadableBean;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.string.StringProperty;
 
 /**
@@ -33,7 +33,7 @@ public class BeanFactoryImplTest extends Assertions {
     bean.setAge(age);
     assertThat(bean.getAge()).isEqualTo(age);
     assertThat(bean.Age().get()).isEqualTo(age);
-    PersonBean copy = ReadableBean.copyReadOnly(bean);
+    PersonBean copy = WritableBean.getReadOnly(bean);
     assertThat(copy.Age().get()).isEqualTo(age);
     assertThat(copy.Name().get()).isEqualTo(name);
     try {

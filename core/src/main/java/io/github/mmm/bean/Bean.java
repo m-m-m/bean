@@ -16,7 +16,18 @@ public class Bean extends AbstractBean {
    */
   public Bean() {
 
-    super();
+    this(null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public Bean(WritableBean writable) {
+
+    super(writable);
     this.type = BeanTypeImpl.asType(getClass());
   }
 

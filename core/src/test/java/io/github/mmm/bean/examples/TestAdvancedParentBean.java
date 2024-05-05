@@ -5,6 +5,7 @@ package io.github.mmm.bean.examples;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanName;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.string.StringProperty;
 
 /**
@@ -23,12 +24,17 @@ public class TestAdvancedParentBean extends AdvancedBean {
 
   public TestAdvancedParentBean() {
 
-    this(null);
+    this(null, null);
   }
 
-  public TestAdvancedParentBean(BeanClass type) {
+  public TestAdvancedParentBean(WritableBean writable) {
 
-    super(type);
+    this(writable, null);
+  }
+
+  public TestAdvancedParentBean(WritableBean writable, BeanClass type) {
+
+    super(writable, type);
     this.Name = add(new StringProperty("Name"));
   }
 

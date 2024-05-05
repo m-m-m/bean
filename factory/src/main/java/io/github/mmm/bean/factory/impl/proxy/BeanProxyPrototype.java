@@ -52,7 +52,7 @@ public class BeanProxyPrototype extends BeanProxy {
    */
   public BeanProxyPrototype(BeanFactoryImpl beanFactory, BeanType beanType, Class<?>... interfaces) {
 
-    super(beanFactory, beanType, interfaces);
+    super(beanFactory, null, beanType, interfaces);
     this.beanType = beanType;
     this.method2operationMap = new HashMap<>();
     this.interfaces = interfaces;

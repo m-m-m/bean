@@ -13,7 +13,18 @@ public class DynamicBean extends Bean {
    */
   public DynamicBean() {
 
-    super();
+    this(null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public DynamicBean(WritableBean writable) {
+
+    super(writable);
   }
 
   @Override

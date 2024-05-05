@@ -5,6 +5,7 @@ package io.github.mmm.bean.examples;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanName;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
 /**
@@ -23,12 +24,22 @@ public class TestAdvancedBean extends TestAdvancedParentBean {
 
   public TestAdvancedBean() {
 
-    this(null);
+    this(null, null);
+  }
+
+  public TestAdvancedBean(WritableBean writable) {
+
+    this(writable, null);
   }
 
   public TestAdvancedBean(BeanClass type) {
 
-    super(type);
+    this(null, type);
+  }
+
+  public TestAdvancedBean(WritableBean writable, BeanClass type) {
+
+    super(writable, type);
     this.Age = add().newInteger("Age");
   }
 

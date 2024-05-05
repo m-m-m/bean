@@ -3,6 +3,7 @@
 package io.github.mmm.bean;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import io.github.mmm.bean.AbstractBean.AddMode;
 import io.github.mmm.property.AttributeReadOnly;
@@ -13,7 +14,8 @@ import io.github.mmm.property.builder.PropertyBuilders;
  * Implementation of {@link PropertyBuilders} that auto registers build properties and redirects to read-only properties
  * if {@link AbstractBean#isReadOnly() read-only}.
  */
-public class StandardPropertyBuilders implements PropertyBuilders, Consumer<WritableProperty<?>> {
+public class StandardPropertyBuilders
+    implements PropertyBuilders, Consumer<WritableProperty<?>>, Function<String, WritableProperty<?>> {
 
   private final WritableBean bean;
 
@@ -35,6 +37,15 @@ public class StandardPropertyBuilders implements PropertyBuilders, Consumer<Writ
     } else {
       this.bean.addProperty(property);
     }
+  }
+
+  @Override
+  public WritableProperty<?> apply(String propertyName) {
+
+    if (this.bean.isReadOnly()) {
+      return this.bean.getProperty(propertyName);
+    }
+    return null;
   }
 
   @Override

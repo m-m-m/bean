@@ -6,6 +6,7 @@ import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.BeanName;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 
@@ -26,15 +27,26 @@ public final class PersonClassBean extends AdvancedBean implements PersonBean {
    */
   public PersonClassBean() {
 
-    super();
+    this(null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public PersonClassBean(WritableBean writable) {
+
+    super(writable);
     this.Name = add().newString("Name");
     this.Age = add().newInteger().withValidator().range(0, 99).and().build("Age");
   }
 
   @Override
-  protected AbstractBean create() {
+  protected AbstractBean create(WritableBean writable) {
 
-    return new PersonClassBean();
+    return new PersonClassBean(writable);
   }
 
   @Override

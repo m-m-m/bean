@@ -16,7 +16,18 @@ public class AdvancedBean extends AbstractVirtualBean {
    */
   public AdvancedBean() {
 
-    super();
+    this(null, null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public AdvancedBean(WritableBean writable) {
+
+    this(writable, null);
   }
 
   /**
@@ -26,7 +37,19 @@ public class AdvancedBean extends AbstractVirtualBean {
    */
   public AdvancedBean(BeanClass type) {
 
-    super(type);
+    this(null, type);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   * @param type the {@link #getType() type}.
+   */
+  public AdvancedBean(WritableBean writable, BeanClass type) {
+
+    super(writable, type);
     Class<? extends AdvancedBean> javaClass = getClass();
     if ((type != null) && (type.getJavaClass() != javaClass)) {
       throw new IllegalArgumentException(

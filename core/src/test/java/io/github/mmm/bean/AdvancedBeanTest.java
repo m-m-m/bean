@@ -71,7 +71,7 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     // yes, this is inconsistent and does not match the age, it is only a test
     LocalDate date = LocalDate.of(2003, 02, 01);
     birthday.set(date);
-    TestAdvancedBean readOnly = ReadableBean.copy(bean, true);
+    TestAdvancedBean readOnly = WritableBean.getReadOnly(bean);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
     assertThat(readOnly.getRequiredProperty("Name").isReadOnly()).isTrue();
@@ -88,11 +88,12 @@ public class AdvancedBeanTest extends AbstractBeanTest {
     string.set("defaultValue");
     assertThat(readOnly.getProperties()).hasSize(4);
     assertThat(readOnly.getProperty("String")).isEqualTo(string);
-    bean.set("String", "value");
+    String newStringValue = "value";
+    bean.set("String", newStringValue);
     String value = bean.get("String");
-    assertThat(value).isEqualTo("value");
+    assertThat(value).isEqualTo(newStringValue);
     value = readOnly.get("String");
-    assertThat(value).isEqualTo("defaultValue");
+    assertThat(value).isEqualTo(newStringValue);
     bean = new TestAdvancedBean(virtucalBeanClass);
     value = bean.get("String");
     assertThat(value).isEqualTo("defaultValue");

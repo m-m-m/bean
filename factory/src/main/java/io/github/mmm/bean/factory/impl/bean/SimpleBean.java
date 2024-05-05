@@ -20,11 +20,27 @@ public final class SimpleBean extends AbstractBean implements SimpleBeanAliasAcc
   /**
    * The constructor.
    *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
+   */
+  public SimpleBean(WritableBean writable) {
+
+    this(writable, null);
+  }
+
+  /**
+   * The constructor.
+   *
+   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
+   *        a mutable bean.
    * @param type the {@link #getType() type}.
    */
-  public SimpleBean(BeanType type) {
+  public SimpleBean(WritableBean writable, BeanType type) {
 
-    super();
+    super(writable);
+    if ((type == null) && (writable != null)) {
+      type = writable.getType();
+    }
     this.type = type;
   }
 

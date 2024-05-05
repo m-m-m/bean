@@ -146,6 +146,13 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
   @Override
   BeanType getType();
 
+  /**
+   * @return the {@link #isReadOnly() read only} view on this {@link WritableBean bean}.
+   * @see #isReadOnly()
+   * @see #getReadOnly(WritableBean)
+   */
+  WritableBean getReadOnly();
+
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   default WritableBean read(StructuredReader reader) {
@@ -242,6 +249,17 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
    */
   @Override
   void pathSegment(String pathSegment);
+
+  /**
+   * @param <B> type of the {@link WritableBean}.
+   * @param bean the {@link WritableBean} to get a {@link #isReadOnly() read-only} {@link #getReadOnly() view} of.
+   * @return the {@link #isReadOnly() read-only} {@link #getReadOnly() view} of the given {@link WritableBean}.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends WritableBean> B getReadOnly(B bean) {
+
+    return (B) bean.getReadOnly();
+  }
 
   /**
    * @param <B> type of the {@link WritableBean} owning the {@link WritableProperty property}.

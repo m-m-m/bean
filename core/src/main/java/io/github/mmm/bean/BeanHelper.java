@@ -21,24 +21,10 @@ import io.github.mmm.property.factory.SimplePropertyFactory;
 public class BeanHelper {
 
   /**
-   * @param source the source bean to copy from.
-   * @param target the target bean to copy to.
-   * @param readOnly - {@code true} if the copy shall be read-only, {@code false} otherwise.
-   * @see ReadableBean#copy(boolean)
-   */
-  public static void copy(AbstractBean source, AbstractBean target, boolean readOnly) {
-
-    copyUnsafe(source, target);
-    if (readOnly) {
-      target.makeReadOnly();
-    }
-  }
-
-  /**
    * @param <B> type of the {@link WritableBean bean} to copy.
    * @param source the source {@link WritableBean bean} to copy from.
    * @param target the target {@link WritableBean bean} to copy to.
-   * @see ReadableBean#copy(boolean)
+   * @see ReadableBean#copy()
    */
   public static <B extends WritableBean> void copy(B source, B target) {
 
@@ -48,7 +34,7 @@ public class BeanHelper {
   /**
    * @param source the source {@link WritableBean bean} to copy from.
    * @param target the target {@link WritableBean bean} to copy to.
-   * @see ReadableBean#copy(boolean)
+   * @see ReadableBean#copy()
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static void copyUnsafe(ReadableBean source, WritableBean target) {

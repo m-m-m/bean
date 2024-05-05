@@ -17,13 +17,28 @@ public final class BeanProxyInstance extends BeanProxy {
   /**
    * The constructor.
    *
+   * @param proxy the {@link BeanProxy} to create a {@link WritableBean#getReadOnly() read-only} view for.
+   */
+  public BeanProxyInstance(BeanProxy proxy) {
+
+    this(proxy.proxy, proxy.getPrototype());
+  }
+
+  /**
+   * The constructor.
+   *
    * @param prototype the {@link #getPrototype() prototype}.
    */
   public BeanProxyInstance(BeanProxyPrototype prototype) {
 
-    super(prototype.beanFactory, prototype.beanType, prototype.interfaces);
-    this.prototype = prototype;
+    this(null, prototype);
     prototype.initProperties(this);
+  }
+
+  private BeanProxyInstance(WritableBean writable, BeanProxyPrototype prototype) {
+
+    super(prototype.beanFactory, writable, prototype.beanType, prototype.interfaces);
+    this.prototype = prototype;
   }
 
   @Override
