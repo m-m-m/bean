@@ -16,7 +16,7 @@ import io.github.mmm.property.object.ReadableObjectProperty;
 public interface ReadableBeanProperty<V extends WritableBean> extends ReadableObjectProperty<V> {
 
   @Override
-  default V getStaticSafeValue() {
+  default V getFallbackSafeValue() {
 
     Class<V> valueClass = getValueClass();
     if (valueClass == null) {
