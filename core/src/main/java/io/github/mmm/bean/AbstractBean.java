@@ -68,6 +68,7 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public void pathSegment(String path) {
 
+    requireWritable();
     this.pathSegment = path;
   }
 
@@ -80,6 +81,7 @@ public abstract class AbstractBean implements WritableBean {
   @Override
   public void parentPath(ReadablePath parent) {
 
+    requireWritable();
     this.parentPath = parent;
   }
 
