@@ -3,6 +3,7 @@
 package io.github.mmm.bean.property;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.ReadableBean;
@@ -133,6 +134,18 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
       }
     }
     return this.typeMapper;
+  }
+
+  @Override
+  protected Supplier<? extends V> createReadOnlyExpression() {
+
+    return () -> {
+      V bean = get();
+      if (bean == null) {
+        return null;
+      }
+      return WritableBean.getReadOnly(bean);
+    };
   }
 
   @Override
