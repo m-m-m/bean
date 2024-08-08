@@ -10,6 +10,7 @@ import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationCopy;
+import io.github.mmm.bean.factory.impl.operation.BeanOperationEquals;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationGetReadOnly;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationNewInstance;
 
@@ -38,6 +39,8 @@ public class BeanProxyBaseMethods {
       this.method2operationMap.put(newInstanceMethod, new BeanOperationNewInstance());
       Method getReadOnlyMethod = WritableBean.class.getMethod("getReadOnly", NO_ARGS);
       this.method2operationMap.put(getReadOnlyMethod, new BeanOperationGetReadOnly());
+      Method equals = Object.class.getMethod("equals", new Class[] { Object.class });
+      this.method2operationMap.put(equals, new BeanOperationEquals());
     } catch (ReflectiveOperationException e) {
       throw new IllegalStateException("Failed to initialize ReadableBean base methods.", e);
     }

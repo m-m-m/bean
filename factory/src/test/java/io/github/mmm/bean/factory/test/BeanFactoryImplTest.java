@@ -36,6 +36,11 @@ public class BeanFactoryImplTest extends Assertions {
     PersonBean copy = WritableBean.getReadOnly(bean);
     assertThat(copy.Age().get()).isEqualTo(age);
     assertThat(copy.Name().get()).isEqualTo(name);
+    // equals
+    assertThat(bean).isEqualTo(bean);
+    assertThat(bean).isNotEqualTo(null);
+    assertThat(bean).isNotEqualTo(copy);
+    assertThat(bean.isEqual(copy)).isTrue();
     try {
       copy.Age().set(99);
       failBecauseExceptionWasNotThrown(ReadOnlyException.class);
