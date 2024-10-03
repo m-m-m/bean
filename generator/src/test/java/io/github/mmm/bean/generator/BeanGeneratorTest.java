@@ -27,75 +27,77 @@ public class BeanGeneratorTest extends Assertions {
     generator.generate(beanClass, writer);
     String code = writer.toString();
     // then
-    assertThat(code).isEqualTo("package beanimpl.io.github.mmm.bean.generator.test;\n" //
-        + "\n" //
-        + "import io.github.mmm.bean.AbstractBean;\n" //
-        + "import io.github.mmm.bean.AdvancedBean;\n" //
-        + "import io.github.mmm.bean.BeanClass;\n" //
-        + "import io.github.mmm.bean.generator.test.ContactBean;\n" //
-        + "import io.github.mmm.property.number.integers.IntegerProperty;\n" //
-        + "import io.github.mmm.property.string.StringProperty;\n" //
-        + "import io.github.mmm.property.temporal.localdate.LocalDateProperty;\n" //
-        + "import java.time.LocalDate;\n" //
-        + "\n" //
-        + "public class ContactBeanImpl extends AdvancedBean implements ContactBean {\n" //
-        + "\n" //
-        + "  private final IntegerProperty Age;\n" //
-        + "  private final LocalDateProperty Birthday;\n" //
-        + "  private final StringProperty Name;\n" //
-        + "\n" //
-        + "  public ContactBeanImpl(BeanClass type) {\n" //
-        + "    super(type);\n" //
-        + "    this.Age = add(ContactBean.super.Age());\n" //
-        + "    this.Birthday = add().newLocalDate().build(\"Birthday\");\n" //
-        + "    this.Name = add().newString().build(\"Name\");\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public IntegerProperty Age() {\n" //
-        + "    return this.Age;\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public Integer getAge() {\n" //
-        + "    return this.Age.get();\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public LocalDateProperty Birthday() {\n" //
-        + "    return this.Birthday;\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public LocalDate getBirthday() {\n" //
-        + "    return this.Birthday.get();\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public void setBirthday(LocalDate birthday) {\n" //
-        + "    this.Birthday.set(birthday);\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public StringProperty Name() {\n" //
-        + "    return this.Name;\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public String getName() {\n" //
-        + "    return this.Name.get();\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  public void setName(String name) {\n" //
-        + "    this.Name.set(name);\n" //
-        + "  }\n" //
-        + "\n" //
-        + "  @Override\n" //
-        + "  protected AbstractBean create() {\n" //
-        + "    return new ContactBeanImpl(getType());\n" //
-        + "  }\n" //
-        + "}\n");
+    assertThat(code).isEqualTo("""
+        package beanimpl.io.github.mmm.bean.generator.test;
+
+        import io.github.mmm.bean.AbstractBean;
+        import io.github.mmm.bean.AdvancedBean;
+        import io.github.mmm.bean.BeanClass;
+        import io.github.mmm.bean.generator.test.ContactBean;
+        import io.github.mmm.property.number.integers.IntegerProperty;
+        import io.github.mmm.property.string.StringProperty;
+        import io.github.mmm.property.time.localdate.LocalDateProperty;
+        import java.time.LocalDate;
+
+        public class ContactBeanImpl extends AdvancedBean implements ContactBean {
+
+          private final IntegerProperty Age;
+          private final LocalDateProperty Birthday;
+          private final StringProperty Name;
+
+          public ContactBeanImpl(BeanClass type) {
+            super(type);
+            this.Age = add(ContactBean.super.Age());
+            this.Birthday = add().newLocalDate().build("Birthday");
+            this.Name = add().newString().build("Name");
+          }
+
+          @Override
+          public IntegerProperty Age() {
+            return this.Age;
+          }
+
+          @Override
+          public Integer getAge() {
+            return this.Age.get();
+          }
+
+          @Override
+          public LocalDateProperty Birthday() {
+            return this.Birthday;
+          }
+
+          @Override
+          public LocalDate getBirthday() {
+            return this.Birthday.get();
+          }
+
+          @Override
+          public void setBirthday(LocalDate birthday) {
+            this.Birthday.set(birthday);
+          }
+
+          @Override
+          public StringProperty Name() {
+            return this.Name;
+          }
+
+          @Override
+          public String getName() {
+            return this.Name.get();
+          }
+
+          @Override
+          public void setName(String name) {
+            this.Name.set(name);
+          }
+
+          @Override
+          protected AbstractBean create() {
+            return new ContactBeanImpl(getType());
+          }
+        }
+        """);
   }
 
 }
