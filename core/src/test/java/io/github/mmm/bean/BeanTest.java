@@ -8,7 +8,7 @@ import io.github.mmm.bean.examples.DynamicTestBean;
 import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.bean.examples.TestBuildersBean;
 import io.github.mmm.property.WritableProperty;
-import io.github.mmm.property.temporal.localdate.LocalDateProperty;
+import io.github.mmm.property.time.localdate.LocalDateProperty;
 import io.github.mmm.validation.ValidationResult;
 import io.github.mmm.value.observable.ObservableEventReceiver;
 

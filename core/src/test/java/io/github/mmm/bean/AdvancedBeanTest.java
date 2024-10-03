@@ -11,7 +11,7 @@ import io.github.mmm.bean.examples.TestAdvancedBean;
 import io.github.mmm.bean.examples.TestAdvancedParentBean;
 import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.property.string.StringProperty;
-import io.github.mmm.property.temporal.localdate.LocalDateProperty;
+import io.github.mmm.property.time.localdate.LocalDateProperty;
 
 /**
  * Test of {@link AbstractBean} via {@link TestAdvancedBean}.

@@ -10,7 +10,7 @@ import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
-import io.github.mmm.property.temporal.localdate.LocalDateProperty;
+import io.github.mmm.property.time.localdate.LocalDateProperty;
 
 /**
  * Manual implementation of {@link ContactBean} to compare with generated code and ensure compilation works as expected.
