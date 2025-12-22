@@ -10,8 +10,8 @@ import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
-import io.github.mmm.bean.factory.impl.bean.SimpleBean;
 import io.github.mmm.bean.factory.impl.bean.InternalBean;
+import io.github.mmm.bean.factory.impl.bean.SimpleBean;
 import io.github.mmm.bean.factory.impl.bean.SimpleVirtualBean;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 
@@ -81,6 +81,9 @@ public abstract class BeanProxy implements InvocationHandler {
       result = method.invoke(this.bean, args);
     } else {
       result = operation.invoke(this, args);
+      if (result == this.bean) {
+        result = this.proxy;
+      }
     }
     return result;
   }

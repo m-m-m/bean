@@ -160,7 +160,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
     if (!reader.readStartObject(this) || reader.readEnd()) {
       return this;
     }
-    WritableBean self = this;
+    WritableBean result = this;
     int propertyCount = 0;
     while (!reader.readEnd()) {
       String propertyName = reader.readName();
@@ -174,13 +174,13 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
         } else {
           if (isPolymorphic()) {
             Class beanClass = io.github.mmm.bean.mapping.ClassNameMapper.get().getClass(type);
-            self = BeanFactory.get().create(beanClass);
+            result = BeanFactory.get().create(beanClass);
           } else if (!type.equals(stableName)) {
             throw new IllegalStateException(StructuredReader.TYPE + "=" + type + "!=" + stableName);
           }
         }
       } else {
-        WritableProperty<?> property = self.getProperty(propertyName);
+        WritableProperty<?> property = result.getProperty(propertyName);
         if (property == null) {
           if (isDynamic()) {
             Object value = reader.readValue(true);
@@ -199,10 +199,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
       }
       propertyCount++;
     }
-    if (self == this) {
-      return null;
-    }
-    return self;
+    return result;
   }
 
   @Override
