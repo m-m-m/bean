@@ -39,6 +39,7 @@ public final class BeanProxyInstance extends BeanProxy {
 
     super(prototype.beanFactory, writable, prototype.beanType, prototype.interfaces);
     this.prototype = prototype;
+    this.bean.setPolymorphic(this.proxy.isPolymorphic());
   }
 
   @Override

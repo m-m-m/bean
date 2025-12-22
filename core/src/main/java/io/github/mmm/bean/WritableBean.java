@@ -171,10 +171,13 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
           propertyCount++; // 1-based index for human reader
           throw new IllegalStateException("Property " + StructuredReader.TYPE + " of " + getType()
               + " must come first but was " + propertyCount + ". property!");
-        } else if (!type.equals(stableName)) {
-          // TODO implement polymorphism
-          // result = BeanFactory.get().create(stableName);
-          throw new IllegalStateException(StructuredReader.TYPE + "=" + type + "!=" + stableName);
+        } else {
+          if (isPolymorphic()) {
+            Class beanClass = io.github.mmm.bean.mapping.ClassNameMapper.get().getClass(type);
+            result = BeanFactory.get().create(beanClass);
+          } else if (!type.equals(stableName)) {
+            throw new IllegalStateException(StructuredReader.TYPE + "=" + type + "!=" + stableName);
+          }
         }
       } else {
         WritableProperty<?> property = result.getProperty(propertyName);

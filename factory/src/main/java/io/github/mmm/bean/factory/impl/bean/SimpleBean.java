@@ -13,9 +13,11 @@ import io.github.mmm.property.AttributeReadOnly;
  *
  * @since 1.0.0
  */
-public final class SimpleBean extends AbstractBean implements SimpleBeanAliasAccess {
+public final class SimpleBean extends AbstractBean implements InternalBean {
 
   private final BeanType type;
+
+  private boolean polymorphic;
 
   /**
    * The constructor.
@@ -51,9 +53,21 @@ public final class SimpleBean extends AbstractBean implements SimpleBeanAliasAcc
   }
 
   @Override
-  public final boolean isPrototype() {
+  public boolean isPrototype() {
 
     return false;
+  }
+
+  @Override
+  public boolean isPolymorphic() {
+
+    return this.polymorphic;
+  }
+
+  @Override
+  public void setPolymorphic(boolean polymorphic) {
+
+    this.polymorphic = polymorphic;
   }
 
   @Override

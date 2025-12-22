@@ -11,6 +11,7 @@ import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
 import io.github.mmm.bean.factory.impl.bean.SimpleBean;
+import io.github.mmm.bean.factory.impl.bean.InternalBean;
 import io.github.mmm.bean.factory.impl.bean.SimpleVirtualBean;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 
@@ -28,7 +29,7 @@ public abstract class BeanProxy implements InvocationHandler {
   protected final WritableBean proxy;
 
   /** @see #getBean() */
-  protected final AbstractBean bean;
+  protected final InternalBean bean;
 
   /**
    * The constructor.
@@ -58,7 +59,7 @@ public abstract class BeanProxy implements InvocationHandler {
    * @param bean the {@link AbstractBean}.
    * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
    */
-  public BeanProxy(BeanFactoryImpl beanFactory, AbstractBean bean, Class<?>... interfaces) {
+  public BeanProxy(BeanFactoryImpl beanFactory, InternalBean bean, Class<?>... interfaces) {
 
     super();
     this.proxy = beanFactory.createProxy(this, interfaces);
@@ -95,7 +96,7 @@ public abstract class BeanProxy implements InvocationHandler {
   /**
    * @return the bean class implementation to use as container delegate.
    */
-  public AbstractBean getBean() {
+  public InternalBean getBean() {
 
     return this.bean;
   }

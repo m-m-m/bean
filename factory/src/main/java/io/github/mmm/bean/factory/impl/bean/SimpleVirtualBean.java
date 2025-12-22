@@ -12,7 +12,9 @@ import io.github.mmm.property.AttributeReadOnly;
 /**
  * Internal implementation of {@link VirtualBean} used from {@link BeanProxy}.
  */
-public final class SimpleVirtualBean extends AbstractVirtualBean implements SimpleBeanAliasAccess {
+public final class SimpleVirtualBean extends AbstractVirtualBean implements InternalBean {
+
+  private boolean polymorphic;
 
   /**
    * The constructor.
@@ -32,6 +34,18 @@ public final class SimpleVirtualBean extends AbstractVirtualBean implements Simp
   public SimpleVirtualBean(WritableBean writable, BeanClass type) {
 
     super(writable, type);
+  }
+
+  @Override
+  public boolean isPolymorphic() {
+
+    return this.polymorphic;
+  }
+
+  @Override
+  public void setPolymorphic(boolean polymorphic) {
+
+    this.polymorphic = polymorphic;
   }
 
   @Override

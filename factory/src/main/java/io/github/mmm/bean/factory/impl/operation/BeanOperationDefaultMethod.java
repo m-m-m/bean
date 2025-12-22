@@ -33,4 +33,12 @@ public class BeanOperationDefaultMethod extends BeanOperation {
     return invokeDefaultMethod(proxy, this.method, args);
   }
 
+  /**
+   * @return the {@link Method}.
+   */
+  public Method getMethod() {
+
+    return this.method;
+  }
+
 }
