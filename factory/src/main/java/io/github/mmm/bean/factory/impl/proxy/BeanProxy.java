@@ -81,9 +81,9 @@ public abstract class BeanProxy implements InvocationHandler {
       result = method.invoke(this.bean, args);
     } else {
       result = operation.invoke(this, args);
-      if (result == this.bean) {
-        result = this.proxy;
-      }
+    }
+    if (result == this.bean) {
+      result = this.proxy;
     }
     return result;
   }
