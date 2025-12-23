@@ -6,7 +6,7 @@ image:https://github.com/m-m-m/bean/actions/workflows/build.yml/badge.svg["Build
 == mmm-bean
 
 image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
-image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean/javadoc.svg["base JavaDoc", link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean]
+image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean/javadoc.svg["JavaDoc",link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean]
 
 The module `mmm-bean` provides infrastructure for advanced beans based on real properties.
 It brings death to boilerplate getter/setter/equals/hashCode non-sense and fun back to developers.
@@ -155,7 +155,7 @@ Of course you can populate an existing bean with data from JSON in an analog way
 == mmm-bean-factory
 
 image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean-factory.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
-image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-factory/javadoc.svg["base JavaDoc", link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean-factory]
+image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-factory/javadoc.svg["JavaDoc",link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean-factory]
 
 The module `mmm-bean-factory` provides an advanced implementation of `BeanFactory` that can create advanced beans (see above) also from interfaces.
 That is you never have to write an implementation and can simply "instantiate" your beans from the interface.
@@ -213,7 +213,7 @@ Yes, you can also use it in such environments if you read on.
 == mmm-bean-generator
 
 image:https://img.shields.io/maven-central/v/io.github.m-m-m/mmm-bean-generator.svg?label=Maven%20Central["Maven Central",link=https://search.maven.org/search?q=g:io.github.m-m-m]
-image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-generator/javadoc.svg["base JavaDoc", link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean-generator]
+image:https://javadoc.io/badge2/io.github.m-m-m/mmm-bean-generator/javadoc.svg["JavaDoc",link=https://javadoc.io/doc/io.github.m-m-m/mmm-bean-generator]
 
 The module `mmm-bean-generator` provides `BeanGenerator` that can scan your module- or classpath for our awesome beans and will generate Java code:
 
