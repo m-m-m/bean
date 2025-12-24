@@ -12,7 +12,7 @@ import io.github.mmm.bean.AdvancedBean;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.WritableBean;
-import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
+import io.github.mmm.bean.factory.impl.BeanInterfaceCreator;
 import io.github.mmm.bean.factory.impl.BeanIntrospector;
 import io.github.mmm.bean.factory.impl.MemoryCache;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
@@ -45,11 +45,11 @@ public class BeanProxyPrototype extends BeanProxy {
   /**
    * The constructor.
    *
-   * @param beanFactory the owning {@link BeanFactoryImpl}.
+   * @param beanFactory the owning {@link BeanInterfaceCreator}.
    * @param beanType the {@link BeanType}.
    * @param interfaces the {@link #getInterfaces() interfaces}.
    */
-  public BeanProxyPrototype(BeanFactoryImpl beanFactory, BeanType beanType, Class<?>... interfaces) {
+  public BeanProxyPrototype(BeanInterfaceCreator beanFactory, BeanType beanType, Class<?>... interfaces) {
 
     super(beanFactory, null, beanType, interfaces);
     this.beanType = beanType;
@@ -161,11 +161,11 @@ public class BeanProxyPrototype extends BeanProxy {
 
   /**
    * @param type the {@link BeanType} of the requested prototype.
-   * @param beanFactory the {@link BeanFactoryImpl}.
+   * @param beanFactory the {@link BeanInterfaceCreator}.
    * @return the {@link BeanProxyPrototype} from cache or newly created.
    */
   @SuppressWarnings("unchecked")
-  public static BeanProxyPrototype get(Class<? extends WritableBean> type, BeanFactoryImpl beanFactory) {
+  public static BeanProxyPrototype get(Class<? extends WritableBean> type, BeanInterfaceCreator beanFactory) {
 
     BeanType beanType;
     if (VirtualBean.class.isAssignableFrom(type)) {
@@ -186,10 +186,10 @@ public class BeanProxyPrototype extends BeanProxy {
 
   /**
    * @param type the {@link BeanType} of the requested prototype.
-   * @param beanFactory the {@link BeanFactoryImpl}.
+   * @param beanFactory the {@link BeanInterfaceCreator}.
    * @return the {@link BeanProxyPrototype} from cache or newly created.
    */
-  public static BeanProxyPrototype get(BeanType type, BeanFactoryImpl beanFactory) {
+  public static BeanProxyPrototype get(BeanType type, BeanInterfaceCreator beanFactory) {
 
     return cache.get(type, () -> new BeanProxyPrototype(beanFactory, type, type.getJavaClasses()));
   }

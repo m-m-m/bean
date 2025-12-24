@@ -4,11 +4,14 @@ package io.github.mmm.bean.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.mmm.base.service.ServiceHelper;
 import io.github.mmm.bean.BeanClass;
+import io.github.mmm.bean.BeanCreator;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 
@@ -20,14 +23,29 @@ public final class BeanFactoryManager implements BeanFactory {
   /** The singleton instance. */
   public static final BeanFactory INSTANCE = new BeanFactoryManager();
 
-  private final List<BeanFactory> delegates;
+  private final List<BeanCreator> delegates;
+
+  private final Map<Class<?>, WritableBean> type2emptyMap;
 
   private BeanFactoryManager() {
 
     super();
     this.delegates = new ArrayList<>();
-    ServiceLoader<BeanFactory> loader = ServiceLoader.load(BeanFactory.class);
+    ServiceLoader<BeanCreator> loader = ServiceLoader.load(BeanCreator.class);
     ServiceHelper.all(loader, this.delegates);
+    this.type2emptyMap = new ConcurrentHashMap<>();
+  }
+
+  @Override
+  public <B extends WritableBean> B getEmpty(Class<B> type) {
+
+    return type.cast(this.type2emptyMap.computeIfAbsent(type, this::createEmpty));
+  }
+
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  private WritableBean createEmpty(Class type) {
+
+    return create(type).getReadOnly();
   }
 
   @Override
@@ -35,8 +53,8 @@ public final class BeanFactoryManager implements BeanFactory {
 
     Objects.requireNonNull(type, "type");
     try {
-      for (BeanFactory delegate : this.delegates) {
-        B bean = delegate.create(type, beanClass);
+      for (BeanCreator creator : this.delegates) {
+        B bean = creator.create(type, beanClass);
         if (bean != null) {
           return bean;
         }

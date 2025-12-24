@@ -8,7 +8,7 @@
  * to have no boilerplate code at all, like to have multi-inheritance and do not fear magic, you can even define your
  * beans as interfaces. To instantiate such bean, you need to use {@link io.github.mmm.bean.BeanFactory#create(Class)}.
  *
- * @provides io.github.mmm.bean.BeanFactory
+ * @provides io.github.mmm.bean.BeanCreator
  * @provides io.github.mmm.bean.mapping.ClassNameMapper
  */
 module io.github.mmm.bean.factory {
@@ -17,7 +17,7 @@ module io.github.mmm.bean.factory {
 
   requires io.github.classgraph;
 
-  provides io.github.mmm.bean.BeanFactory with io.github.mmm.bean.factory.impl.BeanFactoryImpl;
+  provides io.github.mmm.bean.BeanCreator with io.github.mmm.bean.factory.impl.BeanInterfaceCreator;
 
   provides io.github.mmm.bean.mapping.ClassNameMapper with io.github.mmm.bean.factory.impl.mapper.ClassNameMapperImpl;
 

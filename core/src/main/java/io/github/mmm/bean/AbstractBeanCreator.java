@@ -11,14 +11,14 @@ import java.util.function.Function;
  *
  * @since 1.0.0
  */
-public abstract class AbstractBeanFactory implements BeanFactory {
+public abstract class AbstractBeanCreator implements BeanCreator {
 
   private final Map<Class<?>, Function<BeanClass, WritableBean>> beanFactoryMap;
 
   /**
    * The constructor.
    */
-  public AbstractBeanFactory() {
+  public AbstractBeanCreator() {
 
     super();
     this.beanFactoryMap = new HashMap<>();

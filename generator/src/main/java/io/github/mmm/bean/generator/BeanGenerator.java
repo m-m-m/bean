@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.mmm.base.exception.RuntimeIoException;
-import io.github.mmm.bean.AbstractBeanFactory;
+import io.github.mmm.bean.AbstractBeanCreator;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.scanner.BeanScanner;
@@ -132,8 +132,8 @@ public class BeanGenerator {
 
     try {
       writePackageDeclaration(writer, BASE_PACKAGE);
-      writeImportClasses(writer, List.of(AbstractBeanFactory.class));
-      writeClassDeclaration(writer, "BeanFactoryImpl", AbstractBeanFactory.class.getSimpleName(), null);
+      writeImportClasses(writer, List.of(AbstractBeanCreator.class));
+      writeClassDeclaration(writer, "BeanFactoryImpl", AbstractBeanCreator.class.getSimpleName(), null);
       writer.write("  public BeanFactoryImpl() {\n");
       writer.write("    super();\n");
       for (BeanMetadataContainer metadata : metadatas) {

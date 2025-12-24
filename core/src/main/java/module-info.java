@@ -75,11 +75,11 @@ module io.github.mmm.bean {
 
   requires transitive io.github.mmm.base.metainfo;
 
-  uses io.github.mmm.bean.BeanFactory;
+  uses io.github.mmm.bean.BeanCreator;
 
   uses io.github.mmm.bean.mapping.ClassNameMapper;
 
-  provides io.github.mmm.bean.BeanFactory with io.github.mmm.bean.impl.BeanCreator;
+  provides io.github.mmm.bean.BeanCreator with io.github.mmm.bean.impl.BeanClassCreator;
 
   provides io.github.mmm.property.factory.PropertyFactory with io.github.mmm.bean.property.PropertyFactoryBean;
 

@@ -6,7 +6,7 @@ import java.lang.reflect.Constructor;
 
 import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanClass;
-import io.github.mmm.bean.BeanFactory;
+import io.github.mmm.bean.BeanCreator;
 import io.github.mmm.bean.WritableBean;
 
 /**
@@ -15,14 +15,14 @@ import io.github.mmm.bean.WritableBean;
  * @since 1.0.0
  * @see #doCreate(Class, WritableBean)
  */
-public final class BeanCreator implements BeanFactory {
+public final class BeanClassCreator implements BeanCreator {
 
   private static final Class<?>[] CONSTRUCTOR_SIGNATURE = new Class<?>[] { WritableBean.class };
 
   /**
    * The constructor.
    */
-  public BeanCreator() {
+  public BeanClassCreator() {
 
     super();
   }

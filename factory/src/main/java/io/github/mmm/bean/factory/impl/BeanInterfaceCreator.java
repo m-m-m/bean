@@ -6,21 +6,21 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 import io.github.mmm.bean.BeanClass;
-import io.github.mmm.bean.BeanFactory;
+import io.github.mmm.bean.BeanCreator;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
 
 /**
- * Implementation of {@link BeanFactory}.
+ * Implementation of {@link BeanCreator} to create {@link WritableBean beans} from interface as dynamic proxy.
  */
-public class BeanFactoryImpl implements BeanFactory {
+public class BeanInterfaceCreator implements BeanCreator {
 
   private final ClassLoader classLoader;
 
   /**
    * The constructor.
    */
-  public BeanFactoryImpl() {
+  public BeanInterfaceCreator() {
 
     this(Thread.currentThread().getContextClassLoader());
   }
@@ -30,7 +30,7 @@ public class BeanFactoryImpl implements BeanFactory {
    *
    * @param classLoader the {@link ClassLoader}.
    */
-  public BeanFactoryImpl(ClassLoader classLoader) {
+  public BeanInterfaceCreator(ClassLoader classLoader) {
 
     super();
     this.classLoader = classLoader;

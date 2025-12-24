@@ -9,7 +9,7 @@ import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
-import io.github.mmm.bean.factory.impl.BeanFactoryImpl;
+import io.github.mmm.bean.factory.impl.BeanInterfaceCreator;
 import io.github.mmm.bean.factory.impl.bean.InternalBean;
 import io.github.mmm.bean.factory.impl.bean.SimpleBean;
 import io.github.mmm.bean.factory.impl.bean.SimpleVirtualBean;
@@ -22,8 +22,8 @@ import io.github.mmm.bean.factory.impl.operation.BeanOperation;
  */
 public abstract class BeanProxy implements InvocationHandler {
 
-  /** The {@link BeanFactoryImpl}. */
-  protected final BeanFactoryImpl beanFactory;
+  /** The {@link BeanInterfaceCreator}. */
+  protected final BeanInterfaceCreator beanFactory;
 
   /** @see #getProxy() */
   protected final WritableBean proxy;
@@ -34,13 +34,13 @@ public abstract class BeanProxy implements InvocationHandler {
   /**
    * The constructor.
    *
-   * @param beanFactory the owning {@link BeanFactoryImpl}.
+   * @param beanFactory the owning {@link BeanInterfaceCreator}.
    * @param writable the {@link WritableBean} to wrap as {@link WritableBean#isReadOnly() read-only} bean or
    *        {@code null} to create a mutable bean.
    * @param beanType the {@link BeanType}.
    * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
    */
-  public BeanProxy(BeanFactoryImpl beanFactory, WritableBean writable, BeanType beanType, Class<?>... interfaces) {
+  public BeanProxy(BeanInterfaceCreator beanFactory, WritableBean writable, BeanType beanType, Class<?>... interfaces) {
 
     super();
     this.proxy = beanFactory.createProxy(this, interfaces);
@@ -55,11 +55,11 @@ public abstract class BeanProxy implements InvocationHandler {
   /**
    * The constructor.
    *
-   * @param beanFactory the owning {@link BeanFactoryImpl}.
+   * @param beanFactory the owning {@link BeanInterfaceCreator}.
    * @param bean the {@link AbstractBean}.
    * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
    */
-  public BeanProxy(BeanFactoryImpl beanFactory, InternalBean bean, Class<?>... interfaces) {
+  public BeanProxy(BeanInterfaceCreator beanFactory, InternalBean bean, Class<?>... interfaces) {
 
     super();
     this.proxy = beanFactory.createProxy(this, interfaces);

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
 
-import io.github.mmm.bean.impl.BeanCreator;
+import io.github.mmm.bean.impl.BeanClassCreator;
 import io.github.mmm.bean.impl.alias.AbstractBeanAliasMap;
 import io.github.mmm.bean.impl.alias.BeanAliasMapEmpty;
 import io.github.mmm.bean.impl.properties.BeanProperties;
@@ -208,7 +208,7 @@ public abstract class AbstractBean implements WritableBean {
   protected AbstractBean create(WritableBean writable) {
 
     try {
-      return BeanCreator.doCreate(getClass(), writable);
+      return BeanClassCreator.doCreate(getClass(), writable);
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
