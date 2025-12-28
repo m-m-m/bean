@@ -25,7 +25,7 @@ public abstract class BeanPropertiesTest {
 
   /** Tests an empty instance of {@link BeanProperties}. */
   @Test
-  public void testEmpty() {
+  void testEmpty() {
 
     // arrange
     // act
@@ -42,7 +42,7 @@ public abstract class BeanPropertiesTest {
   /** Test of {@link BeanProperties#add(WritableProperty)} and {@link BeanProperties#get(String)}. */
   @SuppressWarnings({ "rawtypes", "unchecked" })
   @Test
-  public void testAdd() {
+  void testAdd() {
 
     // arrange
     BeanProperties properties = create();
@@ -70,7 +70,7 @@ public abstract class BeanPropertiesTest {
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
   @Test
-  public void testAddIfAbsent() {
+  void testAddIfAbsent() {
 
     // arrange
     BeanProperties properties = create();

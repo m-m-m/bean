@@ -11,11 +11,11 @@ import io.github.mmm.bean.WritableBean;
 /**
  * Test of {@link PersonBean}.
  */
-public class PersonBeanTest extends Assertions {
+class PersonBeanTest extends Assertions {
 
   /** Test of {@link PersonBean}. */
   @Test
-  public void test() {
+  void test() {
 
     PersonBean bean = PersonBean.of();
     assertThat(bean).isNotNull();

@@ -10,13 +10,13 @@ import io.github.mmm.property.WritableProperty;
 /**
  * Test of {@link DynamicBean}.
  */
-public class DynamicBeanTest extends AbstractBeanTest {
+class DynamicBeanTest extends AbstractBeanTest {
 
   /**
    * Test of {@link TestBean}.
    */
   @Test
-  public void testBean() {
+  void testBean() {
 
     DynamicBean bean = new DynamicBean();
     assertThat(bean.isPrototype()).isFalse();

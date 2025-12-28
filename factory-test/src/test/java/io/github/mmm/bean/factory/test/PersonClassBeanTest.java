@@ -10,11 +10,11 @@ import io.github.mmm.bean.BeanFactory;
 /**
  * Test of {@link PersonClassBean}.
  */
-public class PersonClassBeanTest extends Assertions {
+class PersonClassBeanTest extends Assertions {
 
   /** Test of {@link PersonClassBean}. */
   @Test
-  public void testCreateFromClass() {
+  void testCreateFromClass() {
 
     PersonClassBean bean = BeanFactory.get().create(PersonClassBean.class);
     assertThat(bean.getClass()).isSameAs(PersonClassBean.class);

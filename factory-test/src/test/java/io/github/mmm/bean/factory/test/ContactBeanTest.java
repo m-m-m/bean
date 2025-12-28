@@ -14,11 +14,11 @@ import io.github.mmm.property.number.integers.IntegerProperty;
 /**
  * Test of {@link ContactBean}.
  */
-public class ContactBeanTest extends Assertions {
+class ContactBeanTest extends Assertions {
 
   /** Test of {@link ContactBean}. */
   @Test
-  public void testCreateFromInterfaceWithInheritance() {
+  void testCreateFromInterfaceWithInheritance() {
 
     ContactBean bean = ContactBean.of();
     String name = "John Doe";

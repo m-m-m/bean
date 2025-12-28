@@ -12,7 +12,7 @@ import io.github.mmm.marshall.StructuredTextFormat;
  * Test of marshalling and unmarshalling a {@link io.github.mmm.bean.Bean#isPolymorphic() polymorphic}
  * {@link io.github.mmm.bean.Bean} via {@link Comestible}.
  */
-public class PolymorphicBeanMarshallingTest {
+class PolymorphicBeanMarshallingTest {
 
   private static final String JSON_WATER = "{\"@type\":\"Drink\",\"Name\":\"water\"}";
 

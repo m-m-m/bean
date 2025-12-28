@@ -13,11 +13,11 @@ import io.github.mmm.bean.generator.test.ContactBean;
 /**
  * Test of {@link BeanGenerator}.
  */
-public class BeanGeneratorTest extends Assertions {
+class BeanGeneratorTest extends Assertions {
 
   /** Test of {@link BeanGenerator#generate(Class, java.io.Writer)} */
   @Test
-  public void testGenerateBeanImpl() {
+  void testGenerateBeanImpl() {
 
     // arrange
     Class<ContactBean> beanClass = ContactBean.class;

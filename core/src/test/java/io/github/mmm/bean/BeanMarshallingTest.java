@@ -13,7 +13,7 @@ import io.github.mmm.marshall.StructuredTextFormat;
 /**
  * Test of marshalling and unmarshalling {@link io.github.mmm.bean.Bean} via {@link TestBean}.
  */
-public class BeanMarshallingTest extends Assertions {
+class BeanMarshallingTest extends Assertions {
 
   private static final int AGE = 42;
 
@@ -25,7 +25,7 @@ public class BeanMarshallingTest extends Assertions {
    * Test of marshalling {@link TestBean} to JSON.
    */
   @Test
-  public void testMarshallToJson() {
+  void testMarshallToJson() {
 
     // arrange
     TestBean bean = new TestBean();
@@ -44,7 +44,7 @@ public class BeanMarshallingTest extends Assertions {
    * Test of unmarshalling {@link TestBean} from JSON.
    */
   @Test
-  public void testUnmarshallFromJson() {
+  void testUnmarshallFromJson() {
 
     // arrange
     TestBean bean = new TestBean();

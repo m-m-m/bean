@@ -13,11 +13,11 @@ import io.github.mmm.property.string.StringProperty;
 /**
  * Test of {@link BeanFactory}[Impl].
  */
-public class BeanFactoryImplTest extends Assertions {
+class BeanFactoryImplTest extends Assertions {
 
   /** Test of {@link BeanFactory#create(Class)} from an interface. */
   @Test
-  public void testCreateFromInterface() {
+  void testCreateFromInterface() {
 
     PersonBean bean = BeanFactory.get().create(PersonBean.class);
     assertThat(bean).isNotNull();
@@ -54,7 +54,7 @@ public class BeanFactoryImplTest extends Assertions {
    * Test of aliases (via {@link io.github.mmm.bean.PropertyAlias} annotation) from bean interface {@link PersonBean}.
    */
   @Test
-  public void testCreateFromInterfaceWithAlias() {
+  void testCreateFromInterfaceWithAlias() {
 
     PersonBean bean = BeanFactory.get().create(PersonBean.class);
     assertThat(bean).isNotNull();

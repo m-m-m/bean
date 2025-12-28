@@ -15,13 +15,13 @@ import io.github.mmm.value.observable.ObservableEventReceiver;
 /**
  * Test of {@link io.github.mmm.bean.Bean} via {@link TestBean}.
  */
-public class BeanTest extends AbstractBeanTest {
+class BeanTest extends AbstractBeanTest {
 
   /**
    * Test of {@link TestBean}.
    */
   @Test
-  public void testBean() {
+  void testBean() {
 
     TestBean bean = new TestBean();
     assertThat(bean.isPrototype()).isFalse();
@@ -47,7 +47,7 @@ public class BeanTest extends AbstractBeanTest {
    * Test of {@link TestBean} with {@link TestBean#isDynamic() dynamic flag} set.
    */
   @Test
-  public void testBeanDynamic() {
+  void testBeanDynamic() {
 
     TestBean bean = new DynamicTestBean();
     assertThat(bean.isPrototype()).isFalse();
@@ -92,7 +92,7 @@ public class BeanTest extends AbstractBeanTest {
    * Test of {@link TestBuildersBean} using {@link Bean#add()}.
    */
   @Test
-  public void testBuilders() {
+  void testBuilders() {
 
     TestBuildersBean bean = new TestBuildersBean();
     assertThat(bean.isPrototype()).isFalse();

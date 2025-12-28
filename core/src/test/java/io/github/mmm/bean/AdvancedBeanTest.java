@@ -16,12 +16,12 @@ import io.github.mmm.property.time.localdate.LocalDateProperty;
 /**
  * Test of {@link AbstractBean} via {@link TestAdvancedBean}.
  */
-public class AdvancedBeanTest extends AbstractBeanTest {
+class AdvancedBeanTest extends AbstractBeanTest {
   /**
    * Test of {@link TestBean} with {@link TestBean#isDynamic() dynamic flag} set.
    */
   @Test
-  public void testAdvancedBeanDynamicVirtual() {
+  void testAdvancedBeanDynamicVirtual() {
 
     // class
     BeanClass virtucalBeanClass = BeanClass.createVirtual("com.foo", "MyVirtualBean", "foo_VirtualBean",

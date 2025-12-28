@@ -9,11 +9,11 @@ import io.github.mmm.bean.examples.TestBean;
 /**
  * Test of {@link BeanFactory}.
  */
-public class BeanFactoryTest extends AbstractBeanTest {
+class BeanFactoryTest extends AbstractBeanTest {
 
   /** Test of {@link BeanFactory#create(Class)}. */
   @Test
-  public void testCreate() {
+  void testCreate() {
 
     BeanFactory factory = BeanFactory.get();
 
