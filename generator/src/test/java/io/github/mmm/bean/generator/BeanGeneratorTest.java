@@ -19,14 +19,14 @@ public class BeanGeneratorTest extends Assertions {
   @Test
   public void testGenerateBeanImpl() {
 
-    // given
+    // arrange
     Class<ContactBean> beanClass = ContactBean.class;
     BeanGenerator generator = new BeanGenerator();
     Writer writer = new StringWriter();
-    // when
+    // act
     generator.generate(beanClass, writer);
     String code = writer.toString();
-    // then
+    // assert
     assertThat(code).isEqualTo("""
         package beanimpl.io.github.mmm.bean.generator.test;
 

@@ -27,16 +27,16 @@ public class BeanMarshallingTest extends Assertions {
   @Test
   public void testMarshallToJson() {
 
-    // given
+    // arrange
     TestBean bean = new TestBean();
     bean.Name.set(NAME);
     bean.Age.setValue(AGE);
     StructuredTextFormat jsonFormat = StandardFormat.json(MarshallingConfig.NO_INDENTATION);
 
-    // when
+    // act
     String json = jsonFormat.write(bean);
 
-    // then
+    // assert
     assertThat(json).isEqualTo(JSON);
   }
 
@@ -46,14 +46,14 @@ public class BeanMarshallingTest extends Assertions {
   @Test
   public void testUnmarshallFromJson() {
 
-    // given
+    // arrange
     TestBean bean = new TestBean();
     StructuredTextFormat jsonFormat = StandardFormat.json();
 
-    // when
+    // act
     jsonFormat.read(JSON, bean);
 
-    // then
+    // assert
     assertThat(bean.Name.get()).isEqualTo(NAME);
     assertThat(bean.Age.getValue()).isEqualTo(AGE);
   }
