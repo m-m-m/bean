@@ -3,6 +3,8 @@
 package io.github.mmm.bean.impl;
 
 import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.mmm.bean.AbstractBean;
 import io.github.mmm.bean.BeanClass;
@@ -19,12 +21,15 @@ public final class BeanClassCreator implements BeanCreator {
 
   private static final Class<?>[] CONSTRUCTOR_SIGNATURE = new Class<?>[] { WritableBean.class };
 
+  private final Map<Class<?>, WritableBean> type2emptyMap;
+
   /**
    * The constructor.
    */
   public BeanClassCreator() {
 
     super();
+    this.type2emptyMap = new ConcurrentHashMap<>();
   }
 
   @Override
@@ -66,4 +71,18 @@ public final class BeanClassCreator implements BeanCreator {
     }
   }
 
+  @Override
+  public <B extends WritableBean> B getEmpty(Class<B> type) {
+
+    if (type.isInterface()) {
+      return null;
+    }
+    return type.cast(this.type2emptyMap.computeIfAbsent(type, this::createEmpty));
+  }
+
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  private WritableBean createEmpty(Class type) {
+
+    return create(type).getReadOnly();
+  }
 }

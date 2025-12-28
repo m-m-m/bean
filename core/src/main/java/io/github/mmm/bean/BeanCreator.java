@@ -42,4 +42,12 @@ public interface BeanCreator {
    */
   <B extends WritableBean> B create(Class<B> type, BeanClass beanClass);
 
+  /**
+   * @param <B> type of the {@link WritableBean}.
+   * @param type the {@link Class} reflecting the {@link WritableBean}.
+   * @return the empty {@link WritableBean#isReadOnly() read-only} instance of the {@link WritableBean} specified by the
+   *         given {@link Class}. Will be lazily created on the first call of this method. Access is thread-safe.
+   */
+  <B extends WritableBean> B getEmpty(Class<B> type);
+
 }

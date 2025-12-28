@@ -4,10 +4,8 @@ package io.github.mmm.bean.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
-import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.mmm.base.service.ServiceHelper;
 import io.github.mmm.bean.BeanClass;
@@ -25,27 +23,12 @@ public final class BeanFactoryManager implements BeanFactory {
 
   private final List<BeanCreator> delegates;
 
-  private final Map<Class<?>, WritableBean> type2emptyMap;
-
   private BeanFactoryManager() {
 
     super();
     this.delegates = new ArrayList<>();
     ServiceLoader<BeanCreator> loader = ServiceLoader.load(BeanCreator.class);
     ServiceHelper.all(loader, this.delegates);
-    this.type2emptyMap = new ConcurrentHashMap<>();
-  }
-
-  @Override
-  public <B extends WritableBean> B getEmpty(Class<B> type) {
-
-    return type.cast(this.type2emptyMap.computeIfAbsent(type, this::createEmpty));
-  }
-
-  @SuppressWarnings({ "rawtypes", "unchecked" })
-  private WritableBean createEmpty(Class type) {
-
-    return create(type).getReadOnly();
   }
 
   @Override
@@ -59,15 +42,37 @@ public final class BeanFactoryManager implements BeanFactory {
           return bean;
         }
       }
-      String message = "No BeanFactory available for this bean type.";
-      if (this.delegates.size() <= 1) {
-        message = message
-            + " It seems you did not include dependency mmm-bean-factory or require module io.github.mmm.bean.factory.";
-      }
-      throw new IllegalStateException(message);
+      throw failNoBeanFactory(type);
     } catch (Exception e) {
       throw new IllegalArgumentException("Failed to create bean of type " + type.getName(), e);
     }
+  }
+
+  @Override
+  public <B extends WritableBean> B getEmpty(Class<B> type) {
+
+    Objects.requireNonNull(type, "type");
+    try {
+      for (BeanCreator creator : this.delegates) {
+        B bean = creator.getEmpty(type);
+        if (bean != null) {
+          return bean;
+        }
+      }
+      throw failNoBeanFactory(type);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Failed to get empty bean of type " + type.getName(), e);
+    }
+  }
+
+  private RuntimeException failNoBeanFactory(Class<?> type) {
+
+    String message = "No BeanFactory available for bean type: " + type;
+    if (this.delegates.size() <= 1) {
+      message = message
+          + " It seems you did not include dependency mmm-bean-factory or require module io.github.mmm.bean.factory.";
+    }
+    throw new IllegalStateException(message);
   }
 
 }

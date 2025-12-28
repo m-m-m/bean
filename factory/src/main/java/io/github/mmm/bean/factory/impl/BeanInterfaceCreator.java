@@ -43,9 +43,8 @@ public class BeanInterfaceCreator implements BeanCreator {
     if (type.isInterface()) {
       BeanProxyPrototype prototype = BeanProxyPrototype.get(type, this);
       return (B) prototype.newInstance().getProxy();
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -59,6 +58,17 @@ public class BeanInterfaceCreator implements BeanCreator {
 
     B bean = (B) Proxy.newProxyInstance(this.classLoader, interfaces, handler);
     return bean;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <B extends WritableBean> B getEmpty(Class<B> type) {
+
+    if (type.isInterface()) {
+      BeanProxyPrototype prototype = BeanProxyPrototype.get(type, this);
+      return (B) prototype.newInstance().getProxy().getReadOnly();
+    }
+    return null;
   }
 
 }
