@@ -24,11 +24,10 @@ public class BeanTypeSet {
   public BeanTypeSet() {
 
     super();
-    try (BeanScanner scanner = new BeanScanner()) {
-      Set<Class<? extends WritableBean>> set = new HashSet<>(scanner.findBeanInterfaces());
-      set.addAll(scanner.findBeanClasses());
-      this.beanTypes = Collections.unmodifiableSet(set);
-    }
+    BeanScanner scanner = new BeanScanner();
+    Set<Class<? extends WritableBean>> set = new HashSet<>(scanner.findBeanInterfaces());
+    set.addAll(scanner.findBeanClasses());
+    this.beanTypes = Collections.unmodifiableSet(set);
   }
 
   /**

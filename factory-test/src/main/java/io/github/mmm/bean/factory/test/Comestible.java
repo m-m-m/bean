@@ -24,6 +24,9 @@ public abstract interface Comestible extends WritableBean {
   /** @return the name of this comestible. */
   StringProperty Name();
 
+  /**
+   * @return a new instance of {@link Comestible}.
+   */
   static Comestible of() {
 
     return BeanFactory.get().create(Comestible.class);

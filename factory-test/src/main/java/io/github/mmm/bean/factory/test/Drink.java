@@ -13,6 +13,9 @@ public interface Drink extends Comestible {
     return true;
   }
 
+  /**
+   * @return a new instance of {@link Drink}.
+   */
   static Drink of() {
 
     return BeanFactory.get().create(Drink.class);

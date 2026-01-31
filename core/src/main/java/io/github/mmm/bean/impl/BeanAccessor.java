@@ -7,7 +7,7 @@ import io.github.mmm.bean.WritableBean;
 /**
  * Gives access to {@link #isThreadSafe(AbstractBean) thread-safe flag}.
  */
-public class BeanAccessor extends AbstractBean {
+public abstract class BeanAccessor extends AbstractBean {
 
   private BeanAccessor(WritableBean writable) {
 

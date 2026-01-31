@@ -173,6 +173,7 @@ public interface WritableBean extends ReadableBean, WritablePath, MarshallingObj
               + " must come first but was " + propertyCount + ". property!");
         } else {
           if (isPolymorphic()) {
+            // do not use import statement here to prevent early class-loading...
             Class beanClass = io.github.mmm.bean.mapping.ClassNameMapper.get().getClass(type);
             result = BeanFactory.get().create(beanClass);
           } else if (!type.equals(stableName)) {
