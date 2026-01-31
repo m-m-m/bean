@@ -92,7 +92,7 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
 
   private BeanPropertyContainer getProperty(String name) {
 
-    return this.properties.computeIfAbsent(name, x -> new BeanPropertyContainer(name));
+    return this.properties.computeIfAbsent(name, _ -> new BeanPropertyContainer(name));
   }
 
   private void introspect(Method method) {

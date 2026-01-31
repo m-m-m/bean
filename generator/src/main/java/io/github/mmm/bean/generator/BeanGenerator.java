@@ -58,22 +58,22 @@ public class BeanGenerator {
   public void generate(Path targetDir, ClassLoader classloader) {
 
     List<BeanMetadataContainer> metadataList = new ArrayList<>();
-    try (BeanScanner scanner = new BeanScanner(classloader)) {
-      Collection<Class<? extends WritableBean>> beanClasses = scanner.findBeanInterfaces();
-      for (Class<? extends WritableBean> beanClass : beanClasses) {
-        BeanMetadataContainer metadata = generate(beanClass, targetDir);
-        if (metadata != null) {
-          metadataList.add(metadata);
-        }
-      }
-      beanClasses = scanner.findBeanClasses();
-      for (Class<? extends WritableBean> beanClass : beanClasses) {
-        BeanMetadataContainer metadata = BeanMetadataContainerClass.of(beanClass);
-        if (metadata != null) {
-          metadataList.add(metadata);
-        }
+    BeanScanner scanner = new BeanScanner();
+    Collection<Class<? extends WritableBean>> beanClasses = scanner.findBeanInterfaces();
+    for (Class<? extends WritableBean> beanClass : beanClasses) {
+      BeanMetadataContainer metadata = generate(beanClass, targetDir);
+      if (metadata != null) {
+        metadataList.add(metadata);
       }
     }
+    beanClasses = scanner.findBeanClasses();
+    for (Class<? extends WritableBean> beanClass : beanClasses) {
+      BeanMetadataContainer metadata = BeanMetadataContainerClass.of(beanClass);
+      if (metadata != null) {
+        metadataList.add(metadata);
+      }
+    }
+
     generateFactory(metadataList, targetDir);
   }
 

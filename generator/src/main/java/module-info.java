@@ -14,10 +14,6 @@ module io.github.mmm.bean.generator {
 
   requires io.github.mmm.bean.factory;
 
-  requires io.github.classgraph;
-
-  // provides BeanFactory with BeanFactoryImpl;
-
   exports io.github.mmm.bean.generator;
 
 }
