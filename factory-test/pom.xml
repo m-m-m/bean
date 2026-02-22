@@ -13,6 +13,11 @@
   <version>0.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>Test beans as separate module (workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=536847).</description>
+  <properties>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <maven.deploy.skip>true</maven.deploy.skip>
+    <maven.central.exclude.artifacts>${project.artifactId}</maven.central.exclude.artifacts>
+  </properties>
 
   <dependencies>
     <dependency>
