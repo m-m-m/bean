@@ -37,7 +37,7 @@ public class PropertyIdMapperImpl implements PropertyIdMapper {
   public PropertyIdMapping getIdMapping(ReadableBean bean) {
 
     BeanType type = bean.getType();
-    return this.bean2idMappingMap.computeIfAbsent(type, t -> createMapping(bean));
+    return this.bean2idMappingMap.computeIfAbsent(type, _ -> createMapping(bean));
   }
 
   private PropertyIdMapping createMapping(ReadableBean bean) {

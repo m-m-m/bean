@@ -3,10 +3,11 @@
 package io.github.mmm.bean.factory.impl.bean;
 
 import io.github.mmm.bean.AbstractBean;
+import io.github.mmm.bean.BeanLock;
 import io.github.mmm.bean.BeanType;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
-import io.github.mmm.property.AttributeReadOnly;
+import io.github.mmm.property.PropertyLock;
 
 /**
  * Internal implementation of {@link WritableBean} non virtual instance used from {@link BeanProxy}.
@@ -16,6 +17,8 @@ import io.github.mmm.property.AttributeReadOnly;
 public final class SimpleBean extends AbstractBean implements InternalBean {
 
   private final BeanType type;
+
+  private final WritableBean proxy;
 
   private boolean polymorphic;
 
@@ -27,7 +30,7 @@ public final class SimpleBean extends AbstractBean implements InternalBean {
    */
   public SimpleBean(WritableBean writable) {
 
-    this(writable, null);
+    this(writable, null, ((SimpleBean) writable).proxy);
   }
 
   /**
@@ -36,14 +39,16 @@ public final class SimpleBean extends AbstractBean implements InternalBean {
    * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
    *        a mutable bean.
    * @param type the {@link #getType() type}.
+   * @param proxy the {@link WritableBean} instance which is the outer dynamic proxy.
    */
-  public SimpleBean(WritableBean writable, BeanType type) {
+  public SimpleBean(WritableBean writable, BeanType type, WritableBean proxy) {
 
     super(writable);
     if ((type == null) && (writable != null)) {
       type = writable.getType();
     }
     this.type = type;
+    this.proxy = proxy;
   }
 
   @Override
@@ -77,10 +82,15 @@ public final class SimpleBean extends AbstractBean implements InternalBean {
   }
 
   @Override
-  protected boolean isLockOwnerInternal(AttributeReadOnly lock) {
+  protected boolean isLockOwnerInternal(PropertyLock lock) {
 
-    // check more accurate?
-    return true;
+    return (lock == this.proxy);
+  }
+
+  @Override
+  protected BeanLock getReadOnlyOuterLock() {
+
+    return this.proxy.getReadOnly();
   }
 
   @Override

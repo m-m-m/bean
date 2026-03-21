@@ -28,19 +28,37 @@ public class BeanHelper {
    */
   public static <B extends WritableBean> void copy(B source, B target) {
 
-    copyUnsafe(source, target);
+    copyUnsafe(source, target, true);
+  }
+
+  /**
+   * @param <B> type of the {@link WritableBean bean} to copy.
+   * @param source the source {@link WritableBean bean} to copy from.
+   * @param target the target {@link WritableBean bean} to copy to.
+   * @param excludeTransient - {@code true} if {@link WritableProperty#isTransient() transient} properties should be
+   *        excluded (not copied), {@code false} otherwise (to copy all properties that are not
+   *        {@link WritableProperty#isReadOnly() read-only}).
+   * @see ReadableBean#copy()
+   */
+  public static <B extends WritableBean> void copy(B source, B target, boolean excludeTransient) {
+
+    copyUnsafe(source, target, excludeTransient);
   }
 
   /**
    * @param source the source {@link WritableBean bean} to copy from.
    * @param target the target {@link WritableBean bean} to copy to.
+   * @param excludeTransient - {@code true} if {@link WritableProperty#isTransient() transient} properties should be
+   *        excluded (not copied), {@code false} otherwise (to copy all properties that are not
+   *        {@link WritableProperty#isReadOnly() read-only}).
    * @see ReadableBean#copy()
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public static void copyUnsafe(ReadableBean source, WritableBean target) {
+  public static void copyUnsafe(ReadableBean source, WritableBean target, boolean excludeTransient) {
 
+    assert !target.isReadOnly() : "Cannot copy to read-only bean " + target.getType();
     for (WritableProperty targetProperty : target.getProperties()) {
-      if (!targetProperty.isReadOnly()) {
+      if (!targetProperty.isReadOnly() && (!excludeTransient || !targetProperty.isTransient())) {
         String name = targetProperty.getName();
         ReadableProperty<?> sourceProperty = source.getProperty(name);
         if (sourceProperty != null) {

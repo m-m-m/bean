@@ -231,7 +231,7 @@ public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
       Function<Class<?>, BeanClassImpl> factory) {
 
     String key = javaClass.getName();
-    return CLASS_MAP.computeIfAbsent(key, (x) -> createBeanClass(javaClass, factory));
+    return CLASS_MAP.computeIfAbsent(key, _ -> createBeanClass(javaClass, factory));
   }
 
   private static BeanClassImpl createBeanClass(Class<? extends VirtualBean> javaClass,

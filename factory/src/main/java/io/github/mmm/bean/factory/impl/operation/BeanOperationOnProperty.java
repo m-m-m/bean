@@ -9,6 +9,7 @@ import io.github.mmm.base.metainfo.MetaInfo;
 import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.Mandatory;
 import io.github.mmm.bean.PropertyAlias;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.GenericTypeInfo;
 import io.github.mmm.bean.factory.impl.bean.InternalBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
@@ -120,14 +121,15 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
   protected PropertyMetadata createMetadata(BeanProxy proxy, PropertyMetadata metadata) {
 
     PropertyMetadata result;
+    WritableBean proxyInstance = proxy.getProxy();
     if (metadata == null) {
       Validator validator = Validator.none();
       if (this.method.isAnnotationPresent(Mandatory.class)) {
         validator = ValidatorMandatory.get();
       }
-      result = PropertyMetadata.of(proxy.getProxy(), validator);
+      result = PropertyMetadata.of(proxyInstance, validator);
     } else {
-      result = metadata.withLock(proxy.getProxy());
+      result = metadata.withLock(proxyInstance);
       Validator validator = metadata.getValidator();
       if (!validator.isMandatory()) {
         if (this.method.isAnnotationPresent(Mandatory.class)) {

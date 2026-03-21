@@ -5,6 +5,7 @@ package io.github.mmm.bean;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import io.github.mmm.bean.impl.BeanClassCreator;
 import io.github.mmm.bean.impl.alias.AbstractBeanAliasMap;
@@ -12,7 +13,7 @@ import io.github.mmm.bean.impl.alias.BeanAliasMapEmpty;
 import io.github.mmm.bean.impl.properties.BeanProperties;
 import io.github.mmm.bean.impl.properties.BeanPropertiesFactory;
 import io.github.mmm.bean.impl.properties.BeanPropertiesReadOnly;
-import io.github.mmm.property.AttributeReadOnly;
+import io.github.mmm.property.PropertyLock;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
@@ -149,15 +150,6 @@ public abstract class AbstractBean implements WritableBean {
     return this.properties;
   }
 
-  @Override
-  public final AbstractBean getReadOnly() {
-
-    if (this.readOnly == null) {
-      this.readOnly = create(this);
-    }
-    return this.readOnly;
-  }
-
   @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public AbstractBean newInstance() {
@@ -194,6 +186,43 @@ public abstract class AbstractBean implements WritableBean {
   public final boolean isReadOnly() {
 
     return (this.readOnly == this);
+  }
+
+  /**
+   * @param lock the {@link PropertyMetadata#getLock() lock} to check.
+   * @return {@code true} if this bean is the lock owner, {@code false} otherwise.
+   */
+  protected boolean isLockOwnerInternal(PropertyLock lock) {
+
+    return (lock == this);
+  }
+
+  @Override
+  public final AbstractBean getReadOnly() {
+
+    if (this.readOnly == null) {
+      this.readOnly = create(this);
+    }
+    return this.readOnly;
+  }
+
+  @Override
+  public BeanLock createReadOnlyLock() {
+
+    if (this.readOnly != null) {
+      return this.readOnly;
+    }
+    return new ReadOnlyBeanLock();
+  }
+
+  /**
+   * Internal method for magic trick to get real read-only lock.
+   *
+   * @return the {@link #getReadOnly() read-only bean} view.
+   */
+  protected BeanLock getReadOnlyOuterLock() {
+
+    return getReadOnly();
   }
 
   /**
@@ -308,15 +337,6 @@ public abstract class AbstractBean implements WritableBean {
       }
     }
     return property;
-  }
-
-  /**
-   * @param lock the {@link PropertyMetadata#getLock() lock} to check.
-   * @return {@code true} if this bean is the lock owner, {@code false} otherwise.
-   */
-  protected boolean isLockOwnerInternal(AttributeReadOnly lock) {
-
-    return (lock == this);
   }
 
   /**
@@ -518,6 +538,33 @@ public abstract class AbstractBean implements WritableBean {
     public String toString() {
 
       return this.buffer.toString();
+    }
+  }
+
+  private class ReadOnlyBeanLock implements BeanLock, Supplier<PropertyLock> {
+
+    @Override
+    public PropertyLock get() {
+
+      return getReadOnlyOuterLock();
+    }
+
+    @Override
+    public PropertyLock createReadOnlyLock() {
+
+      return this;
+    }
+
+    @Override
+    public boolean isReadOnly() {
+
+      return true;
+    }
+
+    @Override
+    public BeanType getType() {
+
+      return AbstractBean.this.getType();
     }
 
   }

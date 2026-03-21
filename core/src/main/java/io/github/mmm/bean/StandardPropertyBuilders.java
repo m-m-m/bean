@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import io.github.mmm.bean.AbstractBean.AddMode;
-import io.github.mmm.property.AttributeReadOnly;
+import io.github.mmm.property.PropertyLock;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.PropertyBuilders;
 
@@ -49,7 +49,7 @@ public class StandardPropertyBuilders
   }
 
   @Override
-  public AttributeReadOnly getLock() {
+  public PropertyLock getLock() {
 
     return this.bean;
   }

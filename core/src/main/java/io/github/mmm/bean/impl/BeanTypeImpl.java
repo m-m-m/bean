@@ -98,6 +98,6 @@ public class BeanTypeImpl extends AbstractBeanType {
     if (javaClass == null) {
       return null;
     }
-    return CLASS_MAP.computeIfAbsent(javaClass.getName(), (x) -> new BeanTypeImpl(javaClass, stableName));
+    return CLASS_MAP.computeIfAbsent(javaClass.getName(), _ -> new BeanTypeImpl(javaClass, stableName));
   }
 }

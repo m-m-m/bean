@@ -3,7 +3,7 @@
 package io.github.mmm.bean.property;
 
 import io.github.mmm.bean.WritableBean;
-import io.github.mmm.property.AttributeReadOnly;
+import io.github.mmm.property.PropertyLock;
 import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.builder.PropertyBuilder;
 import io.github.mmm.validation.main.ValidatorBuilderObject;
@@ -24,7 +24,7 @@ public class BeanPropertyBuilder<V extends WritableBean> extends
    *
    * @param lock the {@link #getLock() lock}.
    */
-  public BeanPropertyBuilder(AttributeReadOnly lock) {
+  public BeanPropertyBuilder(PropertyLock lock) {
 
     this(lock, null);
   }
@@ -35,7 +35,7 @@ public class BeanPropertyBuilder<V extends WritableBean> extends
    * @param lock the {@link #getLock() lock}.
    * @param valueClass the {@link #valueClass(Class) value class}.
    */
-  public BeanPropertyBuilder(AttributeReadOnly lock, Class<V> valueClass) {
+  public BeanPropertyBuilder(PropertyLock lock, Class<V> valueClass) {
 
     super(lock);
     this.valueClass = valueClass;

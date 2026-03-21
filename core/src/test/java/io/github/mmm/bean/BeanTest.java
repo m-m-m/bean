@@ -70,6 +70,7 @@ class BeanTest extends AbstractBeanTest {
     TestBean readOnly = WritableBean.getReadOnly(bean);
     assertThat(readOnly.getRequiredProperty("Name")).isSameAs(readOnly.Name).isNotSameAs(bean.Name)
         .isEqualTo(bean.Name);
+    assertThat((Object) ReadableBean.from(readOnly.Name)).isSameAs(readOnly); // this is tricky and requires some magic!
     assertThat(readOnly.Name.isReadOnly()).isTrue();
     assertThat(readOnly.Name.get()).isSameAs(name);
     assertThat(readOnly.getRequiredProperty("Age")).isSameAs(readOnly.Age).isNotSameAs(bean.Age).isEqualTo(bean.Age);

@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import io.github.mmm.bean.mapping.PropertyIdCollector;
 import io.github.mmm.marshall.MarshallableObject;
-import io.github.mmm.property.AttributeReadOnly;
+import io.github.mmm.property.PropertyLock;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.validation.Validatable;
@@ -42,7 +42,7 @@ import io.github.mmm.value.ReadablePath;
  * IntelliJ, NetBeans, etc.) without plugins and therefore will also work in the future whatever may come.</li>
  * </ul>
  */
-public interface ReadableBean extends Validatable, MarshallableObject, AttributeReadOnly, ReadablePath {
+public interface ReadableBean extends Validatable, MarshallableObject, BeanLock, ReadablePath {
 
   /**
    * The optional suffix for a property method (when following JavaFx conventions what is not recommended by mmm-bean).
@@ -104,13 +104,6 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
    *         {@link ReadableProperty#getName() name}s.
    */
   BeanAliasMap getAliases();
-
-  /**
-   * @return the {@link BeanType} reflecting this {@link Bean}.
-   * @see VirtualBean#getType()
-   * @see BeanClass
-   */
-  BeanType getType();
 
   /**
    * @return the {@link Class} reflecting this bean. Please note that {@link VirtualBean}s may implement multiple
@@ -303,6 +296,22 @@ public interface ReadableBean extends Validatable, MarshallableObject, Attribute
   static <B extends ReadableBean> Class<B> getJavaClass(B bean) {
 
     return (Class<B>) bean.getJavaClass();
+  }
+
+  /**
+   * @param <B> type of the {@link ReadableBean} owning the {@link ReadableProperty property}.
+   * @param property the {@link ReadableProperty} for which the owning {@link ReadableBean} is requested.
+   * @return the {@link ReadableBean} owning the given {@link ReadableProperty property}. Will be {@code null} if the
+   *         {@link ReadableProperty} is manually created from outside a bean.
+   */
+  @SuppressWarnings("unchecked")
+  static <B extends ReadableBean> B from(ReadableProperty<?> property) {
+
+    PropertyLock lock = property.getMetadata().getLock();
+    if (lock instanceof ReadableBean) {
+      return (B) lock;
+    }
+    return null;
   }
 
 }

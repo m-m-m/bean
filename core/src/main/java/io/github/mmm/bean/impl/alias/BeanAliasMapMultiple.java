@@ -45,7 +45,7 @@ public class BeanAliasMapMultiple extends AbstractBeanAliasMap {
         return;
       }
     }
-    List<String> aliases = this.aliasesMap.computeIfAbsent(name, x -> new ArrayList<>());
+    List<String> aliases = this.aliasesMap.computeIfAbsent(name, _ -> new ArrayList<>());
     aliases.add(alias);
   }
 

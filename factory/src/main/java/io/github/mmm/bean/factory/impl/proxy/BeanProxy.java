@@ -31,6 +31,8 @@ public abstract class BeanProxy implements InvocationHandler {
   /** @see #getBean() */
   protected final InternalBean bean;
 
+  private BeanProxy readOnly;
+
   /**
    * The constructor.
    *
@@ -46,9 +48,12 @@ public abstract class BeanProxy implements InvocationHandler {
     this.proxy = beanFactory.createProxy(this, interfaces);
     this.beanFactory = beanFactory;
     if (beanType instanceof BeanClass) {
-      this.bean = new SimpleVirtualBean(writable, (BeanClass) beanType);
+      this.bean = new SimpleVirtualBean(writable, (BeanClass) beanType, this.proxy);
     } else {
-      this.bean = new SimpleBean(writable, beanType);
+      this.bean = new SimpleBean(writable, beanType, this.proxy);
+    }
+    if (writable != null) {
+      this.readOnly = this;
     }
   }
 
@@ -71,6 +76,17 @@ public abstract class BeanProxy implements InvocationHandler {
    * @return the {@link BeanProxyPrototype}.
    */
   public abstract BeanProxyPrototype getPrototype();
+
+  /**
+   * @return the {@link WritableBean#getReadOnly() read-only instance}.
+   */
+  public BeanProxy getReadOnly() {
+
+    if (this.readOnly == null) {
+      this.readOnly = new BeanProxyInstance(this);
+    }
+    return this.readOnly;
+  }
 
   @Override
   public Object invoke(Object instance, Method method, Object[] args) throws Throwable {

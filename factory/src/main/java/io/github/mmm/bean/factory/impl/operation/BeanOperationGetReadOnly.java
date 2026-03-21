@@ -4,7 +4,6 @@ package io.github.mmm.bean.factory.impl.operation;
 
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
-import io.github.mmm.bean.factory.impl.proxy.BeanProxyInstance;
 
 /**
  * {@link BeanOperation} for {@link WritableBean#getReadOnly()}.
@@ -24,8 +23,7 @@ public class BeanOperationGetReadOnly extends BeanOperation {
   @Override
   public Object invoke(BeanProxy proxy, Object[] args) throws Throwable {
 
-    BeanProxyInstance instance = new BeanProxyInstance(proxy);
-    return instance.getProxy();
+    return proxy.getReadOnly().getProxy();
   }
 
 }
