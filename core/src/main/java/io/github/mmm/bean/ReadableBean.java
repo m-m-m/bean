@@ -109,6 +109,7 @@ public interface ReadableBean extends Validatable, MarshallableObject, BeanLock,
    * @return the {@link Class} reflecting this bean. Please note that {@link VirtualBean}s may implement multiple
    *         interfaces as a virtual type that does not physically exist as Java {@link Class} and in such case the
    *         method will return the primary of these {@link Class}es (interfaces).
+   * @see #getJavaClass(ReadableBean)
    */
   default Class<?> getJavaClass() {
 
@@ -132,8 +133,8 @@ public interface ReadableBean extends Validatable, MarshallableObject, BeanLock,
   /**
    * A {@link Bean} may be polymorphic to allow mappings to and from other representations without knowing the exact
    * type. So assuming a service accepts or returns a {@link Bean} of a specific type that has sub-types. If that type
-   * is declared as polymorphic then it is possible to unarshall the {@link Bean} of the exact sub-type back from its
-   * serialized data.<br>
+   * is declared as polymorphic then it is possible to unmarshall the {@link Bean} of the exact sub-type back from its
+   * serialised data.<br>
    * By default a {@link Bean} is not polymorphic. Once you declare your custom {@link Bean} as polymorphic by
    * overriding this method returning {@code true}, you may not this method it again. Hence, if you override this method
    * in a class, you should declare it as final.

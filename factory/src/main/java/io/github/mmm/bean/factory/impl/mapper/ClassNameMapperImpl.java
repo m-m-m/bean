@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import io.github.mmm.base.collection.AbstractIterator;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.base.exception.ObjectNotFoundException;
+import io.github.mmm.base.resource.ResourceScanner;
+import io.github.mmm.base.resource.ResourceScannerServiceResult;
+import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.mapping.ClassNameMapper;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 
@@ -22,9 +25,9 @@ public class ClassNameMapperImpl implements ClassNameMapper {
 
   private static final Logger LOG = LoggerFactory.getLogger(ClassNameMapperImpl.class);
 
-  private Map<String, Class<?>> name2typeMap;
+  private final Map<String, Class<?>> name2typeMap;
 
-  private Map<Class<?>, ClassNameTypeContainer> class2containerMap;
+  private final Map<Class<?>, ClassNameTypeContainer> class2containerMap;
 
   /**
    * The constructor.
@@ -34,20 +37,13 @@ public class ClassNameMapperImpl implements ClassNameMapper {
     super();
     this.name2typeMap = new HashMap<>();
     this.class2containerMap = new HashMap<>();
-    init();
-  }
-
-  /**
-   * Initialized this class.
-   */
-  void init() {
-
     for (Class<?> type : PropertyFactoryManager.get().getValueTypes()) {
-      addDatatype(type);
+      if (type != WritableBean.class) {
+        addDatatype(type);
+      }
     }
-    for (Class<?> type : BeanTypeSet.INSTANCE.getBeanTypes()) {
-      addBean(type);
-    }
+    ResourceScannerServiceResult result = ResourceScanner.get().getResult().getRequired(BeanScanner.class);
+    result.getClasses().forEach(this::addBean);
   }
 
   void addDatatype(Class<?> datatype) {
@@ -62,8 +58,7 @@ public class ClassNameMapperImpl implements ClassNameMapper {
 
   void add(ClassNameTypeContainer container) {
 
-    LOG.debug("Adding class {} for name {} and type {}.", container.javaClass, container.qualifiedName,
-        container.classType);
+    LOG.debug("Adding {} for name {} and type {}.", container.javaClass, container.qualifiedName, container.classType);
     ClassNameTypeContainer duplicateContainer = this.class2containerMap.put(container.javaClass, container);
     if (duplicateContainer != null) {
       throw new DuplicateObjectException(container.javaClass.getName(), container.qualifiedName,

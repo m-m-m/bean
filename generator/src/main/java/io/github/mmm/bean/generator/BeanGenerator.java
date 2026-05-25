@@ -19,6 +19,7 @@ import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,7 +31,8 @@ import io.github.mmm.base.exception.RuntimeIoException;
 import io.github.mmm.bean.AbstractBeanCreator;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
-import io.github.mmm.bean.factory.scanner.BeanScanner;
+import io.github.mmm.bean.mapping.ClassNameMapper;
+import io.github.mmm.bean.mapping.ClassNameMapper.ClassType;
 
 /**
  * Code generator to create implementations of {@link WritableBean} sub-interfaces and {@link BeanFactory} Java
@@ -55,25 +57,23 @@ public class BeanGenerator {
    *        required packages will be created automatically.
    * @param classloader the {@link ClassLoader} to scan for interfaces extending {@link WritableBean}.
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public void generate(Path targetDir, ClassLoader classloader) {
 
     List<BeanMetadataContainer> metadataList = new ArrayList<>();
-    BeanScanner scanner = new BeanScanner();
-    Collection<Class<? extends WritableBean>> beanClasses = scanner.findBeanInterfaces();
-    for (Class<? extends WritableBean> beanClass : beanClasses) {
-      BeanMetadataContainer metadata = generate(beanClass, targetDir);
+    Iterator<Class<?>> beanIterator = ClassNameMapper.get().getClasses(ClassType.BEAN);
+    while (beanIterator.hasNext()) {
+      Class beanClass = beanIterator.next();
+      BeanMetadataContainer metadata;
+      if (beanClass.isInterface()) {
+        metadata = generate(beanClass, targetDir);
+      } else {
+        metadata = BeanMetadataContainerClass.of(beanClass);
+      }
       if (metadata != null) {
         metadataList.add(metadata);
       }
     }
-    beanClasses = scanner.findBeanClasses();
-    for (Class<? extends WritableBean> beanClass : beanClasses) {
-      BeanMetadataContainer metadata = BeanMetadataContainerClass.of(beanClass);
-      if (metadata != null) {
-        metadataList.add(metadata);
-      }
-    }
-
     generateFactory(metadataList, targetDir);
   }
 

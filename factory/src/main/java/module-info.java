@@ -10,6 +10,7 @@
  *
  * @provides io.github.mmm.bean.BeanCreator
  * @provides io.github.mmm.bean.mapping.ClassNameMapper
+ * @provides io.github.mmm.base.resource.ResourceScannerService
  */
 module io.github.mmm.bean.factory {
 
@@ -17,11 +18,14 @@ module io.github.mmm.bean.factory {
 
   requires io.github.mmm.base.resource;
 
-  provides io.github.mmm.bean.BeanCreator with io.github.mmm.bean.factory.impl.BeanInterfaceCreator;
+  provides io.github.mmm.bean.BeanCreator //
+      with io.github.mmm.bean.factory.impl.BeanInterfaceCreator;
 
-  provides io.github.mmm.bean.mapping.ClassNameMapper with io.github.mmm.bean.factory.impl.mapper.ClassNameMapperImpl;
+  provides io.github.mmm.bean.mapping.ClassNameMapper //
+      with io.github.mmm.bean.factory.impl.mapper.ClassNameMapperImpl;
 
-  exports io.github.mmm.bean.factory.scanner;
+  provides io.github.mmm.base.resource.ResourceScannerService //
+      with io.github.mmm.bean.factory.impl.mapper.BeanScanner;
 
   exports io.github.mmm.bean.factory.impl.bean to io.github.mmm.bean;
 

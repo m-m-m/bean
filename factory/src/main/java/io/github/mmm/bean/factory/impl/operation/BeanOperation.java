@@ -6,9 +6,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.github.mmm.bean.BeanHelper;
 import io.github.mmm.bean.factory.impl.bean.InternalBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
@@ -22,9 +19,6 @@ import io.github.mmm.property.factory.PropertyFactory;
  * @since 1.0.0
  */
 public abstract class BeanOperation {
-
-  /** Logger instance. */
-  private static final Logger LOG = LoggerFactory.getLogger(BeanOperation.class);
 
   /** Empty {@link Object} array. */
   protected static final Object[] NO_ARGS = new Object[0];
@@ -61,29 +55,7 @@ public abstract class BeanOperation {
     try {
       return InvocationHandler.invokeDefault(proxy.getProxy(), method, args);
     } catch (NoSuchMethodError e) {
-      LOG.error("Your Java version is outdated! Please use Java >= 16 to prevent this error! For details see:\n"
-          + "https://github.com/m-m-m/bean/issues/4");
-      Class<?> returnType = method.getReturnType();
-      if (returnType.isPrimitive()) {
-        if (int.class == returnType) {
-          return Integer.valueOf(0);
-        } else if (long.class == returnType) {
-          return Long.valueOf(0L);
-        } else if (double.class == returnType) {
-          return Double.valueOf(0);
-        } else if (boolean.class == returnType) {
-          return Boolean.FALSE;
-        } else if (float.class == returnType) {
-          return Float.valueOf(0);
-        } else if (char.class == returnType) {
-          return Character.valueOf('\0');
-        } else if (byte.class == returnType) {
-          return Byte.valueOf((byte) 0);
-        } else if (short.class == returnType) {
-          return Short.valueOf((short) 0);
-        }
-      }
-      return null;
+      throw new IllegalStateException(e);
     }
   }
 
