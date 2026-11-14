@@ -8,18 +8,16 @@ import io.github.mmm.bean.BeanName;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
-/**
- * {@link AdvancedBean} for testing.
- */
+/// [AdvancedBean] for testing.
 @SuppressWarnings("javadoc")
 @BeanName("mmm_TestAdvancedBean")
 public class TestAdvancedBean extends TestAdvancedParentBean {
 
-  /** @see BeanClass#getPrototype() */
+  /// @see BeanClass#getPrototype()
   @SuppressWarnings("hiding")
   public static final TestAdvancedBean PROTOTYPE = new TestAdvancedBean();
 
-  /** Age of person. */
+  /// Age of person.
   public final IntegerProperty Age;
 
   public TestAdvancedBean() {

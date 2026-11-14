@@ -8,12 +8,10 @@ import org.junit.jupiter.api.Test;
 import io.github.mmm.base.exception.ReadOnlyException;
 import io.github.mmm.bean.WritableBean;
 
-/**
- * Test of {@link PersonBean}.
- */
+/// Test of [PersonBean].
 class PersonBeanTest extends Assertions {
 
-  /** Test of {@link PersonBean}. */
+  /// Test of [PersonBean].
   @Test
   void test() {
 

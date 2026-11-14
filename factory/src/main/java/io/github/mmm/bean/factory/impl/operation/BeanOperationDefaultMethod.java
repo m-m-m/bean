@@ -6,20 +6,16 @@ import java.lang.reflect.Method;
 
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 
-/**
- * Operation for {@link Method#isDefault() default} {@link Method}s.
- *
- * @since 1.0.0
- */
+/// Operation for [default][Method#isDefault()] [Method]s.
+///
+/// @since 1.0.0
 public class BeanOperationDefaultMethod extends BeanOperation {
 
   private final Method method;
 
-  /**
-   * The constructor.
-   *
-   * @param method the the {@link Method#isDefault() default} {@link Method}.
-   */
+  /// The constructor.
+  ///
+  /// @param method the the [default][Method#isDefault()] [Method].
   public BeanOperationDefaultMethod(Method method) {
 
     super();
@@ -33,9 +29,7 @@ public class BeanOperationDefaultMethod extends BeanOperation {
     return invokeDefaultMethod(proxy, this.method, args);
   }
 
-  /**
-   * @return the {@link Method}.
-   */
+  /// @return the [Method].
   public Method getMethod() {
 
     return this.method;

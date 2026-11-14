@@ -10,34 +10,28 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.PropertyLock;
 
-/**
- * Internal implementation of {@link VirtualBean} used from {@link BeanProxy}.
- */
+/// Internal implementation of [VirtualBean] used from [BeanProxy].
 public final class SimpleVirtualBean extends AbstractVirtualBean implements InternalBean {
 
   private final WritableBean proxy;
 
   private boolean polymorphic;
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public SimpleVirtualBean(WritableBean writable) {
 
     this(writable, null, ((SimpleVirtualBean) writable).proxy);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   * @param type the {@link #getType() type}.
-   * @param proxy the {@link WritableBean} instance which is the outer dynamic proxy.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
+  /// @param type the [type][#getType()].
+  /// @param proxy the [WritableBean] instance which is the outer dynamic proxy.
   public SimpleVirtualBean(WritableBean writable, BeanClass type, WritableBean proxy) {
 
     super(writable, type);

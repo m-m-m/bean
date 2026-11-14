@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import io.github.mmm.bean.examples.TestBean;
 
-/**
- * Test of {@link BeanFactory}.
- */
+/// Test of [BeanFactory].
 class BeanFactoryTest extends AbstractBeanTest {
 
-  /** Test of {@link BeanFactory#create(Class)}. */
+  /// Test of [BeanFactory#create(Class)].
   @Test
   void testCreate() {
 

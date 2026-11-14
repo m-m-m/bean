@@ -6,21 +6,17 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 
-/**
- * {@link BeanMethodContainer} for a regular setter method.
- *
- * @since 1.0.0
- */
+/// [BeanMethodContainer] for a regular setter method.
+///
+/// @since 1.0.0
 public class BeanMethodContainerSetter extends BeanMethodContainer {
 
   private final Class<?> propertyType;
 
-  /**
-   * The constructor.
-   *
-   * @param method the {@link #getMethod() method}.
-   * @param propertyName the {@link #getPropertyName() property name}.
-   */
+  /// The constructor.
+  ///
+  /// @param method the [method][#getMethod()].
+  /// @param propertyName the [property name][#getPropertyName()].
   public BeanMethodContainerSetter(Method method, String propertyName) {
 
     super(method, propertyName);

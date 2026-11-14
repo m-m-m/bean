@@ -16,11 +16,9 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.mapping.ClassNameMapper;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 
-/**
- * Implementation of {@link ClassNameMapper}.
- *
- * @since 1.0.0
- */
+/// Implementation of [ClassNameMapper].
+///
+/// @since 1.0.0
 public class ClassNameMapperImpl implements ClassNameMapper {
 
   private static final Logger LOG = LoggerFactory.getLogger(ClassNameMapperImpl.class);
@@ -29,9 +27,7 @@ public class ClassNameMapperImpl implements ClassNameMapper {
 
   private final Map<Class<?>, ClassNameTypeContainer> class2containerMap;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public ClassNameMapperImpl() {
 
     super();

@@ -15,11 +15,9 @@ import io.github.mmm.bean.impl.properties.BeanPropertiesMap;
 import io.github.mmm.bean.impl.properties.BeanPropertiesStaticArray;
 import io.github.mmm.bean.impl.properties.BeanPropertyNames;
 
-/**
- * Implementation of {@link BeanType}.
- *
- * @see ReadableBean#getType()
- */
+/// Implementation of [BeanType].
+///
+/// @see ReadableBean#getType()
 public class BeanTypeImpl extends AbstractBeanType {
 
   private static final Map<String, BeanTypeImpl> CLASS_MAP = new ConcurrentHashMap<>();
@@ -28,22 +26,18 @@ public class BeanTypeImpl extends AbstractBeanType {
 
   private BeanProperties properties;
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the {@link #getJavaClass() java class}.
-   * @param stableName the {@link #getStableName() stable name}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the [java class][#getJavaClass()].
+  /// @param stableName the [stable name][#getStableName()].
   protected BeanTypeImpl(Class<? extends WritableBean> javaClass, String stableName) {
 
     super(javaClass, stableName);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param template the template to copy.
-   */
+  /// The constructor.
+  ///
+  /// @param template the template to copy.
   protected BeanTypeImpl(BeanTypeImpl template) {
 
     super(template);
@@ -79,20 +73,16 @@ public class BeanTypeImpl extends AbstractBeanType {
     return result;
   }
 
-  /**
-   * @param javaClass the {@link #getJavaClass() java class}.
-   * @return the {@link BeanType} representing the given {@link Class}.
-   */
+  /// @param javaClass the [java class][#getJavaClass()].
+  /// @return the [BeanType] representing the given [Class].
   public static BeanTypeImpl asType(Class<? extends WritableBean> javaClass) {
 
     return asType(javaClass, null);
   }
 
-  /**
-   * @param javaClass the {@link #getJavaClass() java class}.
-   * @param stableName the custom {@link #getStableName() stable name}.
-   * @return the {@link BeanType} representing the given {@link Class}.
-   */
+  /// @param javaClass the [java class][#getJavaClass()].
+  /// @param stableName the custom [stable name][#getStableName()].
+  /// @return the [BeanType] representing the given [Class].
   public static BeanTypeImpl asType(Class<? extends WritableBean> javaClass, String stableName) {
 
     if (javaClass == null) {

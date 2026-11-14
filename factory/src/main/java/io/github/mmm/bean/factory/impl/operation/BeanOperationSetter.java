@@ -8,19 +8,15 @@ import io.github.mmm.bean.factory.impl.GenericTypeInfo;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * {@link BeanOperation} for legacy POJO setter method.
- *
- * @since 1.0.0
- */
+/// [BeanOperation] for legacy POJO setter method.
+///
+/// @since 1.0.0
 public class BeanOperationSetter extends BeanOperationOnProperty {
 
-  /**
-   * The constructor.
-   *
-   * @param propertyName the {@link #getPropertyName() propertyName}.
-   * @param method the {@link #getMethod() method}.
-   */
+  /// The constructor.
+  ///
+  /// @param propertyName the [propertyName][#getPropertyName()].
+  /// @param method the [method][#getMethod()].
   public BeanOperationSetter(String propertyName, Method method) {
 
     super(propertyName, method);

@@ -1,8 +1,6 @@
 package io.github.mmm.bean.impl.properties;
 
-/**
- * Test of {@link BeanPropertiesDynamicArray}.
- */
+/// Test of [BeanPropertiesDynamicArray].
 class BeanPropertiesDynamicArrayTest extends BeanPropertiesTest {
   @Override
   protected BeanProperties create() {

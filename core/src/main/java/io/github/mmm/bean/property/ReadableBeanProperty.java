@@ -7,12 +7,10 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.object.ReadableObjectProperty;
 
-/**
- * {@link ReadableProperty} with {@link WritableBean} {@link #getValue() value}.
- *
- * @param <V> type of the {@link WritableBean bean} {@link #getValue() value}.
- * @since 1.0.0
- */
+/// [ReadableProperty] with [WritableBean] [value][#getValue()].
+///
+/// @param <V> type of the [bean][WritableBean] [value][#getValue()].
+/// @since 1.0.0
 public interface ReadableBeanProperty<V extends WritableBean> extends ReadableObjectProperty<V> {
 
   @Override

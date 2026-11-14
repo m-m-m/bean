@@ -6,19 +6,15 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 
-/**
- * {@link BeanMethodContainer} for a regular getter method.
- *
- * @since 1.0.0
- */
+/// [BeanMethodContainer] for a regular getter method.
+///
+/// @since 1.0.0
 public class BeanMethodContainerGetter extends BeanMethodContainer {
 
-  /**
-   * The constructor.
-   *
-   * @param method the {@link #getMethod() method}.
-   * @param propertyName the {@link #getPropertyName() property name}.
-   */
+  /// The constructor.
+  ///
+  /// @param method the [method][#getMethod()].
+  /// @param propertyName the [property name][#getPropertyName()].
   public BeanMethodContainerGetter(Method method, String propertyName) {
 
     super(method, propertyName);

@@ -8,23 +8,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation to configure {@link ReadableBean#getAliases() alias mapping} for the annotated
- * {@link io.github.mmm.property.ReadableProperty property}.
- *
- * @see #value()
- */
+/// Annotation to configure [alias mapping][ReadableBean#getAliases()] for the annotated
+/// [property][io.github.mmm.property.ReadableProperty].
+///
+/// @see #value()
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
 @Documented
 public @interface PropertyAlias {
 
-  /**
-   * @return if a property method of a {@link WritableBean} interface is annotated the {@link ReadableBean#getAliases()
-   *         aliases} of that property.
-   * @see ReadableBean#getProperty(String)
-   * @see BeanAliasMap#getAliases(String)
-   */
+  /// @return if a property method of a [WritableBean] interface is annotated the [aliases][ReadableBean#getAliases()] of that property.
+  /// @see ReadableBean#getProperty(String)
+  /// @see BeanAliasMap#getAliases(String)
   String[] value();
 
 }

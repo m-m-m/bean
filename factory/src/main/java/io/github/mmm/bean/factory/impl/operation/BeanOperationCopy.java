@@ -8,16 +8,12 @@ import io.github.mmm.bean.factory.impl.bean.InternalBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyInstance;
 
-/**
- * {@link BeanOperation} for {@link ReadableBean#copy()}.
- *
- * @since 1.0.0
- */
+/// [BeanOperation] for [ReadableBean#copy()].
+///
+/// @since 1.0.0
 public class BeanOperationCopy extends BeanOperation {
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanOperationCopy() {
 
     super();

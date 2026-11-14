@@ -9,21 +9,17 @@ import java.util.function.Function;
 
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Implementation of {@link BeanProperties} based on a {@link Map}.
- */
+/// Implementation of [BeanProperties] based on a [Map].
 public class BeanPropertiesMap extends BeanProperties {
 
   private final Map<String, WritableProperty<?>> propertiesMap;
 
   private final Collection<WritableProperty<?>> properties;
 
-  /**
-   * The constructor.
-   *
-   * @param threadSafe - {@code true} if thread safe behavior is required for concurrent access, {@code false}
-   *        otherwise.
-   */
+  /// The constructor.
+  ///
+  /// @param threadSafe - `true` if thread safe behavior is required for concurrent access, `false`
+  ///        otherwise.
   public BeanPropertiesMap(boolean threadSafe) {
 
     super();

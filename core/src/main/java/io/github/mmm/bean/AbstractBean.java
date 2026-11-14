@@ -21,15 +21,13 @@ import io.github.mmm.property.builder.PropertyBuilders;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 import io.github.mmm.value.ReadablePath;
 
-/**
- * Abstract base implementation of {@link WritableBean}.<br>
- * <b>ATTENTION:</b><br>
- * If you plan to implement beans as Java class instead of using interfaces, you always need to have a public
- * constructor with {@link WritableBean} as a single argument. Otherwise {@link #getReadOnly() read-only} support can
- * not work.
- *
- * @see Bean
- */
+/// Abstract base implementation of [WritableBean].
+/// **ATTENTION:**
+/// If you plan to implement beans as Java class instead of using interfaces, you always need to have a public
+/// constructor with [WritableBean] as a single argument. Otherwise [read-only][#getReadOnly()] support can
+/// not work.
+///
+/// @see Bean
 public abstract class AbstractBean implements WritableBean {
 
   private /* final */ BeanProperties properties;
@@ -44,12 +42,10 @@ public abstract class AbstractBean implements WritableBean {
 
   private PropertyBuilders builders;
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public AbstractBean(WritableBean writable) {
 
     super();
@@ -101,15 +97,13 @@ public abstract class AbstractBean implements WritableBean {
     return WritableBean.super.path(fixed);
   }
 
-  /**
-   * @return {@code true} if the {@link Bean} will be access concurrently and is required to be thread-safe (use
-   *         concurrent collections, etc.), {@code false} otherwise. Please note we strongly encourage you not use
-   *         {@link Bean}s concurrently and overriding this method to return {@code true}. We also will not thoroughly
-   *         test such concurrency and just support it as best-guess implementation since it is relatively easy for us
-   *         but rather impossible to solve from the outside. So in case you are blocked by a concurrency issue that you
-   *         do not want to solve otherwise, you may consider overriding this method to return {@code true} for your
-   *         beans. Please also be warned that this causes quite some overhead and will reduce performance.
-   */
+  /// @return `true` if the [Bean] will be access concurrently and is required to be thread-safe (use
+  ///         concurrent collections, etc.), `false` otherwise. Please note we strongly encourage you not use
+  ///         [Bean]s concurrently and overriding this method to return `true`. We also will not thoroughly
+  ///         test such concurrency and just support it as best-guess implementation since it is relatively easy for us
+  ///         but rather impossible to solve from the outside. So in case you are blocked by a concurrency issue that you
+  ///         do not want to solve otherwise, you may consider overriding this method to return `true` for your
+  ///         beans. Please also be warned that this causes quite some overhead and will reduce performance.
   protected boolean isThreadSafe() {
 
     return false;
@@ -121,9 +115,7 @@ public abstract class AbstractBean implements WritableBean {
     return false;
   }
 
-  /**
-   * Verifies that this {@link Bean} is writable (not {@link #isReadOnly() read-only}).
-   */
+  /// Verifies that this [Bean] is writable (not [read-only][#isReadOnly()]).
   protected void requireWritable() {
 
     if (isReadOnly()) {
@@ -131,9 +123,7 @@ public abstract class AbstractBean implements WritableBean {
     }
   }
 
-  /**
-   * Verifies that this {@link Bean} is {@link #isDynamic() dynamic} (extensible).
-   */
+  /// Verifies that this [Bean] is [dynamic][#isDynamic()] (extensible).
   protected void requireDynamic() {
 
     if (!isDynamic()) {
@@ -188,10 +178,8 @@ public abstract class AbstractBean implements WritableBean {
     return (this.readOnly == this);
   }
 
-  /**
-   * @param lock the {@link PropertyMetadata#getLock() lock} to check.
-   * @return {@code true} if this bean is the lock owner, {@code false} otherwise.
-   */
+  /// @param lock the [lock][PropertyMetadata#getLock()] to check.
+  /// @return `true` if this bean is the lock owner, `false` otherwise.
   protected boolean isLockOwnerInternal(PropertyLock lock) {
 
     return (lock == this);
@@ -215,25 +203,21 @@ public abstract class AbstractBean implements WritableBean {
     return new ReadOnlyBeanLock();
   }
 
-  /**
-   * Internal method for magic trick to get real read-only lock.
-   *
-   * @return the {@link #getReadOnly() read-only bean} view.
-   */
+  /// Internal method for magic trick to get real read-only lock.
+  ///
+  /// @return the [read-only bean][#getReadOnly()] view.
   protected BeanLock getReadOnlyOuterLock() {
 
     return getReadOnly();
   }
 
-  /**
-   * Creates a new instance of this {@link Bean} implementation. The default implementation uses reflection. To improve
-   * performance please override this method. Please note, that if you do so, you also need to override this method
-   * again for all sub-classes of the hierarchy.
-   *
-   * @param writable the {@link AdvancedBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   * @return the new {@link Bean} instance. Has to be of the same type as the {@link #getClass() current class}.
-   */
+  /// Creates a new instance of this [Bean] implementation. The default implementation uses reflection. To improve
+  /// performance please override this method. Please note, that if you do so, you also need to override this method
+  /// again for all sub-classes of the hierarchy.
+  ///
+  /// @param writable the [AdvancedBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
+  /// @return the new [Bean] instance. Has to be of the same type as the [current class][#getClass()].
   protected AbstractBean create(WritableBean writable) {
 
     try {
@@ -289,30 +273,26 @@ public abstract class AbstractBean implements WritableBean {
     return (P) add((WritableProperty) property, AddMode.NORMAL);
   }
 
-  /**
-   * Internal method for {@link #addProperty(WritableProperty)}, without verification. Will be called from constructor
-   * of bean class implementations to register properties.
-   *
-   * @param <V> type of the {@link WritableProperty#get() property value}.
-   * @param <P> type of the {@link WritableProperty} to add.
-   * @param property the {@link WritableProperty} to add.
-   * @return the given {@code property}.
-   */
+  /// Internal method for [#addProperty(WritableProperty)], without verification. Will be called from constructor
+  /// of bean class implementations to register properties.
+  ///
+  /// @param <V> type of the [property value][WritableProperty#get()].
+  /// @param <P> type of the [WritableProperty] to add.
+  /// @param property the [WritableProperty] to add.
+  /// @return the given `property`.
   protected <V, P extends WritableProperty<V>> P add(P property) {
 
     return add(property, AddMode.INTERNAL);
   }
 
-  /**
-   * Internal method for {@link #addProperty(WritableProperty)}, without verification. Shall only be used internally.
-   * From outside only use indirectly via {@link #addProperty(WritableProperty)} or from constructor via
-   * {@link #add(WritableProperty)}.
-   *
-   * @param <P> type of the {@link WritableProperty} to add.
-   * @param property the {@link WritableProperty} to add.
-   * @param mode the {@link AddMode}.
-   * @return the given {@code property}.
-   */
+  /// Internal method for [#addProperty(WritableProperty)], without verification. Shall only be used internally.
+  /// From outside only use indirectly via [#addProperty(WritableProperty)] or from constructor via
+  /// [#add(WritableProperty)].
+  ///
+  /// @param <P> type of the [WritableProperty] to add.
+  /// @param property the [WritableProperty] to add.
+  /// @param mode the [AddMode].
+  /// @return the given `property`.
   @SuppressWarnings("unchecked")
   <V, P extends WritableProperty<V>> P add(P property, AddMode mode) {
 
@@ -339,9 +319,7 @@ public abstract class AbstractBean implements WritableBean {
     return property;
   }
 
-  /**
-   * @return the builder factory to build properties to be added to this bean.
-   */
+  /// @return the builder factory to build properties to be added to this bean.
   protected PropertyBuilders add() {
 
     if (this.builders == null) {
@@ -350,11 +328,9 @@ public abstract class AbstractBean implements WritableBean {
     return this.builders;
   }
 
-  /**
-   * Internal method that may be overridden to replace the {@link StandardPropertyBuilders} implementation.
-   *
-   * @return the {@link StandardPropertyBuilders} instance.
-   */
+  /// Internal method that may be overridden to replace the [StandardPropertyBuilders] implementation.
+  ///
+  /// @return the [StandardPropertyBuilders] instance.
   protected StandardPropertyBuilders createPropertyBuilders() {
 
     return new StandardPropertyBuilders(this);
@@ -366,17 +342,13 @@ public abstract class AbstractBean implements WritableBean {
     return WritableProperty.copy(property, null, metadata);
   }
 
-  /**
-   * @param property the {@link WritableProperty} that has been added.
-   */
+  /// @param property the [WritableProperty] that has been added.
   protected void onPropertyAdded(WritableProperty<?> property) {
 
   }
 
-  /**
-   * @param propertyName the {@link ReadableProperty#getName() property name}.
-   * @param alias the {@link BeanAliasMap#getAliases(String) alias} to add.
-   */
+  /// @param propertyName the [property name][ReadableProperty#getName()].
+  /// @param alias the [alias][BeanAliasMap#getAliases(String)] to add.
   protected void registerAlias(String propertyName, String alias) {
 
     assert (getBeanProperties().get(propertyName) != null);
@@ -400,10 +372,8 @@ public abstract class AbstractBean implements WritableBean {
     throw new IllegalStateException("Illegal alias '" + alias + "' pointing to an existing property name!");
   }
 
-  /**
-   * @param propertyName the {@link ReadableProperty#getName() property name}.
-   * @param propertyAliases the {@link BeanAliasMap#getAliases(String) aliases} to add.
-   */
+  /// @param propertyName the [property name][ReadableProperty#getName()].
+  /// @param propertyAliases the [aliases][BeanAliasMap#getAliases(String)] to add.
   protected void registerAliases(String propertyName, String... propertyAliases) {
 
     assert (getBeanProperties().get(propertyName) != null) : "No property with name '" + propertyName
@@ -425,47 +395,38 @@ public abstract class AbstractBean implements WritableBean {
     return doToString();
   }
 
-  /**
-   * Internal method to get access to {@link #isThreadSafe()}.
-   *
-   * @param bean the {@link AbstractBean}.
-   * @return the value of {@link #isThreadSafe()}.
-   */
+  /// Internal method to get access to [#isThreadSafe()].
+  ///
+  /// @param bean the [AbstractBean].
+  /// @return the value of [#isThreadSafe()].
   protected static boolean isThreadSafe(AbstractBean bean) {
 
     return bean.isThreadSafe();
   }
 
-  /**
-   * Enum with the available modes for {@link AbstractBean#add(WritableProperty, AddMode) adding a property internally}.
-   */
+  /// Enum with the available modes for [adding a property internally][AbstractBean#add(WritableProperty, AddMode)].
   static enum AddMode {
 
-    /** Add property from {@link AbstractBean#addProperty(WritableProperty)}. */
+    /// Add property from [AbstractBean#addProperty(WritableProperty)].
     NORMAL,
 
-    /** Add property from {@link AbstractBean#add(WritableProperty)}. */
+    /// Add property from [AbstractBean#add(WritableProperty)].
     INTERNAL,
 
-    /** Add property from {@link PropertyBuilders}. */
+    /// Add property from [PropertyBuilders].
     DIRECT,
 
-    /** Add a {@link WritableProperty#copy(WritableProperty) copy} of the property if none exists with that name. */
+    /// Add a [copy][WritableProperty#copy(WritableProperty)] of the property if none exists with that name.
     COPY,
 
-    /**
-     * Add a {@link WritableProperty#copy(WritableProperty) copy} of the property with the {@link WritableProperty#get()
-     * value} if none exists with that name.
-     */
+    /// Add a [copy][WritableProperty#copy(WritableProperty)] of the property with the [value][WritableProperty#get()] if none exists with that name.
     COPY_WITH_VALUE,
 
-    /** Add a {@link WritableProperty#getReadOnly() read-only view} of the property if none exists with that name. */
+    /// Add a [read-only view][WritableProperty#getReadOnly()] of the property if none exists with that name.
     READ_ONLY;
 
-    /**
-     * @return {@code true} to add the given {@link WritableProperty} instance as-is, {@code false} otherwise (if a copy
-     *         or read-only view shall be added instead).
-     */
+    /// @return `true` to add the given [WritableProperty] instance as-is, `false` otherwise (if a copy
+    ///         or read-only view shall be added instead).
     public boolean isAddInstance() {
 
       return ((this == NORMAL) || (this == INTERNAL)) || (this == DIRECT);

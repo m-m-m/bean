@@ -11,20 +11,16 @@ import java.lang.reflect.Parameter;
 import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.WritableBean;
 
-/**
- * {@link BeanMetadataContainer} for a regular {@link Class} (no {@link Class#isInterface() interface}).
- *
- * @since 1.0.0
- */
+/// [BeanMetadataContainer] for a regular [Class] (no [interface][Class#isInterface()]).
+///
+/// @since 1.0.0
 public class BeanMetadataContainerClass extends BeanMetadataContainer {
 
   private final boolean hasBeanClassConstructor;
 
-  /**
-   * The constructor.
-   *
-   * @param beanClass the {@link #getBeanType() bean type}.
-   */
+  /// The constructor.
+  ///
+  /// @param beanClass the [bean type][#getBeanType()].
   private BeanMetadataContainerClass(Class<? extends WritableBean> beanClass, boolean hasBeanClassConstructor) {
 
     super(beanClass);
@@ -43,11 +39,9 @@ public class BeanMetadataContainerClass extends BeanMetadataContainer {
     writer.write(")");
   }
 
-  /**
-   * @param type the {@link #getBeanType() bean type} to check.
-   * @return {@code true} if the given {@link Class} reflects a Java class (not an interface, enum, annoataion, etc.)
-   *         and is not {@link Modifier#isAbstract(int) abstract}, {@code false} otherwise.
-   */
+  /// @param type the [bean type][#getBeanType()] to check.
+  /// @return `true` if the given [Class] reflects a Java class (not an interface, enum, annoataion, etc.)
+  ///         and is not [abstract][Modifier#isAbstract(int)], `false` otherwise.
   public static boolean isNonAbstractClass(Class<?> type) {
 
     if (type.isInterface()) {
@@ -62,12 +56,10 @@ public class BeanMetadataContainerClass extends BeanMetadataContainer {
     return true;
   }
 
-  /**
-   * @param beanClass the {@link Class} reflecting the {@link WritableBean} to get metadata for.
-   * @return the {@link BeanMetadataContainerInterface} for the given {@link Class} or {@code null} if not a
-   *         {@link #isNonAbstractClass(Class) non-abstract class} or not having public non-arg or {@link BeanClass}
-   *         constructor.
-   */
+  /// @param beanClass the [Class] reflecting the [WritableBean] to get metadata for.
+  /// @return the [BeanMetadataContainerInterface] for the given [Class] or `null` if not a
+  ///         [non-abstract class][#isNonAbstractClass(Class)] or not having public non-arg or [BeanClass]
+  ///         constructor.
   public static BeanMetadataContainerClass of(Class<? extends WritableBean> beanClass) {
 
     if (isNonAbstractClass(beanClass)) {

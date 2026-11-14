@@ -5,12 +5,10 @@ import java.util.List;
 
 import io.github.mmm.bean.BeanAliasMap;
 
-/**
- * Implementation of {@link BeanAliasMap} that is empty.
- */
+/// Implementation of [BeanAliasMap] that is empty.
 public class BeanAliasMapEmpty extends AbstractBeanAliasMap {
 
-  /** The singleton instance. */
+  /// The singleton instance.
   public static final AbstractBeanAliasMap INSTANCE = new BeanAliasMapEmpty();
 
   private BeanAliasMapEmpty() {

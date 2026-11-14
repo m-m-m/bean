@@ -11,12 +11,10 @@ import org.junit.jupiter.api.Test;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 
-/**
- * Test of {@link ContactBean}.
- */
+/// Test of [ContactBean].
 class ContactBeanTest extends Assertions {
 
-  /** Test of {@link ContactBean}. */
+  /// Test of [ContactBean].
   @Test
   void testCreateFromInterfaceWithInheritance() {
 

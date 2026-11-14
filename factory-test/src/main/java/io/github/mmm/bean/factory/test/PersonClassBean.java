@@ -10,32 +10,26 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 
-/**
- * A {@link Bean} for testing.
- */
+/// A [Bean] for testing.
 @BeanName("mmm_TestBean")
 public final class PersonClassBean extends AdvancedBean implements PersonBean {
 
-  /** Full name of person. */
+  /// Full name of person.
   public final StringProperty Name;
 
-  /** Age of person. */
+  /// Age of person.
   public final IntegerProperty Age;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public PersonClassBean() {
 
     this(null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public PersonClassBean(WritableBean writable) {
 
     super(writable);

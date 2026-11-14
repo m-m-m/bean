@@ -13,12 +13,10 @@ import io.github.mmm.bean.BeanCreator;
 import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 
-/**
- * Implementation of {@link BeanFactory}.
- */
+/// Implementation of [BeanFactory].
 public final class BeanFactoryManager implements BeanFactory {
 
-  /** The singleton instance. */
+  /// The singleton instance.
   public static final BeanFactory INSTANCE = new BeanFactoryManager();
 
   private final List<BeanCreator> delegates;

@@ -11,21 +11,17 @@ import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.BeanCreator;
 import io.github.mmm.bean.WritableBean;
 
-/**
- * Creator of {@link AbstractBean} instances.
- *
- * @since 1.0.0
- * @see #doCreate(Class, WritableBean)
- */
+/// Creator of [AbstractBean] instances.
+///
+/// @since 1.0.0
+/// @see #doCreate(Class, WritableBean)
 public final class BeanClassCreator implements BeanCreator {
 
   private static final Class<?>[] CONSTRUCTOR_SIGNATURE = new Class<?>[] { WritableBean.class };
 
   private final Map<Class<?>, WritableBean> type2emptyMap;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanClassCreator() {
 
     super();
@@ -46,14 +42,12 @@ public final class BeanClassCreator implements BeanCreator {
     }
   }
 
-  /**
-   * @param <B> type of {@link AbstractBean}.
-   * @param type {@link Class} of {@link AbstractBean}.
-   * @param writable the {@link AbstractBean} to wrap as {@link AbstractBean#isReadOnly() read-only} bean or
-   *        {@code null} to create a mutable bean.
-   * @return the new bean instance.
-   * @throws ReflectiveOperationException in case of an error.
-   */
+  /// @param <B> type of [AbstractBean].
+  /// @param type [Class] of [AbstractBean].
+  /// @param writable the [AbstractBean] to wrap as [read-only][AbstractBean#isReadOnly()] bean or
+  ///        `null` to create a mutable bean.
+  /// @return the new bean instance.
+  /// @throws ReflectiveOperationException in case of an error.
   @SuppressWarnings("unchecked")
   public static <B extends AbstractBean> B doCreate(Class<B> type, WritableBean writable)
       throws ReflectiveOperationException {

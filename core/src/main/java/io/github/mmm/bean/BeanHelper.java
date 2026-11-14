@@ -13,46 +13,38 @@ import io.github.mmm.property.factory.PropertyFactory;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 import io.github.mmm.property.factory.SimplePropertyFactory;
 
-/**
- * Class with helper methods for internal reuse to avoid redundancies.
- *
- * @since 1.0.0
- */
+/// Class with helper methods for internal reuse to avoid redundancies.
+///
+/// @since 1.0.0
 public class BeanHelper {
 
-  /**
-   * @param <B> type of the {@link WritableBean bean} to copy.
-   * @param source the source {@link WritableBean bean} to copy from.
-   * @param target the target {@link WritableBean bean} to copy to.
-   * @see ReadableBean#copy()
-   */
+  /// @param <B> type of the [bean][WritableBean] to copy.
+  /// @param source the source [bean][WritableBean] to copy from.
+  /// @param target the target [bean][WritableBean] to copy to.
+  /// @see ReadableBean#copy()
   public static <B extends WritableBean> void copy(B source, B target) {
 
     copyUnsafe(source, target, true);
   }
 
-  /**
-   * @param <B> type of the {@link WritableBean bean} to copy.
-   * @param source the source {@link WritableBean bean} to copy from.
-   * @param target the target {@link WritableBean bean} to copy to.
-   * @param excludeTransient - {@code true} if {@link WritableProperty#isTransient() transient} properties should be
-   *        excluded (not copied), {@code false} otherwise (to copy all properties that are not
-   *        {@link WritableProperty#isReadOnly() read-only}).
-   * @see ReadableBean#copy()
-   */
+  /// @param <B> type of the [bean][WritableBean] to copy.
+  /// @param source the source [bean][WritableBean] to copy from.
+  /// @param target the target [bean][WritableBean] to copy to.
+  /// @param excludeTransient - `true` if [transient][WritableProperty#isTransient()] properties should be
+  ///        excluded (not copied), `false` otherwise (to copy all properties that are not
+  ///        [read-only][WritableProperty#isReadOnly()]).
+  /// @see ReadableBean#copy()
   public static <B extends WritableBean> void copy(B source, B target, boolean excludeTransient) {
 
     copyUnsafe(source, target, excludeTransient);
   }
 
-  /**
-   * @param source the source {@link WritableBean bean} to copy from.
-   * @param target the target {@link WritableBean bean} to copy to.
-   * @param excludeTransient - {@code true} if {@link WritableProperty#isTransient() transient} properties should be
-   *        excluded (not copied), {@code false} otherwise (to copy all properties that are not
-   *        {@link WritableProperty#isReadOnly() read-only}).
-   * @see ReadableBean#copy()
-   */
+  /// @param source the source [bean][WritableBean] to copy from.
+  /// @param target the target [bean][WritableBean] to copy to.
+  /// @param excludeTransient - `true` if [transient][WritableProperty#isTransient()] properties should be
+  ///        excluded (not copied), `false` otherwise (to copy all properties that are not
+  ///        [read-only][WritableProperty#isReadOnly()]).
+  /// @see ReadableBean#copy()
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static void copyUnsafe(ReadableBean source, WritableBean target, boolean excludeTransient) {
 
@@ -68,28 +60,22 @@ public class BeanHelper {
     }
   }
 
-  /**
-   * @param getter the name of a method that is potentially a getter.
-   * @return the property name for the given {@code getter} or {@code null} if not a getter.
-   */
+  /// @param getter the name of a method that is potentially a getter.
+  /// @return the property name for the given `getter` or `null` if not a getter.
   public static String getPropertyName4Getter(String getter) {
 
     return getCapitalSuffixAfterPrefixes(getter, "get", "has", "is");
   }
 
-  /**
-   * @param setter the name of a method that is potentially a setter.
-   * @return the property name for the given {@code setter} or {@code null} if not a setter.
-   */
+  /// @param setter the name of a method that is potentially a setter.
+  /// @return the property name for the given `setter` or `null` if not a setter.
   public static String getPropertyName4Setter(String setter) {
 
     return getCapitalSuffixAfterPrefix(setter, "set");
   }
 
-  /**
-   * @param method the {@link Method} to check.
-   * @return the property name for the given {@link Method} or {@code null} if not a property {@link Method}.
-   */
+  /// @param method the [Method] to check.
+  /// @return the property name for the given [Method] or `null` if not a property [Method].
   public static String getPropertyName4Property(Method method) {
 
     if (method.getParameterCount() == 0) {
@@ -105,10 +91,8 @@ public class BeanHelper {
     return null;
   }
 
-  /**
-   * @param type the {@link Class} reflecting the {@link ReadableProperty} to get the {@link PropertyFactory} for.
-   * @return the {@link PropertyFactory} for the given property {@code Class} or {@code null} if not a property.
-   */
+  /// @param type the [Class] reflecting the [ReadableProperty] to get the [PropertyFactory] for.
+  /// @return the [PropertyFactory] for the given property `Class` or `null` if not a property.
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static PropertyFactory<?, ?> getPropertyFactory(Class<?> type) {
 
@@ -126,12 +110,10 @@ public class BeanHelper {
     return null;
   }
 
-  /**
-   * @param string the {@link String} to convert (e.g. method name).
-   * @param prefixes the array of prefixes to remove.
-   * @return the first {@link #getCapitalSuffixAfterPrefix(String, String) capital suffix} or {@code null} of no
-   *         {@code prefix} was matched.
-   */
+  /// @param string the [String] to convert (e.g. method name).
+  /// @param prefixes the array of prefixes to remove.
+  /// @return the first [capital suffix][#getCapitalSuffixAfterPrefix(String, String)] or `null` of no
+  ///         `prefix` was matched.
   private static String getCapitalSuffixAfterPrefixes(String string, String... prefixes) {
 
     for (String prefix : prefixes) {
@@ -143,11 +125,9 @@ public class BeanHelper {
     return null;
   }
 
-  /**
-   * @param string the {@link String} to convert (e.g. method name).
-   * @param prefix the prefix to remove.
-   * @return the capitalized rest after the given {@code prefix} or {@code null} if the {@code prefix} was not present.
-   */
+  /// @param string the [String] to convert (e.g. method name).
+  /// @param prefix the prefix to remove.
+  /// @return the capitalized rest after the given `prefix` or `null` if the `prefix` was not present.
   private static String getCapitalSuffixAfterPrefix(String string, String prefix) {
 
     if (string.startsWith(prefix)) {
@@ -159,10 +139,8 @@ public class BeanHelper {
     return null;
   }
 
-  /**
-   * @param bean the {@link ReadableBean}.
-   * @return the {@link Set} with the names of the {@link ReadableBean#getProperties() properties}.
-   */
+  /// @param bean the [ReadableBean].
+  /// @return the [Set] with the names of the [properties][ReadableBean#getProperties()].
   public static Set<String> getPropertyNames(ReadableBean bean) {
 
     Set<String> names = new HashSet<>();

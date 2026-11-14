@@ -7,15 +7,11 @@ import java.util.Set;
 
 import io.github.mmm.property.ReadableProperty;
 
-/**
- * Helper class for {@link io.github.mmm.bean.Bean}s.
- */
+/// Helper class for [io.github.mmm.bean.Bean]s.
 class BeanTestHelper {
 
-  /**
-   * @param bean the {@link ReadableBean}.
-   * @return the {@link Set} with the names of the {@link ReadableBean#getProperties() properties}.
-   */
+  /// @param bean the [ReadableBean].
+  /// @return the [Set] with the names of the [properties][ReadableBean#getProperties()].
   public static Set<String> getPropertyNames(ReadableBean bean) {
 
     Set<String> names = new HashSet<>();

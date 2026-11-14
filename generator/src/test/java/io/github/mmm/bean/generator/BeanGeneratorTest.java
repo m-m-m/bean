@@ -10,12 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import io.github.mmm.bean.generator.test.ContactBean;
 
-/**
- * Test of {@link BeanGenerator}.
- */
+/// Test of [BeanGenerator].
 class BeanGeneratorTest extends Assertions {
 
-  /** Test of {@link BeanGenerator#generate(Class, java.io.Writer)} */
+  /// Test of [BeanGenerator#generate(Class, java.io.Writer)]
   @Test
   void testGenerateBeanImpl() {
 

@@ -8,23 +8,19 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-/**
- * A simple cache implementation that is thread-safe and uses {@link WeakReference}s to avoid memory leaks.
- *
- * @param <K> type of {@link Map#containsKey(Object) key}.
- * @param <V> type of {@link Map#containsValue(Object) value}.
- *
- * @since 1.0.0
- */
+/// A simple cache implementation that is thread-safe and uses [WeakReference]s to avoid memory leaks.
+///
+/// @param <K> type of [key][Map#containsKey(Object)].
+/// @param <V> type of [value][Map#containsValue(Object)].
+///
+/// @since 1.0.0
 public class MemoryCache<K, V> {
 
   private final ReentrantLock lock;
 
   private final Map<K, WeakReference<V>> cache;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public MemoryCache() {
 
     super();
@@ -32,13 +28,11 @@ public class MemoryCache<K, V> {
     this.cache = new HashMap<>(32);
   }
 
-  /**
-   * @param key the {@link Map#containsKey(Object) key}.
-   * @param factory the {@link Supplier} factory.
-   * @return the cached value or the value created from the given {@link Supplier} factory after putting into this
-   *         cache.
-   * @see Map#computeIfAbsent(Object, java.util.function.Function)
-   */
+  /// @param key the [key][Map#containsKey(Object)].
+  /// @param factory the [Supplier] factory.
+  /// @return the cached value or the value created from the given [Supplier] factory after putting into this
+  ///         cache.
+  /// @see Map#computeIfAbsent(Object, java.util.function.Function)
   public V get(K key, Supplier<V> factory) {
 
     this.lock.lock();

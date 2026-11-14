@@ -12,9 +12,7 @@ import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 import io.github.mmm.property.time.localdate.LocalDateProperty;
 
-/**
- * Manual implementation of {@link ContactBean} to compare with generated code and ensure compilation works as expected.
- */
+/// Manual implementation of [ContactBean] to compare with generated code and ensure compilation works as expected.
 public class ContactBeanImpl extends AdvancedBean implements ContactBean {
 
   private final LocalDateProperty Birthday;
@@ -23,34 +21,28 @@ public class ContactBeanImpl extends AdvancedBean implements ContactBean {
 
   private final IntegerProperty Age;
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public ContactBeanImpl(WritableBean writable) {
 
     this(writable, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param type - the {@link #getType() type}.
-   */
+  /// The constructor.
+  ///
+  /// @param type - the [type][#getType()].
   public ContactBeanImpl(BeanClass type) {
 
     this(null, type);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   * @param type - the {@link #getType() type}.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
+  /// @param type - the [type][#getType()].
   public ContactBeanImpl(WritableBean writable, BeanClass type) {
 
     super(writable, type);

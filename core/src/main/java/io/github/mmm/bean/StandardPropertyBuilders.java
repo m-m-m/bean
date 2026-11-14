@@ -10,20 +10,16 @@ import io.github.mmm.property.PropertyLock;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.builder.PropertyBuilders;
 
-/**
- * Implementation of {@link PropertyBuilders} that auto registers build properties and redirects to read-only properties
- * if {@link AbstractBean#isReadOnly() read-only}.
- */
+/// Implementation of [PropertyBuilders] that auto registers build properties and redirects to read-only properties
+/// if [read-only][AbstractBean#isReadOnly()].
 public class StandardPropertyBuilders
     implements PropertyBuilders, Consumer<WritableProperty<?>>, Function<String, WritableProperty<?>> {
 
   private final WritableBean bean;
 
-  /**
-   * The constructor.
-   *
-   * @param bean {@link WritableBean} to build the {@link WritableProperty properties} for.
-   */
+  /// The constructor.
+  ///
+  /// @param bean [WritableBean] to build the [properties][WritableProperty] for.
   public StandardPropertyBuilders(WritableBean bean) {
 
     this.bean = bean;

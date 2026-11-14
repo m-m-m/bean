@@ -2,20 +2,16 @@ package io.github.mmm.bean.impl.mapping;
 
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 
-/**
- * Simple implementation of {@link PropertyIdMapping}.
- *
- * @since 1.0.0
- */
+/// Simple implementation of [PropertyIdMapping].
+///
+/// @since 1.0.0
 public class PropertyIdMappingSimple extends AbstractPropertyIdMapping {
 
   private final String[] names;
 
-  /**
-   * The constructor.
-   *
-   * @param names the array of property names stored using their ID as index.
-   */
+  /// The constructor.
+  ///
+  /// @param names the array of property names stored using their ID as index.
   public PropertyIdMappingSimple(String... names) {
 
     super();

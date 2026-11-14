@@ -4,21 +4,17 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-/**
- * Implementation of {@link GenericTypeInfo} for {@link Method} {@link Method#getReturnType() return type}.
- */
+/// Implementation of [GenericTypeInfo] for [Method] [return type][Method#getReturnType()].
 public class GenericTypeInfoParameter extends GenericTypeInfo {
 
   private final Executable executable;
 
   private final int parameter;
 
-  /**
-   * The constructor.
-   *
-   * @param executable the {@link Executable}.
-   * @param parameter the {@link Executable#getParameters() parameter} index.
-   */
+  /// The constructor.
+  ///
+  /// @param executable the [Executable].
+  /// @param parameter the [parameter][Executable#getParameters()] index.
   public GenericTypeInfoParameter(Executable executable, int parameter) {
 
     super(executable.getParameterTypes()[parameter]);

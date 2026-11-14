@@ -18,9 +18,7 @@ import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.impl.properties.BeanProperties;
 import io.github.mmm.bean.impl.properties.BeanPropertiesMap;
 
-/**
- * A {@link BeanClass} reflects a {@link Bean} (similar to a Java {@link Class}).
- */
+/// A [BeanClass] reflects a [Bean] (similar to a Java [Class]).
 public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
 
   private static final Map<String, BeanClassImpl> CLASS_MAP = new ConcurrentHashMap<>();
@@ -45,52 +43,44 @@ public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
     asClass(VirtualBean.class);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the {@link Class} of the {@link Bean} to reflect.
-   * @param superClassList the {@link #getSuperClasses() super-classes}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the [Class] of the [Bean] to reflect.
+  /// @param superClassList the [super-classes][#getSuperClasses()].
   public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList) {
 
     this(javaClass, superClassList, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the {@link Class} of the {@link Bean} to reflect.
-   * @param superClassList the {@link #getSuperClasses() super-classes}.
-   * @param stableName the {@link #getStableName() stable name}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the [Class] of the [Bean] to reflect.
+  /// @param superClassList the [super-classes][#getSuperClasses()].
+  /// @param stableName the [stable name][#getStableName()].
   public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String stableName) {
 
     this(javaClass, superClassList, javaClass.getPackageName(), javaClass.getSimpleName(), stableName, false);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the {@link Class} of the {@link Bean} to reflect.
-   * @param superClassList the {@link #getSuperClasses() super-classes}.
-   * @param stableName the {@link #getStableName() stable name}.
-   * @param simpleName the {@link #getSimpleName() simple name}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the [Class] of the [Bean] to reflect.
+  /// @param superClassList the [super-classes][#getSuperClasses()].
+  /// @param stableName the [stable name][#getStableName()].
+  /// @param simpleName the [simple name][#getSimpleName()].
   public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String stableName,
       String simpleName) {
 
     this(javaClass, superClassList, javaClass.getPackageName(), simpleName, stableName);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the {@link Class} of the {@link Bean} to reflect.
-   * @param superClassList the {@link #getSuperClasses() super-classes}.
-   * @param packageName the {@link #getPackageName() package name}.
-   * @param stableName the {@link #getStableName() stable name}.
-   * @param simpleName the {@link #getSimpleName() simple name}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the [Class] of the [Bean] to reflect.
+  /// @param superClassList the [super-classes][#getSuperClasses()].
+  /// @param packageName the [package name][#getPackageName()].
+  /// @param stableName the [stable name][#getStableName()].
+  /// @param simpleName the [simple name][#getSimpleName()].
   public BeanClassImpl(Class<? extends VirtualBean> javaClass, List<BeanClassImpl> superClassList, String packageName,
       String stableName, String simpleName) {
 
@@ -184,9 +174,7 @@ public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
     return this.prototype;
   }
 
-  /**
-   * @param prototype the {@link #getPrototype() prototype}.
-   */
+  /// @param prototype the [prototype][#getPrototype()].
   public void setPrototype(VirtualBean prototype) {
 
     if (this.prototype != null) {
@@ -204,29 +192,23 @@ public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
     return new BeanPropertiesMap(threadSafe);
   }
 
-  /**
-   * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
-   * @return the {@link BeanClass} for this instance.
-   */
+  /// @param javaClass the [Class] reflecting the [AdvancedBean].
+  /// @return the [BeanClass] for this instance.
   public static BeanClassImpl asClass(Class<? extends VirtualBean> javaClass) {
 
     return asClass(javaClass, BeanClassImpl::getBeanClass);
   }
 
-  /**
-   * @param key the fully-qualified (virtual or physical) class-name.
-   * @return the {@link BeanClass} for this instance.
-   */
+  /// @param key the fully-qualified (virtual or physical) class-name.
+  /// @return the [BeanClass] for this instance.
   public static BeanClassImpl getClass(String key) {
 
     return CLASS_MAP.get(key);
   }
 
-  /**
-   * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
-   * @param factory a {@link Function} to get or create {@link BeanClassImpl} by {@link Class}.
-   * @return the {@link BeanClass} for this instance.
-   */
+  /// @param javaClass the [Class] reflecting the [AdvancedBean].
+  /// @param factory a [Function] to get or create [BeanClassImpl] by [Class].
+  /// @return the [BeanClass] for this instance.
   public static BeanClassImpl asClass(Class<? extends VirtualBean> javaClass,
       Function<Class<?>, BeanClassImpl> factory) {
 
@@ -262,10 +244,8 @@ public final class BeanClassImpl extends AbstractBeanType implements BeanClass {
     return beanClass;
   }
 
-  /**
-   * @param javaClass the {@link Class} reflecting the {@link AdvancedBean}.
-   * @return the corresponding {@link BeanClass}.
-   */
+  /// @param javaClass the [Class] reflecting the [AdvancedBean].
+  /// @return the corresponding [BeanClass].
   private static BeanClassImpl getBeanClass(Class<?> javaClass) {
 
     BeanClassImpl beanClass = CLASS_MAP.get(javaClass.getName());

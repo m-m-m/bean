@@ -8,18 +8,16 @@ import io.github.mmm.bean.BeanName;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.string.StringProperty;
 
-/**
- * {@link AdvancedBean} for testing.
- */
+/// [AdvancedBean] for testing.
 @SuppressWarnings("javadoc")
 @BeanName("mmm_TestAdvancedParentBean")
 public class TestAdvancedParentBean extends AdvancedBean {
 
-  /** @see BeanClass#getPrototype() */
+  /// @see BeanClass#getPrototype()
   @SuppressWarnings("hiding")
   public static final TestAdvancedParentBean PROTOTYPE = new TestAdvancedParentBean();
 
-  /** Full name of person. */
+  /// Full name of person.
   public final StringProperty Name;
 
   public TestAdvancedParentBean() {

@@ -9,20 +9,16 @@ import io.github.mmm.base.exception.ReadOnlyException;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Implementation of {@link BeanProperties} for a read-only bean.
- */
+/// Implementation of [BeanProperties] for a read-only bean.
 public class BeanPropertiesReadOnly extends BeanProperties {
 
   private final WritableBean delegate;
 
   private final Collection<WritableProperty<?>> properties;
 
-  /**
-   * The constructor.
-   *
-   * @param delegate the {@link BeanProperties} to wrap read-only.
-   */
+  /// The constructor.
+  ///
+  /// @param delegate the [BeanProperties] to wrap read-only.
   public BeanPropertiesReadOnly(WritableBean delegate) {
 
     super();

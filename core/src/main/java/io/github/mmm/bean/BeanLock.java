@@ -4,19 +4,15 @@ package io.github.mmm.bean;
 
 import io.github.mmm.property.PropertyLock;
 
-/**
- * {@link PropertyLock} for {@link ReadableBean}. Usually the {@link ReadableBean} itself but for
- * {@link io.github.mmm.property.WritableProperty#getReadOnly() read-only properties}....
- *
- * @since 1.0.0
- */
+/// [PropertyLock] for [ReadableBean]. Usually the [ReadableBean] itself but for
+/// [read-only properties][io.github.mmm.property.WritableProperty#getReadOnly()]....
+///
+/// @since 1.0.0
 public interface BeanLock extends PropertyLock {
 
-  /**
-   * @return the {@link BeanType} reflecting this {@link Bean}.
-   * @see VirtualBean#getType()
-   * @see BeanClass
-   */
+  /// @return the [BeanType] reflecting this [Bean].
+  /// @see VirtualBean#getType()
+  /// @see BeanClass
   BeanType getType();
 
 }

@@ -10,12 +10,10 @@ import io.github.mmm.property.factory.AbstractPropertyFactory;
 import io.github.mmm.property.factory.PropertyFactory;
 import io.github.mmm.property.factory.PropertyTypeInfo;
 
-/**
- * Implementation of {@link PropertyFactory} for {@link BeanProperty}.
- *
- * @param <V> type of the {@link WritableBean bean}.
- * @since 1.0.0
- */
+/// Implementation of [PropertyFactory] for [BeanProperty].
+///
+/// @param <V> type of the [bean][WritableBean].
+/// @since 1.0.0
 public class PropertyFactoryBean<V extends WritableBean> extends AbstractPropertyFactory<V, BeanProperty<V>> {
 
   @SuppressWarnings({ "unchecked", "rawtypes" })

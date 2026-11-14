@@ -6,28 +6,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * Abstract base implementation of {@link BeanFactory} for generated implementations.
- *
- * @since 1.0.0
- */
+/// Abstract base implementation of [BeanFactory] for generated implementations.
+///
+/// @since 1.0.0
 public abstract class AbstractBeanCreator implements BeanCreator {
 
   private final Map<Class<?>, Function<BeanClass, WritableBean>> beanFactoryMap;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public AbstractBeanCreator() {
 
     super();
     this.beanFactoryMap = new HashMap<>();
   }
 
-  /**
-   * @param beanInterface the {@link Class} reflecting the {@link WritableBean} interface to register.
-   * @param factory the factory {@link Function} to create instances of that {@link WritableBean} interface.
-   */
+  /// @param beanInterface the [Class] reflecting the [WritableBean] interface to register.
+  /// @param factory the factory [Function] to create instances of that [WritableBean] interface.
   protected void add(Class<?> beanInterface, Function<BeanClass, WritableBean> factory) {
 
     this.beanFactoryMap.put(beanInterface, factory);

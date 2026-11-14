@@ -8,26 +8,22 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.value.converter.CompositeTypeMapper;
 
-/**
- * {@link CompositeTypeMapper} for a {@link WritableBean}.
- *
- * @param <S> the {@link #getSourceType() source type}.
- * @param <T> the {@link #getTargetType() target type}.
- * @since 1.0.0
- */
+/// [CompositeTypeMapper] for a [WritableBean].
+///
+/// @param <S> the [source type][#getSourceType()].
+/// @param <T> the [target type][#getTargetType()].
+/// @since 1.0.0
 public class BeanTypeMapper<S extends WritableBean, T> extends CompositeTypeMapper<S, T> {
 
   private final WritableProperty<T> property;
 
   private S template;
 
-  /**
-   * The constructor.
-   *
-   * @param property the {@link WritableProperty} to map as segment.
-   * @param next the {@link #next() next} {@link BeanTypeMapper}. May be {@code null}.
-   * @param template the {@link WritableBean} to use as template.
-   */
+  /// The constructor.
+  ///
+  /// @param property the [WritableProperty] to map as segment.
+  /// @param next the [next][#next()] [BeanTypeMapper]. May be `null`.
+  /// @param template the [WritableBean] to use as template.
   public BeanTypeMapper(WritableProperty<T> property, BeanTypeMapper<S, ?> next, S template) {
 
     super(property.getName(), next);
@@ -66,11 +62,9 @@ public class BeanTypeMapper<S extends WritableBean, T> extends CompositeTypeMapp
     builder.build().setDynamic(this.suffix, targetSegment);
   }
 
-  /**
-   * @param <B> type of the {@link WritableBean}.
-   * @param bean the {@link WritableBean} instance.
-   * @return the {@link BeanTypeMapper} to map the given {@link WritableBean}.
-   */
+  /// @param <B> type of the [WritableBean].
+  /// @param bean the [WritableBean] instance.
+  /// @return the [BeanTypeMapper] to map the given [WritableBean].
   public static <B extends WritableBean> BeanTypeMapper<B, ?> of(B bean) {
 
     return of(bean, bean.getProperties().iterator());

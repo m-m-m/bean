@@ -10,10 +10,8 @@ import java.util.function.Function;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Implementation of {@link BeanProperties} using a static array of {@link WritableProperty}. May only be used for
- * static (non {@link io.github.mmm.bean.Bean#isDynamic() dynamic}) {@link io.github.mmm.bean.Bean}s.
- */
+/// Implementation of [BeanProperties] using a static array of [WritableProperty]. May only be used for
+/// static (non [dynamic][io.github.mmm.bean.Bean#isDynamic()]) [io.github.mmm.bean.Bean]s.
 public class BeanPropertiesStaticArray extends BeanProperties {
 
   private final BeanPropertyNames propertyNames;
@@ -23,11 +21,9 @@ public class BeanPropertiesStaticArray extends BeanProperties {
 
   private final Collection<WritableProperty<?>> properties;
 
-  /**
-   * The constructor.
-   *
-   * @param propertyNames the {@link BeanPropertyNames}.
-   */
+  /// The constructor.
+  ///
+  /// @param propertyNames the [BeanPropertyNames].
   public BeanPropertiesStaticArray(BeanPropertyNames propertyNames) {
 
     super();

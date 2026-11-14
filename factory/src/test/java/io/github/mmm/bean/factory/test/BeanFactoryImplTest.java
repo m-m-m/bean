@@ -11,12 +11,10 @@ import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.string.StringProperty;
 
-/**
- * Test of {@link BeanFactory}[Impl].
- */
+/// Test of [BeanFactory][Impl].
 class BeanFactoryImplTest extends Assertions {
 
-  /** Test of {@link BeanFactory#create(Class)} from an interface. */
+  /// Test of [BeanFactory#create(Class)] from an interface.
   @Test
   void testCreateFromInterface() {
 
@@ -52,9 +50,7 @@ class BeanFactoryImplTest extends Assertions {
     }
   }
 
-  /**
-   * Test of aliases (via {@link io.github.mmm.bean.PropertyAlias} annotation) from bean interface {@link PersonBean}.
-   */
+  /// Test of aliases (via [io.github.mmm.bean.PropertyAlias] annotation) from bean interface [PersonBean].
   @Test
   void testCreateFromInterfaceWithAlias() {
 

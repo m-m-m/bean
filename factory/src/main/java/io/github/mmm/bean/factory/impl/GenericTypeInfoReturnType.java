@@ -3,18 +3,14 @@ package io.github.mmm.bean.factory.impl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-/**
- * Implementation of {@link GenericTypeInfo} for {@link Method} {@link Method#getReturnType() return type}.
- */
+/// Implementation of [GenericTypeInfo] for [Method] [return type][Method#getReturnType()].
 public class GenericTypeInfoReturnType extends GenericTypeInfo {
 
   private final Method method;
 
-  /**
-   * The constructor.
-   *
-   * @param method the {@link Method}.
-   */
+  /// The constructor.
+  ///
+  /// @param method the [Method].
   public GenericTypeInfoReturnType(Method method) {
 
     super(method.getReturnType());

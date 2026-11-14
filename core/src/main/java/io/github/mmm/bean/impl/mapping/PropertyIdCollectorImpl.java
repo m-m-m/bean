@@ -8,11 +8,9 @@ import io.github.mmm.bean.mapping.PropertyIdCollector;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.property.ReadableProperty;
 
-/**
- * Implementation of {@link PropertyIdCollector}.
- *
- * @since 1.0.0
- */
+/// Implementation of [PropertyIdCollector].
+///
+/// @since 1.0.0
 public class PropertyIdCollectorImpl implements PropertyIdCollector {
 
   private int counter;
@@ -21,19 +19,15 @@ public class PropertyIdCollectorImpl implements PropertyIdCollector {
 
   private Map<Integer, String> id2nameMap;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public PropertyIdCollectorImpl() {
 
     this(16);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param capacity the capacity of the array used to avoid {@link Map} allocation.
-   */
+  /// The constructor.
+  ///
+  /// @param capacity the capacity of the array used to avoid [Map] allocation.
   public PropertyIdCollectorImpl(int capacity) {
 
     super();
@@ -85,9 +79,7 @@ public class PropertyIdCollectorImpl implements PropertyIdCollector {
     this.counter = this.counter + offset;
   }
 
-  /**
-   * @return the {@link PropertyIdMapping} for the collected ID assignments.
-   */
+  /// @return the [PropertyIdMapping] for the collected ID assignments.
   public PropertyIdMapping build() {
 
     if (this.id2nameMap == null) {

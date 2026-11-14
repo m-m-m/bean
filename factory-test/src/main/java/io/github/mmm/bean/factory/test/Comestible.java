@@ -4,9 +4,7 @@ import io.github.mmm.bean.BeanFactory;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.property.string.StringProperty;
 
-/**
- * A {@link Comestible} is something to eat or drink.
- */
+/// A [Comestible] is something to eat or drink.
 public abstract interface Comestible extends WritableBean {
 
   @Override
@@ -15,18 +13,16 @@ public abstract interface Comestible extends WritableBean {
     return true;
   }
 
-  /** @return {@code true} if liquid, {@code false} otherwise. */
+  /// @return `true` if liquid, `false` otherwise.
   default boolean isLiquid() {
 
     return false;
   }
 
-  /** @return the name of this comestible. */
+  /// @return the name of this comestible.
   StringProperty Name();
 
-  /**
-   * @return a new instance of {@link Comestible}.
-   */
+  /// @return a new instance of [Comestible].
   static Comestible of() {
 
     return BeanFactory.get().create(Comestible.class);

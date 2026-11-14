@@ -24,27 +24,23 @@ import io.github.mmm.property.factory.PropertyTypeInfo;
 import io.github.mmm.validation.Validator;
 import io.github.mmm.validation.main.ValidatorMandatory;
 
-/**
- * Operation on a {@link Bean} {@link WritableProperty property}.
- *
- * @since 1.0.0
- */
+/// Operation on a [Bean] [property][WritableProperty].
+///
+/// @since 1.0.0
 public abstract class BeanOperationOnProperty extends BeanOperation {
 
-  /** @see #getPropertyName() */
+  /// @see #getPropertyName()
   protected final String propertyName;
 
-  /** @see #getMethod() */
+  /// @see #getMethod()
   protected final Method method;
 
   private MetaInfo metaInfo;
 
-  /**
-   * The constructor.
-   *
-   * @param propertyName the {@link #getPropertyName() propertyName}.
-   * @param method the {@link #getMethod() method}.
-   */
+  /// The constructor.
+  ///
+  /// @param propertyName the [propertyName][#getPropertyName()].
+  /// @param method the [method][#getMethod()].
   public BeanOperationOnProperty(String propertyName, Method method) {
 
     super();
@@ -59,20 +55,16 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     return this.propertyName;
   }
 
-  /**
-   * @return the {@link Method} of this operation.
-   */
+  /// @return the [Method] of this operation.
   public Method getMethod() {
 
     return this.method;
   }
 
-  /**
-   * @param proxy the {@link BeanProxy}.
-   * @param propertyType the {@link GenericTypeInfo} of the the {@link WritableProperty} or {@code null} if
-   *        {@code valueType} is given.
-   * @return the new {@link WritableProperty}.
-   */
+  /// @param proxy the [BeanProxy].
+  /// @param propertyType the [GenericTypeInfo] of the the [WritableProperty] or `null` if
+  ///        `valueType` is given.
+  /// @return the new [WritableProperty].
   @SuppressWarnings({ "rawtypes", "unchecked" })
   protected WritableProperty<?> createPropertyByPropertyType(BeanProxy proxy, GenericTypeInfo propertyType) {
 
@@ -90,12 +82,10 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     return property;
   }
 
-  /**
-   * @param proxy the {@link BeanProxy}.
-   * @param valueType the {@link GenericTypeInfo} of the {@link WritableProperty#getValueClass() value class} or
-   *        {@code null} if {@code propertyType} is given.
-   * @return the new {@link WritableProperty}.
-   */
+  /// @param proxy the [BeanProxy].
+  /// @param valueType the [GenericTypeInfo] of the [value class][WritableProperty#getValueClass()] or
+  ///        `null` if `propertyType` is given.
+  /// @return the new [WritableProperty].
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public WritableProperty<?> createPropertyByValueType(BeanProxy proxy, GenericTypeInfo valueType) {
 
@@ -112,11 +102,9 @@ public abstract class BeanOperationOnProperty extends BeanOperation {
     return property;
   }
 
-  /**
-   * @param proxy the {@link BeanProxy}.
-   * @param metadata the optional existing {@link PropertyMetadata} to use as template. May be {@code null}.
-   * @return the new {@link PropertyMetadata}.
-   */
+  /// @param proxy the [BeanProxy].
+  /// @param metadata the optional existing [PropertyMetadata] to use as template. May be `null`.
+  /// @return the new [PropertyMetadata].
   @SuppressWarnings({ "unchecked", "rawtypes" })
   protected PropertyMetadata createMetadata(BeanProxy proxy, PropertyMetadata metadata) {
 

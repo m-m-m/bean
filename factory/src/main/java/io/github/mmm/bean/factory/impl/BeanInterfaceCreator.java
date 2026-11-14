@@ -10,26 +10,20 @@ import io.github.mmm.bean.BeanCreator;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
 
-/**
- * Implementation of {@link BeanCreator} to create {@link WritableBean beans} from interface as dynamic proxy.
- */
+/// Implementation of [BeanCreator] to create [beans][WritableBean] from interface as dynamic proxy.
 public class BeanInterfaceCreator implements BeanCreator {
 
   private final ClassLoader classLoader;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanInterfaceCreator() {
 
     this(Thread.currentThread().getContextClassLoader());
   }
 
-  /**
-   * The constructor.
-   *
-   * @param classLoader the {@link ClassLoader}.
-   */
+  /// The constructor.
+  ///
+  /// @param classLoader the [ClassLoader].
   public BeanInterfaceCreator(ClassLoader classLoader) {
 
     super();
@@ -47,12 +41,10 @@ public class BeanInterfaceCreator implements BeanCreator {
     return null;
   }
 
-  /**
-   * @param <B> type of {@link WritableBean}.
-   * @param handler the {@link InvocationHandler}.
-   * @param interfaces the interfaces to be implemented by the dynamic proxy.
-   * @return the dynamic proxy instance.
-   */
+  /// @param <B> type of [WritableBean].
+  /// @param handler the [InvocationHandler].
+  /// @param interfaces the interfaces to be implemented by the dynamic proxy.
+  /// @return the dynamic proxy instance.
   @SuppressWarnings("unchecked")
   public <B extends WritableBean> B createProxy(InvocationHandler handler, Class<?>... interfaces) {
 

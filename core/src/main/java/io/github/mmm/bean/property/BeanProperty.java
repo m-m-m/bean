@@ -14,12 +14,10 @@ import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.value.ReadableValue;
 import io.github.mmm.value.converter.TypeMapper;
 
-/**
- * Implementation of {@link WritableBeanProperty}.
- *
- * @param <V> type of the {@link WritableBean bean} {@link #getValue() value}.
- * @since 1.0.0
- */
+/// Implementation of [WritableBeanProperty].
+///
+/// @param <V> type of the [bean][WritableBean] [value][#getValue()].
+/// @since 1.0.0
 public class BeanProperty<V extends WritableBean> extends Property<V> implements WritableBeanProperty<V> {
 
   private final Class<V> valueClass;
@@ -28,48 +26,40 @@ public class BeanProperty<V extends WritableBean> extends Property<V> implements
 
   private TypeMapper<V, ?> typeMapper;
 
-  /**
-   * The constructor.
-   *
-   * @param name the {@link #getName() name}.
-   * @param valueClass the {@link #getValueClass() value class}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the [name][#getName()].
+  /// @param valueClass the [value class][#getValueClass()].
   public BeanProperty(String name, Class<V> valueClass) {
 
     this(name, valueClass, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param name the {@link #getName() name}.
-   * @param valueClass the {@link #getValueClass() value class}.
-   * @param metadata the {@link #getMetadata() metadata}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the [name][#getName()].
+  /// @param valueClass the [value class][#getValueClass()].
+  /// @param metadata the [metadata][#getMetadata()].
   public BeanProperty(String name, Class<V> valueClass, PropertyMetadata<V> metadata) {
 
     super(name, metadata);
     this.valueClass = valueClass;
   }
 
-  /**
-   * The constructor.
-   *
-   * @param name the {@link #getName() name}.
-   * @param value the (initial) {@link #get() value}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the [name][#getName()].
+  /// @param value the (initial) [value][#get()].
   public BeanProperty(String name, V value) {
 
     this(name, value, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param name the {@link #getName() name}.
-   * @param value the (initial) {@link #get() value}.
-   * @param metadata the {@link #getMetadata() metadata}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the [name][#getName()].
+  /// @param value the (initial) [value][#get()].
+  /// @param metadata the [metadata][#getMetadata()].
   @SuppressWarnings("unchecked")
   public BeanProperty(String name, V value, PropertyMetadata<V> metadata) {
 

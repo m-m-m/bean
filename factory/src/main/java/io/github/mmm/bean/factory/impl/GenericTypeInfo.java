@@ -6,21 +6,17 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 
-/**
- * Simple wrapper of {@link #getRawClass()} and {@link #getGenericType()}.
- */
+/// Simple wrapper of [#getRawClass()] and [#getGenericType()].
 public class GenericTypeInfo {
 
   private final Class<?> rawClass;
 
-  /** @see #getGenericType() */
+  /// @see #getGenericType()
   protected Type genericType;
 
-  /**
-   * The constructor.
-   *
-   * @param rawClass the {@link #getRawClass() raw class}.
-   */
+  /// The constructor.
+  ///
+  /// @param rawClass the [raw class][#getRawClass()].
   protected GenericTypeInfo(Class<?> rawClass) {
 
     this(rawClass, null);
@@ -33,17 +29,13 @@ public class GenericTypeInfo {
     this.genericType = genericType;
   }
 
-  /**
-   * @return raw {@link Class}.
-   */
+  /// @return raw [Class].
   public Class<?> getRawClass() {
 
     return this.rawClass;
   }
 
-  /**
-   * @return the generic {@link Type}.
-   */
+  /// @return the generic [Type].
   public Type getGenericType() {
 
     return this.genericType;
@@ -55,11 +47,9 @@ public class GenericTypeInfo {
     return this.genericType.getTypeName();
   }
 
-  /**
-   * @param rawClass the {@link #getRawClass() raw class}.
-   * @param genericType the {@link #getGenericType() generic type}.
-   * @return the {@link GenericTypeInfo} for the given values.
-   */
+  /// @param rawClass the [raw class][#getRawClass()].
+  /// @param genericType the [generic type][#getGenericType()].
+  /// @return the [GenericTypeInfo] for the given values.
   public static GenericTypeInfo of(Class<?> rawClass, Type genericType) {
 
     if (genericType == null) {
@@ -68,35 +58,29 @@ public class GenericTypeInfo {
     return new GenericTypeInfo(rawClass, genericType);
   }
 
-  /**
-   * @param method the {@link Method}.
-   * @return the {@link GenericTypeInfo} for the {@link Method#getGenericReturnType() return type}.
-   */
+  /// @param method the [Method].
+  /// @return the [GenericTypeInfo] for the [return type][Method#getGenericReturnType()].
   public static GenericTypeInfo ofReturnType(Method method) {
 
     return new GenericTypeInfoReturnType(method);
   }
 
-  /**
-   * @param executable the {@link Executable}.
-   * @param parameterIndex the index of the requested parameter.
-   * @return the {@link GenericTypeInfo} for the {@link Executable#getGenericParameterTypes() parameter} at the
-   *         specified {@code parameterIndex}.
-   */
+  /// @param executable the [Executable].
+  /// @param parameterIndex the index of the requested parameter.
+  /// @return the [GenericTypeInfo] for the [parameter][Executable#getGenericParameterTypes()] at the
+  ///         specified `parameterIndex`.
   public static GenericTypeInfo ofParameter(Executable executable, int parameterIndex) {
 
     return new GenericTypeInfoParameter(executable, parameterIndex);
   }
 
-  /**
-   * @param type the {@link #getGenericType() generic type}. The {@link #getRawClass() raw class} will be derived from
-   *        this {@link Type}.
-   * @param containingType the {@link Type} containing the {@link Type} to resolve. E.g. the {@link Class} the
-   *        {@link Type} to resolve has been retrieved from from field, return type, parameter, type-parameter, etc.
-   * @return the {@link GenericTypeInfo} with the {@link GenericTypeInfo#getRawClass() raw class} derived from the given
-   *         {@link Type}. Will be {@code null} if we can not properly resolve the raw class (e.g. TypeVariables are not
-   *         supported).
-   */
+  /// @param type the [generic type][#getGenericType()]. The [raw class][#getRawClass()] will be derived from
+  ///        this [Type].
+  /// @param containingType the [Type] containing the [Type] to resolve. E.g. the [Class] the
+  ///        [Type] to resolve has been retrieved from from field, return type, parameter, type-parameter, etc.
+  /// @return the [GenericTypeInfo] with the [raw class][GenericTypeInfo#getRawClass()] derived from the given
+  ///         [Type]. Will be `null` if we can not properly resolve the raw class (e.g. TypeVariables are not
+  ///         supported).
   public static GenericTypeInfo ofGeneric(Type type, Type containingType) {
 
     Class<?> rawClass = getRawClass(type, containingType);
@@ -106,13 +90,11 @@ public class GenericTypeInfo {
     return of(rawClass, type);
   }
 
-  /**
-   * @param type the generic {@link Type} to resolve as raw {@link Class}.
-   * @param containingType the {@link Type} containing the {@link Type} to resolve. E.g. the {@link Class} the
-   *        {@link Type} to resolve has been retrieved from from field, return type, parameter, type-parameter, etc.
-   * @return the resolved raw {@link Class} of {@code null} if we can not properly resolve the raw class (e.g.
-   *         TypeVariable is not supported).
-   */
+  /// @param type the generic [Type] to resolve as raw [Class].
+  /// @param containingType the [Type] containing the [Type] to resolve. E.g. the [Class] the
+  ///        [Type] to resolve has been retrieved from from field, return type, parameter, type-parameter, etc.
+  /// @return the resolved raw [Class] of `null` if we can not properly resolve the raw class (e.g.
+  ///         TypeVariable is not supported).
   public static Class<?> getRawClass(Type type, Type containingType) {
 
     return getRawClass(type, containingType, type);

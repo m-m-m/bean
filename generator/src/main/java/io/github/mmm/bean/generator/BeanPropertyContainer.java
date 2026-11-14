@@ -9,11 +9,9 @@ import java.lang.reflect.Method;
 import io.github.mmm.property.factory.PropertyFactory;
 import io.github.mmm.property.factory.PropertyFactoryManager;
 
-/**
- * Container for a {@link BeanPropertyContainer}.
- *
- * @since 1.0.0
- */
+/// Container for a [BeanPropertyContainer].
+///
+/// @since 1.0.0
 public class BeanPropertyContainer {
 
   private final String name;
@@ -28,52 +26,40 @@ public class BeanPropertyContainer {
 
   private String propertyType;
 
-  /**
-   * The constructor.
-   *
-   * @param name the {@link #getName() Name}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the [Name][#getName()].
   public BeanPropertyContainer(String name) {
 
     super();
     this.name = name;
   }
 
-  /**
-   * @return the name of the property.
-   */
+  /// @return the name of the property.
   public String getName() {
 
     return this.name;
   }
 
-  /**
-   * @return propertyMethod
-   */
+  /// @return propertyMethod
   public BeanMethodContainerProperty getPropertyMethod() {
 
     return this.propertyMethod;
   }
 
-  /**
-   * @return getterMethod
-   */
+  /// @return getterMethod
   public BeanMethodContainerGetter getGetterMethod() {
 
     return this.getterMethod;
   }
 
-  /**
-   * @return setterMethod
-   */
+  /// @return setterMethod
   public BeanMethodContainerSetter getSetterMethod() {
 
     return this.setterMethod;
   }
 
-  /**
-   * @param method the {@link BeanMethodContainer} to register in this {@link BeanPropertyContainer}.
-   */
+  /// @param method the [BeanMethodContainer] to register in this [BeanPropertyContainer].
   public void add(BeanMethodContainer method) {
 
     if (method instanceof BeanMethodContainerProperty) {
@@ -95,9 +81,7 @@ public class BeanPropertyContainer {
     return update;
   }
 
-  /**
-   * @return type
-   */
+  /// @return type
   public Class<?> getType() {
 
     if (this.type == null) {
@@ -115,9 +99,7 @@ public class BeanPropertyContainer {
     return this.type;
   }
 
-  /**
-   * @return propertyType
-   */
+  /// @return propertyType
   public String getPropertyType() {
 
     if (this.propertyType == null) {
@@ -142,12 +124,10 @@ public class BeanPropertyContainer {
     return null;
   }
 
-  /**
-   * Writes the property field declaration.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the property field declaration.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeField(Writer writer) throws IOException {
 
     writer.write("  private final ");
@@ -160,12 +140,10 @@ public class BeanPropertyContainer {
     writer.write(";\n");
   }
 
-  /**
-   * Writes the property field initializer statement for constructor.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the property field initializer statement for constructor.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeFieldInitializer(Writer writer) throws IOException {
 
     writer.write("    this.");
@@ -198,12 +176,10 @@ public class BeanPropertyContainer {
     writer.write(");\n");
   }
 
-  /**
-   * Writes the methods.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the methods.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeMethods(Writer writer) throws IOException {
 
     if (this.propertyMethod != null) {

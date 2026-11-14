@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import io.github.mmm.bean.BeanAliasMap;
 
-/**
- * Implementation of {@link BeanAliasMap} that has a multiple mappings.
- */
+/// Implementation of [BeanAliasMap] that has a multiple mappings.
 public class BeanAliasMapMultiple extends AbstractBeanAliasMap {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanAliasMapMultiple.class);
@@ -22,12 +20,10 @@ public class BeanAliasMapMultiple extends AbstractBeanAliasMap {
 
   private final Map<String, List<String>> aliasesMap;
 
-  /**
-   * The constructor.
-   *
-   * @param name the primary {@link io.github.mmm.property.ReadableProperty#getName() property name}.
-   * @param alias the associated {@link #getName(String) alias}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the primary [property name][io.github.mmm.property.ReadableProperty#getName()].
+  /// @param alias the associated [alias][#getName(String)].
   public BeanAliasMapMultiple(String name, String alias) {
 
     super();

@@ -10,41 +10,37 @@ import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.factory.PropertyTypeInfo;
 import io.github.mmm.property.object.WritableSimpleProperty;
 
-/**
- * Abstract base class for real implementations of {@link PropertyTypeInfo}.
- *
- * @param <V> type of {@link #getValueClass()}.
- */
+/// Abstract base class for real implementations of [PropertyTypeInfo].
+///
+/// @param <V> type of [#getValueClass()].
 public abstract class AbstractPropertyTypeInfo<V> implements PropertyTypeInfo<V> {
 
   private static final Type[] NO_TYPES = new Type[0];
 
-  /** The {@link GenericTypeInfo} of the property or value. */
+  /// The [GenericTypeInfo] of the property or value.
   protected final GenericTypeInfo owner;
 
   private final BeanOperationOnProperty operation;
 
   private final BeanProxy proxy;
 
-  /** @see #getTypeArgument(int) */
+  /// @see #getTypeArgument(int)
   protected final Type[] typeArguments;
 
-  /** @see #getValueClass() */
+  /// @see #getValueClass()
   protected Class<V> valueClass;
 
-  /** @see #getValueProperty() */
+  /// @see #getValueProperty()
   protected WritableProperty<?> valueProperty;
 
-  /** @see #getKeyProperty() */
+  /// @see #getKeyProperty()
   protected WritableSimpleProperty<?> keyProperty;
 
-  /**
-   * The constructor.
-   *
-   * @param genericType the {@link GenericTypeInfo}.
-   * @param operation the {@link BeanOperationOnProperty}.
-   * @param proxy the {@link BeanProxy} instance.
-   */
+  /// The constructor.
+  ///
+  /// @param genericType the [GenericTypeInfo].
+  /// @param operation the [BeanOperationOnProperty].
+  /// @param proxy the [BeanProxy] instance.
   public AbstractPropertyTypeInfo(GenericTypeInfo genericType, BeanOperationOnProperty operation, BeanProxy proxy) {
 
     super();

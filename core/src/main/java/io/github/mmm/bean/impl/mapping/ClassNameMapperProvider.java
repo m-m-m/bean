@@ -7,14 +7,12 @@ import java.util.ServiceLoader;
 import io.github.mmm.base.service.ServiceHelper;
 import io.github.mmm.bean.mapping.ClassNameMapper;
 
-/**
- * Provider of {@link ClassNameMapper}.
- *
- * @since 1.0.0
- */
+/// Provider of [ClassNameMapper].
+///
+/// @since 1.0.0
 public class ClassNameMapperProvider {
 
-  /** Instance of {@link ClassNameMapper}. */
+  /// Instance of [ClassNameMapper].
   public static final ClassNameMapper MAPPER = ServiceHelper.singleton(ServiceLoader.load(ClassNameMapper.class));
 
 }

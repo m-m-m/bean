@@ -9,21 +9,17 @@ import java.util.function.Function;
 
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Implementation of {@link BeanProperties} using {@link List}.
- */
+/// Implementation of [BeanProperties] using [List].
 public class BeanPropertiesList extends BeanProperties {
 
   private final List<WritableProperty<?>> propertiesList;
 
   private final Collection<WritableProperty<?>> properties;
 
-  /**
-   * The constructor.
-   *
-   * @param threadSafe - {@code true} if thread safe behavior is required for concurrent access, {@code false}
-   *        otherwise.
-   */
+  /// The constructor.
+  ///
+  /// @param threadSafe - `true` if thread safe behavior is required for concurrent access, `false`
+  ///        otherwise.
   public BeanPropertiesList(boolean threadSafe) {
 
     super();

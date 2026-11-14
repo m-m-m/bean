@@ -9,15 +9,11 @@ import io.github.mmm.bean.property.BeanProperty;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.value.observable.ObservableEventReceiver;
 
-/**
- * Test of {@link DynamicBean}.
- */
+/// Test of [DynamicBean].
 public abstract class AbstractBeanTest extends Assertions {
 
-  /**
-   * @param bean the {@link AbstractBean}.
-   * @param stableName the {@link BeanType#getStableName() stable name} or {@code null} to determine.
-   */
+  /// @param bean the [AbstractBean].
+  /// @param stableName the [stable name][BeanType#getStableName()] or `null` to determine.
   protected void checkType(AbstractBean bean, String stableName) {
 
     BeanType type = bean.getType();
@@ -33,23 +29,19 @@ public abstract class AbstractBeanTest extends Assertions {
     assertThat(type.toString()).isEqualTo(javaClass.getName());
   }
 
-  /**
-   * @param bean the {@link AdvancedBean} to check.
-   * @param property the {@link AdvancedBean#getRequiredProperty(String) required property} supposed to exist in the
-   *        given bean.
-   */
+  /// @param bean the [AdvancedBean] to check.
+  /// @param property the [required property][AdvancedBean#getRequiredProperty(String)] supposed to exist in the
+  ///        given bean.
   protected void checkProperty(AbstractBean bean, WritableProperty<?> property) {
 
     checkProperty(bean, property, null);
   }
 
-  /**
-   * @param <V> type of the value.
-   * @param bean the {@link AdvancedBean} to check.
-   * @param property the {@link AdvancedBean#getRequiredProperty(String) required property} supposed to exist in the
-   *        given bean.
-   * @param newValue a new {@link WritableProperty#get() value} different from the current property value.
-   */
+  /// @param <V> type of the value.
+  /// @param bean the [AdvancedBean] to check.
+  /// @param property the [required property][AdvancedBean#getRequiredProperty(String)] supposed to exist in the
+  ///        given bean.
+  /// @param newValue a new [value][WritableProperty#get()] different from the current property value.
   protected <V> void checkProperty(AbstractBean bean, WritableProperty<V> property, V newValue) {
 
     String propertyName = property.getName();

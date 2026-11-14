@@ -11,11 +11,9 @@ import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.impl.properties.BeanPropertiesFactory;
 
-/**
- * Implementation of {@link BeanType}.
- *
- * @see ReadableBean#getType()
- */
+/// Implementation of [BeanType].
+///
+/// @see ReadableBean#getType()
 public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactory {
 
   private final Class<? extends WritableBean> javaClass;
@@ -24,12 +22,10 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
 
   private MetaInfo metaInfo;
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the {@link #getJavaClass() java class}.
-   * @param stableName the {@link #getStableName() stable name}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the [java class][#getJavaClass()].
+  /// @param stableName the [stable name][#getStableName()].
   protected AbstractBeanType(Class<? extends WritableBean> javaClass, String stableName) {
 
     super();
@@ -38,11 +34,9 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
     this.stableName = getStableName(javaClass, stableName);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param template the template to copy.
-   */
+  /// The constructor.
+  ///
+  /// @param template the template to copy.
   protected AbstractBeanType(AbstractBeanType template) {
 
     super();
@@ -50,11 +44,9 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
     this.stableName = template.stableName;
   }
 
-  /**
-   * @param javaClass the {@link Class} reflecting the {@link WritableBean}.
-   * @param stableName the {@link #getStableName() stable name} or {@code null} to determine automatically.
-   * @return the {@link #getStableName() stable name}.
-   */
+  /// @param javaClass the [Class] reflecting the [WritableBean].
+  /// @param stableName the [stable name][#getStableName()] or `null` to determine automatically.
+  /// @return the [stable name][#getStableName()].
   private static String getStableName(Class<?> javaClass, String stableName) {
 
     if (stableName != null) {
@@ -63,10 +55,8 @@ public abstract class AbstractBeanType implements BeanType, BeanPropertiesFactor
     return getStableName(javaClass);
   }
 
-  /**
-   * @param javaClass the {@link Class} reflecting the {@link WritableBean}.
-   * @return the {@link #getStableName() stable name}.
-   */
+  /// @param javaClass the [Class] reflecting the [WritableBean].
+  /// @return the [stable name][#getStableName()].
   public static String getStableName(Class<?> javaClass) {
 
     BeanName name = javaClass.getAnnotation(BeanName.class);

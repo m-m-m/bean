@@ -2,23 +2,19 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
-/**
- * {@link WritableBean} that may be {@link BeanType#isVirtual() virtual} so it can potentially represent types that do
- * not exist as Java {@link Class}. Further, it has a {@link BeanClass#getPrototype() prototype} that is typically
- * {@link #isDynamic() dynamic}. If a {@link io.github.mmm.property.Property} is added to the prototype, it will
- * automatically be available by all instances and {@link BeanClass#isSubclassOf(BeanClass) subclasses}.
- */
+/// [WritableBean] that may be [virtual][BeanType#isVirtual()] so it can potentially represent types that do
+/// not exist as Java [Class]. Further, it has a [prototype][BeanClass#getPrototype()] that is typically
+/// [dynamic][#isDynamic()]. If a [io.github.mmm.property.Property] is added to the prototype, it will
+/// automatically be available by all instances and [subclasses][BeanClass#isSubclassOf(BeanClass)].
 @AbstractInterface
 public interface VirtualBean extends WritableBean {
 
   @Override
   BeanClass getType();
 
-  /**
-   * @param beanClass the {@link BeanClass} to check.
-   * @return {@code true} if this {@link VirtualBean} is an instance of the given {@link BeanClass}, {@code false}
-   *         otherwise.
-   */
+  /// @param beanClass the [BeanClass] to check.
+  /// @return `true` if this [VirtualBean] is an instance of the given [BeanClass], `false`
+  ///         otherwise.
   default boolean isInstanceOf(BeanClass beanClass) {
 
     if (beanClass == null) {
@@ -27,11 +23,9 @@ public interface VirtualBean extends WritableBean {
     return getType().isSubclassOf(beanClass, true, true);
   }
 
-  /**
-   * @param <B> type of the {@link VirtualBean}.
-   * @param bean the {@link VirtualBean} to get the prototype of.
-   * @return the {@link BeanClass#getPrototype() prototype} of the given {@link VirtualBean}.
-   */
+  /// @param <B> type of the [VirtualBean].
+  /// @param bean the [VirtualBean] to get the prototype of.
+  /// @return the [prototype][BeanClass#getPrototype()] of the given [VirtualBean].
   @SuppressWarnings("unchecked")
   static <B extends VirtualBean> B getPrototype(B bean) {
 

@@ -6,9 +6,7 @@ import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.string.StringProperty;
 
-/**
- * {@link VirtualBean} to test dynamic creation from interface.
- */
+/// [VirtualBean] to test dynamic creation from interface.
 @SuppressWarnings("javadoc")
 public interface PersonBean extends VirtualBean {
 

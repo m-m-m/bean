@@ -5,9 +5,7 @@ import java.util.List;
 
 import io.github.mmm.bean.BeanAliasMap;
 
-/**
- * Implementation of {@link BeanAliasMap} that has a single mapping.
- */
+/// Implementation of [BeanAliasMap] that has a single mapping.
 public class BeanAliasMapSingle extends AbstractBeanAliasMap {
 
   private final String name;
@@ -16,12 +14,10 @@ public class BeanAliasMapSingle extends AbstractBeanAliasMap {
 
   private final List<String> aliases;
 
-  /**
-   * The constructor.
-   *
-   * @param name the primary {@link io.github.mmm.property.ReadableProperty#getName() property name}.
-   * @param alias the associated {@link #getName(String) alias}.
-   */
+  /// The constructor.
+  ///
+  /// @param name the primary [property name][io.github.mmm.property.ReadableProperty#getName()].
+  /// @param alias the associated [alias][#getName(String)].
   public BeanAliasMapSingle(String name, String alias) {
 
     super();

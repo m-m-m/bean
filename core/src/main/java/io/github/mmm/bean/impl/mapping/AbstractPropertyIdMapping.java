@@ -6,9 +6,7 @@ import io.github.mmm.base.filter.CharFilter;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 import io.github.mmm.property.ReadableProperty;
 
-/**
- * Implementation of {@link PropertyIdMapping} based on {@link Map}.
- */
+/// Implementation of [PropertyIdMapping] based on [Map].
 public abstract class AbstractPropertyIdMapping implements PropertyIdMapping {
 
   @Override
@@ -29,10 +27,8 @@ public abstract class AbstractPropertyIdMapping implements PropertyIdMapping {
     return id;
   }
 
-  /**
-   * @param name the {@link ReadableProperty#getName() name} of the {@link ReadableProperty property}.
-   * @return the ID of the property or {@code null}.
-   */
+  /// @param name the [name][ReadableProperty#getName()] of the [property][ReadableProperty].
+  /// @return the ID of the property or `null`.
   protected abstract int id(String name);
 
 }

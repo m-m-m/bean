@@ -12,14 +12,10 @@ import io.github.mmm.property.time.localdate.LocalDateProperty;
 import io.github.mmm.validation.ValidationResult;
 import io.github.mmm.value.observable.ObservableEventReceiver;
 
-/**
- * Test of {@link io.github.mmm.bean.Bean} via {@link TestBean}.
- */
+/// Test of [io.github.mmm.bean.Bean] via [TestBean].
 class BeanTest extends AbstractBeanTest {
 
-  /**
-   * Test of {@link TestBean}.
-   */
+  /// Test of [TestBean].
   @Test
   void testBean() {
 
@@ -43,9 +39,7 @@ class BeanTest extends AbstractBeanTest {
     assertThat(bean).hasToString("mmm_TestBean(readonly=false,Age=42,Name=John Doe)");
   }
 
-  /**
-   * Test of {@link TestBean} with {@link TestBean#isDynamic() dynamic flag} set.
-   */
+  /// Test of [TestBean] with [dynamic flag][TestBean#isDynamic()] set.
   @Test
   void testBeanDynamic() {
 
@@ -89,9 +83,7 @@ class BeanTest extends AbstractBeanTest {
     assertThat(listener.getEvent().getValue()).isEqualTo(newAge);
   }
 
-  /**
-   * Test of {@link TestBuildersBean} using {@link Bean#add()}.
-   */
+  /// Test of [TestBuildersBean] using [Bean#add()].
   @Test
   void testBuilders() {
 

@@ -10,14 +10,12 @@ import java.lang.annotation.Target;
 
 import io.github.mmm.validation.main.ObjectValidatorBuilder;
 
-/**
- * Annotation indicating that a {@link WritableBean}-interface is abstract and can not be instantiated via
- * {@link BeanFactory}. This can avoid generation of an implementation and may save some time during the build process
- * when using the AOT code generator.
- *
- * @see ObjectValidatorBuilder#mandatory()
- * @since 1.0.0
- */
+/// Annotation indicating that a [WritableBean]-interface is abstract and can not be instantiated via
+/// [BeanFactory]. This can avoid generation of an implementation and may save some time during the build process
+/// when using the AOT code generator.
+///
+/// @see ObjectValidatorBuilder#mandatory()
+/// @since 1.0.0
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 @Documented

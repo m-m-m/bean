@@ -16,11 +16,9 @@ import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.mapping.ClassNameMapper;
 
-/**
- * Implementation of {@link ClassNameMapper}.
- *
- * @since 1.0.0
- */
+/// Implementation of [ClassNameMapper].
+///
+/// @since 1.0.0
 public class BeanScanner implements ResourceTypeScannerService {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanScanner.class);
@@ -32,9 +30,7 @@ public class BeanScanner implements ResourceTypeScannerService {
 
   private final Set<String> exclusions;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanScanner() {
 
     super();

@@ -6,22 +6,18 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 
-/**
- * {@link BeanMethodContainer} for a property access method.
- *
- * @since 1.0.0
- */
+/// [BeanMethodContainer] for a property access method.
+///
+/// @since 1.0.0
 public class BeanMethodContainerProperty extends BeanMethodContainer {
 
   private final Class<?> propertyType;
 
-  /**
-   * The constructor.
-   *
-   * @param method the {@link #getMethod() method}.
-   * @param propertyName the {@link #getPropertyName() property name}.
-   * @param propertyType the {@link #getPropertyType() property type}.
-   */
+  /// The constructor.
+  ///
+  /// @param method the [method][#getMethod()].
+  /// @param propertyName the [property name][#getPropertyName()].
+  /// @param propertyType the [property type][#getPropertyType()].
   public BeanMethodContainerProperty(Method method, String propertyName, Class<?> propertyType) {
 
     super(method, propertyName);

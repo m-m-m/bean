@@ -10,27 +10,23 @@ import io.github.mmm.bean.BeanHelper;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.factory.PropertyFactory;
 
-/**
- * Wrapper for a {@link Method} of a {@link io.github.mmm.bean.WritableBean}.
- *
- * @since 1.0.0
- */
+/// Wrapper for a [Method] of a [io.github.mmm.bean.WritableBean].
+///
+/// @since 1.0.0
 public abstract class BeanMethodContainer {
 
-  /** @see #getMethod() */
+  /// @see #getMethod()
   protected final Method method;
 
-  /** @see #getPropertyName() */
+  /// @see #getPropertyName()
   protected final String propertyName;
 
   private String parameterName;
 
-  /**
-   * The constructor.
-   *
-   * @param method the {@link #getMethod() method}.
-   * @param propertyName the {@link #getPropertyName() property name}.
-   */
+  /// The constructor.
+  ///
+  /// @param method the [method][#getMethod()].
+  /// @param propertyName the [property name][#getPropertyName()].
   public BeanMethodContainer(Method method, String propertyName) {
 
     super();
@@ -38,12 +34,10 @@ public abstract class BeanMethodContainer {
     this.propertyName = propertyName;
   }
 
-  /**
-   * Writes the method.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the method.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void write(Writer writer) throws IOException {
 
     writer.write("\n");
@@ -59,43 +53,33 @@ public abstract class BeanMethodContainer {
     writer.write("  }\n");
   }
 
-  /**
-   * Writes the method parameters.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the method parameters.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   protected void writeParameters(Writer writer) throws IOException {
 
   }
 
-  /**
-   * Writes the method body (implementation).
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the method body (implementation).
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   protected abstract void writeBody(Writer writer) throws IOException;
 
-  /**
-   * @return the underlying {@link io.github.mmm.bean.WritableBean bean} {@link Method}.
-   */
+  /// @return the underlying [bean][io.github.mmm.bean.WritableBean] [Method].
   public Method getMethod() {
 
     return this.method;
   }
 
-  /**
-   * @return property the name of the property handled by this method.
-   */
+  /// @return property the name of the property handled by this method.
   public String getPropertyName() {
 
     return this.propertyName;
   }
 
-  /**
-   * @return property the name of the property handled by this method.
-   */
+  /// @return property the name of the property handled by this method.
   public String getParameterName() {
 
     if (this.parameterName == null) {
@@ -104,16 +88,12 @@ public abstract class BeanMethodContainer {
     return this.parameterName;
   }
 
-  /**
-   * @return the {@link Class} reflecting the {ReadableProperty{@link #getPropertyType() type of the property value}
-   *         (and not the {@link ReadableProperty property} itself).
-   */
+  /// @return the [Class] reflecting the {ReadableProperty[type of the property value][#getPropertyType()]
+  ///         (and not the [property][ReadableProperty] itself).
   public abstract Class<?> getPropertyType();
 
-  /**
-   * @param method the {@link Method} to introspect.
-   * @return the corresponding {@link BeanMethodContainer} or {@code null} if not a {@link BeanMethodContainer} (to implement).
-   */
+  /// @param method the [Method] to introspect.
+  /// @return the corresponding [BeanMethodContainer] or `null` if not a [BeanMethodContainer] (to implement).
   public static BeanMethodContainer of(Method method) {
 
     if (method.isDefault()) {
@@ -149,11 +129,9 @@ public abstract class BeanMethodContainer {
     return null;
   }
 
-  /**
-   * @param other the {@link BeanMethodContainer} to compare.
-   * @return {@code true} if {@code this} {@link BeanMethodContainer} is more specialized than the given one (e.g. it overrides
-   *         the given method), {@code false} otherwise.
-   */
+  /// @param other the [BeanMethodContainer] to compare.
+  /// @return `true` if `this` [BeanMethodContainer] is more specialized than the given one (e.g. it overrides
+  ///         the given method), `false` otherwise.
   public boolean isSpecialized(BeanMethodContainer other) {
 
     if (other.method.getDeclaringClass().isAssignableFrom(this.method.getDeclaringClass())) {

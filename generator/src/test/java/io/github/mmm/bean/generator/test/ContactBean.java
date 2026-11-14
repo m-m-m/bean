@@ -9,9 +9,7 @@ import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.number.integers.IntegerProperty;
 import io.github.mmm.property.time.localdate.LocalDateProperty;
 
-/**
- * Extends {@link PersonBean} for testing.
- */
+/// Extends [PersonBean] for testing.
 @SuppressWarnings("javadoc")
 public interface ContactBean extends PersonBean {
 

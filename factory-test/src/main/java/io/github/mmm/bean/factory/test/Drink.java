@@ -2,9 +2,7 @@ package io.github.mmm.bean.factory.test;
 
 import io.github.mmm.bean.BeanFactory;
 
-/**
- * A liquid {@link Comestible} that can be drunken.
- */
+/// A liquid [Comestible] that can be drunken.
 public interface Drink extends Comestible {
 
   @Override
@@ -13,9 +11,7 @@ public interface Drink extends Comestible {
     return true;
   }
 
-  /**
-   * @return a new instance of {@link Drink}.
-   */
+  /// @return a new instance of [Drink].
   static Drink of() {
 
     return BeanFactory.get().create(Drink.class);

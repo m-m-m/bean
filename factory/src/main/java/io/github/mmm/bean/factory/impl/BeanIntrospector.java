@@ -16,14 +16,12 @@ import io.github.mmm.bean.Bean;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationProperty;
 
-/**
- * Collector for {@link BeanOperation}s.
- *
- * @since 1.0.0
- */
+/// Collector for [BeanOperation]s.
+///
+/// @since 1.0.0
 public class BeanIntrospector {
 
-  /** Logger instance. */
+  /// Logger instance.
   private static final Logger LOG = LoggerFactory.getLogger(BeanIntrospector.class);
 
   private final Class<?> beanType;
@@ -32,11 +30,9 @@ public class BeanIntrospector {
 
   private final Set<Class<?>> typesVisited;
 
-  /**
-   * The constructor.
-   *
-   * @param beanType primary bean type.
-   */
+  /// The constructor.
+  ///
+  /// @param beanType primary bean type.
   public BeanIntrospector(Class<?> beanType) {
 
     super();
@@ -45,11 +41,9 @@ public class BeanIntrospector {
     this.typesVisited = new HashSet<>();
   }
 
-  /**
-   * @param type the {@link Class} reflecting the {@link Bean} or one of its parent types to visit.
-   * @return {@code true} if the given {@link Class} should be visited (introspected), {@code false} if it has already
-   *         been visited.
-   */
+  /// @param type the [Class] reflecting the [Bean] or one of its parent types to visit.
+  /// @return `true` if the given [Class] should be visited (introspected), `false` if it has already
+  ///         been visited.
   public boolean visitType(Class<?> type) {
 
     boolean added = this.typesVisited.add(type);
@@ -61,9 +55,7 @@ public class BeanIntrospector {
     return added;
   }
 
-  /**
-   * @param operation the {@link BeanOperation} to register.
-   */
+  /// @param operation the [BeanOperation] to register.
   public void add(BeanOperation operation) {
 
     String propertyName = operation.getPropertyName();
@@ -80,19 +72,15 @@ public class BeanIntrospector {
     }
   }
 
-  /**
-   * @param name the name of the property.
-   * @return the {@link BeanOperation} that was {@link #add(BeanOperation) added} for the given property name or
-   *         {@code null} if none was found.
-   */
+  /// @param name the name of the property.
+  /// @return the [BeanOperation] that was [added][#add(BeanOperation)] for the given property name or
+  ///         `null` if none was found.
   public BeanOperation getPropertyOperation(String name) {
 
     return this.propertyMap.get(name);
   }
 
-  /**
-   * @return the {@link Collection} of {@link BeanOperation}s for property creation.
-   */
+  /// @return the [Collection] of [BeanOperation]s for property creation.
   public Collection<BeanOperation> getPropertyOperations() {
 
     return new ArrayList<>(this.propertyMap.values());

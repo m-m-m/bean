@@ -10,20 +10,16 @@ import io.github.mmm.property.enumeration.ReadableEnumProperty;
 import io.github.mmm.property.object.WritableSimpleProperty;
 import io.github.mmm.property.range.ReadableRangeProperty;
 
-/**
- * Implementation of {@link AbstractPropertyTypeInfo} by {@link WritableProperty property} {@link GenericTypeInfo type}.
- *
- * @param <V> type of {@link #getValueClass()}.
- */
+/// Implementation of [AbstractPropertyTypeInfo] by [property][WritableProperty] [type][GenericTypeInfo].
+///
+/// @param <V> type of [#getValueClass()].
 public class PropertyTypeInfoByProperty<V> extends AbstractPropertyTypeInfo<V> {
 
-  /**
-   * The constructor.
-   *
-   * @param genericType the {@link GenericTypeInfo}.
-   * @param operation the {@link BeanOperationOnProperty}.
-   * @param proxy the {@link BeanProxy} instance.
-   */
+  /// The constructor.
+  ///
+  /// @param genericType the [GenericTypeInfo].
+  /// @param operation the [BeanOperationOnProperty].
+  /// @param proxy the [BeanProxy] instance.
   @SuppressWarnings("unchecked")
   public PropertyTypeInfoByProperty(GenericTypeInfo genericType, BeanOperationOnProperty operation, BeanProxy proxy) {
 

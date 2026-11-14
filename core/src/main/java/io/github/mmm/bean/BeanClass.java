@@ -8,47 +8,36 @@ import java.util.List;
 
 import io.github.mmm.bean.impl.BeanClassImpl;
 
-/**
- * {@link BeanClass} extends {@link BeanType} for a {@link VirtualBean} with extended information.
- *
- * @see VirtualBean#getType()
- * @since 1.0.0
- */
+/// [BeanClass] extends [BeanType] for a [VirtualBean] with extended information.
+///
+/// @see VirtualBean#getType()
+/// @since 1.0.0
 public interface BeanClass extends BeanType {
 
-  /**
-   * @return the {@link Collection} of the super {@link BeanClass} this class inherits from.
-   */
+  /// @return the [Collection] of the super [BeanClass] this class inherits from.
   Collection<BeanClass> getSuperClasses();
 
   @Override
   Class<? extends VirtualBean> getJavaClass();
 
-  /**
-   * @return the prototype of this {@link BeanClass}. Properties added to this prototype will be inherited by all
-   *         instances of this {@link BeanClass} including those created before adding the new property.
-   */
+  /// @return the prototype of this [BeanClass]. Properties added to this prototype will be inherited by all
+  ///         instances of this [BeanClass] including those created before adding the new property.
   VirtualBean getPrototype();
 
-  /**
-   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
-   * @return {@code true} if {@code this} {@link BeanClass} is a transitive {@link #getSuperClasses() super-class} of
-   *         the given {@link BeanClass}, {@code false} otherwise.
-   */
+  /// @param beanClass the [BeanClass] to check hierarchical relationship with.
+  /// @return `true` if `this` [BeanClass] is a transitive [super-class][#getSuperClasses()] of
+  ///         the given [BeanClass], `false` otherwise.
   default boolean isSuperclassOf(BeanClass beanClass) {
 
     return isSuperclassOf(beanClass, true, false);
   }
 
-  /**
-   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
-   * @param transitive {@code true} to check hierarchy transitive, {@code false} otherwise (only check for direct
-   *        superclass).
-   * @param equal {@code true} if equality of {@code this} and the given {@link BeanClass} will be accepted (returning
-   *        {@code true}), {@code false} otherwise.
-   * @return {@code true} if {@code this} {@link BeanClass} is a ({@code transitive}) {@link #getSuperClasses()
-   *         super-class} of (or {@code equal} to) the given {@link BeanClass}, {@code false} otherwise.
-   */
+  /// @param beanClass the [BeanClass] to check hierarchical relationship with.
+  /// @param transitive `true` to check hierarchy transitive, `false` otherwise (only check for direct
+  ///        superclass).
+  /// @param equal `true` if equality of `this` and the given [BeanClass] will be accepted (returning
+  ///        `true`), `false` otherwise.
+  /// @return `true` if `this` [BeanClass] is a (`transitive`) [super-class][#getSuperClasses()] of (or `equal` to) the given [BeanClass], `false` otherwise.
   default boolean isSuperclassOf(BeanClass beanClass, boolean transitive, boolean equal) {
 
     if (beanClass == null) {
@@ -71,11 +60,9 @@ public interface BeanClass extends BeanType {
     return false;
   }
 
-  /**
-   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
-   * @return {@code true} if {@code this} {@link BeanClass} is a transitive sub-class of (or in other words inherits
-   *         from) the given {@link BeanClass}, {@code false} otherwise.
-   */
+  /// @param beanClass the [BeanClass] to check hierarchical relationship with.
+  /// @return `true` if `this` [BeanClass] is a transitive sub-class of (or in other words inherits
+  ///         from) the given [BeanClass], `false` otherwise.
   default boolean isSubclassOf(BeanClass beanClass) {
 
     if (beanClass == null) {
@@ -84,15 +71,13 @@ public interface BeanClass extends BeanType {
     return beanClass.isSuperclassOf(this);
   }
 
-  /**
-   * @param beanClass the {@link BeanClass} to check hierarchical relationship with.
-   * @param transitive {@code true} to check hierarchy transitive, {@code false} otherwise (only check for direct
-   *        subclass).
-   * @param equal {@code true} if equality of {@code this} and the given {@link BeanClass} will be accepted (returning
-   *        {@code true}), {@code false} otherwise.
-   * @return {@code true} if {@code this} {@link BeanClass} is a ({@code transitive}) sub-class of (or {@code equal} to)
-   *         the given {@link BeanClass}, {@code false} otherwise.
-   */
+  /// @param beanClass the [BeanClass] to check hierarchical relationship with.
+  /// @param transitive `true` to check hierarchy transitive, `false` otherwise (only check for direct
+  ///        subclass).
+  /// @param equal `true` if equality of `this` and the given [BeanClass] will be accepted (returning
+  ///        `true`), `false` otherwise.
+  /// @return `true` if `this` [BeanClass] is a (`transitive`) sub-class of (or `equal` to)
+  ///         the given [BeanClass], `false` otherwise.
   default boolean isSubclassOf(BeanClass beanClass, boolean transitive, boolean equal) {
 
     if (beanClass == null) {
@@ -101,14 +86,12 @@ public interface BeanClass extends BeanType {
     return beanClass.isSuperclassOf(this, transitive, equal);
   }
 
-  /**
-   * @param packageName the {@link #getPackageName() package name}.
-   * @param simpleName the {@link #getSimpleName() simple name}.
-   * @param stableName the {@link #getStableName() stable name}.
-   * @param superClasses the {@link #getSuperClasses() super-classes}.
-   * @return the created {@link #isVirtual() virtual} {@link BeanClass}.
-   * @see AdvancedBean#AdvancedBean(BeanClass)
-   */
+  /// @param packageName the [package name][#getPackageName()].
+  /// @param simpleName the [simple name][#getSimpleName()].
+  /// @param stableName the [stable name][#getStableName()].
+  /// @param superClasses the [super-classes][#getSuperClasses()].
+  /// @return the created [virtual][#isVirtual()] [BeanClass].
+  /// @see AdvancedBean#AdvancedBean(BeanClass)
   @SuppressWarnings({ "unchecked", "rawtypes" })
   static BeanClass createVirtual(String packageName, String simpleName, String stableName, BeanClass... superClasses) {
 

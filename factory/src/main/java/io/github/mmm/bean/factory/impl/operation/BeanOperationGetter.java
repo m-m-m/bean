@@ -8,21 +8,17 @@ import io.github.mmm.bean.factory.impl.GenericTypeInfo;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * {@link BeanOperation} for legacy POJO getter method.
- *
- * @since 1.0.0
- */
+/// [BeanOperation] for legacy POJO getter method.
+///
+/// @since 1.0.0
 public class BeanOperationGetter extends BeanOperationOnProperty {
 
   private final Object defaultResult;
 
-  /**
-   * The constructor.
-   *
-   * @param propertyName the {@link #getPropertyName() propertyName}.
-   * @param method the {@link #getMethod() method}.
-   */
+  /// The constructor.
+  ///
+  /// @param propertyName the [propertyName][#getPropertyName()].
+  /// @param method the [method][#getMethod()].
   public BeanOperationGetter(String propertyName, Method method) {
 
     super(propertyName, method);

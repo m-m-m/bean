@@ -13,17 +13,13 @@ import org.junit.jupiter.api.Test;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.string.StringProperty;
 
-/**
- * Abstract base test for implementations of {@link BeanProperties}.
- */
+/// Abstract base test for implementations of [BeanProperties].
 public abstract class BeanPropertiesTest {
 
-  /**
-   * @return a new and empty instance of the {@link BeanProperties} implementation to test.
-   */
+  /// @return a new and empty instance of the [BeanProperties] implementation to test.
   protected abstract BeanProperties create();
 
-  /** Tests an empty instance of {@link BeanProperties}. */
+  /// Tests an empty instance of [BeanProperties].
   @Test
   void testEmpty() {
 
@@ -39,8 +35,8 @@ public abstract class BeanPropertiesTest {
     assertThat(collection).hasToString("[]");
   }
 
-  /** Test of {@link BeanProperties#add(WritableProperty)} and {@link BeanProperties#get(String)}. */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  /// Test of [BeanProperties#add(WritableProperty)] and [BeanProperties#get(String)].
+  @SuppressWarnings({ "rawtypes" })
   @Test
   void testAdd() {
 
@@ -64,11 +60,8 @@ public abstract class BeanPropertiesTest {
     assertThat((Collection) properties.get()).containsExactly(p1, p2, p3, p4, p5);
   }
 
-  /**
-   * Test of {@link BeanProperties#addIfAbsent(String, java.util.function.Function)} and
-   * {@link BeanProperties#get(String)}.
-   */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  /// Test of [BeanProperties#addIfAbsent(String, java.util.function.Function)] and [BeanProperties#get(String)].
+  @SuppressWarnings({ "rawtypes" })
   @Test
   void testAddIfAbsent() {
 

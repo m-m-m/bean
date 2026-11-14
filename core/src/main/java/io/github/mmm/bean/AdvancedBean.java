@@ -2,51 +2,41 @@
  * http://www.apache.org/licenses/LICENSE-2.0 */
 package io.github.mmm.bean;
 
-/**
- * Implementation of {@link VirtualBean} as regular java class. Extend your beans from this class if you need virtual
- * and dynamic typing.
- */
+/// Implementation of [VirtualBean] as regular java class. Extend your beans from this class if you need virtual
+/// and dynamic typing.
 public class AdvancedBean extends AbstractVirtualBean {
 
-  /** @see BeanClass#getPrototype() */
+  /// @see BeanClass#getPrototype()
   public static final AdvancedBean PROTOTYPE = new AdvancedBean();
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public AdvancedBean() {
 
     this(null, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public AdvancedBean(WritableBean writable) {
 
     this(writable, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param type the {@link #getType() type}.
-   */
+  /// The constructor.
+  ///
+  /// @param type the [type][#getType()].
   public AdvancedBean(BeanClass type) {
 
     this(null, type);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   * @param type the {@link #getType() type}.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
+  /// @param type the [type][#getType()].
   public AdvancedBean(WritableBean writable, BeanClass type) {
 
     super(writable, type);

@@ -8,10 +8,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import io.github.mmm.bean.impl.BeanClassImpl;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Implementation of {@link VirtualBean} as regular java class. Extend your beans from this class if you need virtual
- * and dynamic typing.
- */
+/// Implementation of [VirtualBean] as regular java class. Extend your beans from this class if you need virtual
+/// and dynamic typing.
 public abstract class AbstractVirtualBean extends AbstractBean implements VirtualBean {
 
   private static final AtomicLong MODIFICATION_SEQUNCE = new AtomicLong(1);
@@ -22,42 +20,34 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
 
   private /* final */ BeanClassImpl type;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public AbstractVirtualBean() {
 
     this(null, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public AbstractVirtualBean(WritableBean writable) {
 
     this(writable, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param type the {@link #getType() type}.
-   */
+  /// The constructor.
+  ///
+  /// @param type the [type][#getType()].
   public AbstractVirtualBean(BeanClass type) {
 
     this(null, type);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   * @param type the {@link #getType() type}.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
+  /// @param type the [type][#getType()].
   public AbstractVirtualBean(WritableBean writable, BeanClass type) {
 
     super(writable);
@@ -134,10 +124,8 @@ public abstract class AbstractVirtualBean extends AbstractBean implements Virtua
     }
   }
 
-  /**
-   * Called before properties are accessed if {@link #isDynamic() dynamic} and not {@link #isReadOnly() read-only} to
-   * allow implementations to update properties internally before.
-   */
+  /// Called before properties are accessed if [dynamic][#isDynamic()] and not [read-only][#isReadOnly()] to
+  /// allow implementations to update properties internally before.
   protected void updateProperties() {
 
     if (isPrototype()) {

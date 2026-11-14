@@ -4,27 +4,21 @@ package io.github.mmm.bean;
 
 import io.github.mmm.bean.impl.BeanTypeImpl;
 
-/**
- * Regular implementation of {@link WritableBean}. For {@link VirtualBean}s use {@link AdvancedBean} instead.
- */
+/// Regular implementation of [WritableBean]. For [VirtualBean]s use [AdvancedBean] instead.
 public class Bean extends AbstractBean {
 
   private final BeanType type;
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public Bean() {
 
     this(null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param writable the {@link WritableBean} to wrap as {@link #isReadOnly() read-only} bean or {@code null} to create
-   *        a mutable bean.
-   */
+  /// The constructor.
+  ///
+  /// @param writable the [WritableBean] to wrap as [read-only][#isReadOnly()] bean or `null` to create
+  ///        a mutable bean.
   public Bean(WritableBean writable) {
 
     super(writable);

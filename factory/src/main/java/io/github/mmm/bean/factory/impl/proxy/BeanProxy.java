@@ -15,33 +15,29 @@ import io.github.mmm.bean.factory.impl.bean.SimpleBean;
 import io.github.mmm.bean.factory.impl.bean.SimpleVirtualBean;
 import io.github.mmm.bean.factory.impl.operation.BeanOperation;
 
-/**
- * Proxy for a {@link WritableBean}.
- *
- * @since 1.0.0
- */
+/// Proxy for a [WritableBean].
+///
+/// @since 1.0.0
 public abstract class BeanProxy implements InvocationHandler {
 
-  /** The {@link BeanInterfaceCreator}. */
+  /// The [BeanInterfaceCreator].
   protected final BeanInterfaceCreator beanFactory;
 
-  /** @see #getProxy() */
+  /// @see #getProxy()
   protected final WritableBean proxy;
 
-  /** @see #getBean() */
+  /// @see #getBean()
   protected final InternalBean bean;
 
   private BeanProxy readOnly;
 
-  /**
-   * The constructor.
-   *
-   * @param beanFactory the owning {@link BeanInterfaceCreator}.
-   * @param writable the {@link WritableBean} to wrap as {@link WritableBean#isReadOnly() read-only} bean or
-   *        {@code null} to create a mutable bean.
-   * @param beanType the {@link BeanType}.
-   * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
-   */
+  /// The constructor.
+  ///
+  /// @param beanFactory the owning [BeanInterfaceCreator].
+  /// @param writable the [WritableBean] to wrap as [read-only][WritableBean#isReadOnly()] bean or
+  ///        `null` to create a mutable bean.
+  /// @param beanType the [BeanType].
+  /// @param interfaces the [interfaces][BeanProxyPrototype#getInterfaces()].
   public BeanProxy(BeanInterfaceCreator beanFactory, WritableBean writable, BeanType beanType, Class<?>... interfaces) {
 
     super();
@@ -57,13 +53,11 @@ public abstract class BeanProxy implements InvocationHandler {
     }
   }
 
-  /**
-   * The constructor.
-   *
-   * @param beanFactory the owning {@link BeanInterfaceCreator}.
-   * @param bean the {@link AbstractBean}.
-   * @param interfaces the {@link BeanProxyPrototype#getInterfaces() interfaces}.
-   */
+  /// The constructor.
+  ///
+  /// @param beanFactory the owning [BeanInterfaceCreator].
+  /// @param bean the [AbstractBean].
+  /// @param interfaces the [interfaces][BeanProxyPrototype#getInterfaces()].
   public BeanProxy(BeanInterfaceCreator beanFactory, InternalBean bean, Class<?>... interfaces) {
 
     super();
@@ -72,14 +66,10 @@ public abstract class BeanProxy implements InvocationHandler {
     this.bean = bean;
   }
 
-  /**
-   * @return the {@link BeanProxyPrototype}.
-   */
+  /// @return the [BeanProxyPrototype].
   public abstract BeanProxyPrototype getPrototype();
 
-  /**
-   * @return the {@link WritableBean#getReadOnly() read-only instance}.
-   */
+  /// @return the [read-only instance][WritableBean#getReadOnly()].
   public BeanProxy getReadOnly() {
 
     if (this.readOnly == null) {
@@ -104,17 +94,13 @@ public abstract class BeanProxy implements InvocationHandler {
     return result;
   }
 
-  /**
-   * @return the dynamic proxy instance.
-   */
+  /// @return the dynamic proxy instance.
   public WritableBean getProxy() {
 
     return this.proxy;
   }
 
-  /**
-   * @return the bean class implementation to use as container delegate.
-   */
+  /// @return the bean class implementation to use as container delegate.
   public InternalBean getBean() {
 
     return this.bean;

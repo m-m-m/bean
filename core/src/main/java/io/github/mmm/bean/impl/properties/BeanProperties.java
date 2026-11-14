@@ -7,56 +7,41 @@ import java.util.function.Function;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Interface for the container of {@link WritableProperty properties} for a {@link io.github.mmm.bean.AbstractBean
- * bean}.
- */
+/// Interface for the container of [properties][WritableProperty] for a [bean][io.github.mmm.bean.AbstractBean].
 public abstract class BeanProperties {
 
-  /**
-   * @param name the {@link WritableProperty#getName() name} of the requested {@link WritableProperty property}.
-   * @return the requested {@link WritableProperty property} or {@code null} if no such property exists.
-   * @see io.github.mmm.bean.ReadableBean#getProperty(String)
-   */
+  /// @param name the [name][WritableProperty#getName()] of the requested [property][WritableProperty].
+  /// @return the requested [property][WritableProperty] or `null` if no such property exists.
+  /// @see io.github.mmm.bean.ReadableBean#getProperty(String)
   public abstract WritableProperty<?> get(String name);
 
-  /**
-   * @return the {@link Collection} with all contained {@link ReadableProperty properties}.
-   * @see io.github.mmm.bean.ReadableBean#getProperties()
-   */
+  /// @return the [Collection] with all contained [properties][ReadableProperty].
+  /// @see io.github.mmm.bean.ReadableBean#getProperties()
   public abstract Collection<? extends WritableProperty<?>> get();
 
-  /**
-   * Internal method to add a property.
-   *
-   * @param property the {@link WritableProperty} to add.
-   * @see io.github.mmm.bean.WritableBean#addProperty(WritableProperty)
-   */
+  /// Internal method to add a property.
+  ///
+  /// @param property the [WritableProperty] to add.
+  /// @see io.github.mmm.bean.WritableBean#addProperty(WritableProperty)
   public abstract void add(WritableProperty<?> property);
 
-  /**
-   * Internal method to add a property if absent.
-   *
-   * @param name the {@link WritableProperty#getName() name} of the property to add.
-   * @param factory the {@link Function} used to create the {@link WritableProperty} to add if absent.
-   * @return the existing property or the property created by the given {@code factory}.
-   * @see io.github.mmm.bean.WritableBean#addProperty(WritableProperty)
-   * @see java.util.Map#computeIfAbsent(Object, Function)
-   */
+  /// Internal method to add a property if absent.
+  ///
+  /// @param name the [name][WritableProperty#getName()] of the property to add.
+  /// @param factory the [Function] used to create the [WritableProperty] to add if absent.
+  /// @return the existing property or the property created by the given `factory`.
+  /// @see io.github.mmm.bean.WritableBean#addProperty(WritableProperty)
+  /// @see java.util.Map#computeIfAbsent(Object, Function)
   public abstract WritableProperty<?> addIfAbsent(String name, Function<String, WritableProperty<?>> factory);
 
-  /**
-   * @param name the potential {@link io.github.mmm.property.WritableProperty#getName() property name}.
-   * @return the normalized form for case-insensitive mapping.
-   */
+  /// @param name the potential [property name][io.github.mmm.property.WritableProperty#getName()].
+  /// @return the normalized form for case-insensitive mapping.
   protected static String normalize(String name) {
 
     return name.toLowerCase(Locale.ROOT);
   }
 
-  /**
-   * @return a new {@link BeanPropertyNames} instance with the names of the current properties.
-   */
+  /// @return a new [BeanPropertyNames] instance with the names of the current properties.
   public BeanPropertyNames createNames() {
 
     Collection<? extends WritableProperty<?>> collection = get();

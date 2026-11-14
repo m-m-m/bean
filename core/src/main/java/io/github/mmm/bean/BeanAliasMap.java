@@ -5,31 +5,24 @@ import java.util.List;
 import io.github.mmm.property.ReadableProperty;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * An alias is an alternative for a {@link ReadableBean#getProperty(String) property} {@link ReadableProperty#getName()
- * name}. It allows to {@link ReadableBean#getProperty(String) retrieve a property} not only via its primary
- * {@link ReadableProperty#getName() name} but also under one or multiple aliases. An alias could e.g. be a legacy name
- * after a {@link ReadableProperty property} has been renamed or to use a technical name containing special characters
- * (e.g. "@" or ".") for very specific cases.
- */
+/// An alias is an alternative for a [property][ReadableBean#getProperty(String)] [name][ReadableProperty#getName()]. It allows to [retrieve a property][ReadableBean#getProperty(String)] not only via its primary
+/// [name][ReadableProperty#getName()] but also under one or multiple aliases. An alias could e.g. be a legacy name
+/// after a [property][ReadableProperty] has been renamed or to use a technical name containing special characters
+/// (e.g. "@" or ".") for very specific cases.
 public interface BeanAliasMap {
 
-  /**
-   * @param alias the alias of a {@link WritableProperty#getName() property name}.
-   * @return the primary {@link WritableProperty#getName() property name} for the given {@code alias} or {@code null} if
-   *         no such alias is defined.
-   * @see #getAliases(String)
-   */
+  /// @param alias the alias of a [property name][WritableProperty#getName()].
+  /// @return the primary [property name][WritableProperty#getName()] for the given `alias` or `null` if
+  ///         no such alias is defined.
+  /// @see #getAliases(String)
   String getName(String alias);
 
-  /**
-   * Inverse operation of {@link #getName(String)}.
-   *
-   * @param name the primary {@link WritableProperty#getName() property name}.
-   * @return a {@link List} with all registered {@link #getName(String) aliases} for the given {@code name}. Will be
-   *         empty if no such {@link #getName(String) alias} is defined.
-   * @see #getName(String)
-   */
+  /// Inverse operation of [#getName(String)].
+  ///
+  /// @param name the primary [property name][WritableProperty#getName()].
+  /// @return a [List] with all registered [aliases][#getName(String)] for the given `name`. Will be
+  ///         empty if no such [alias][#getName(String)] is defined.
+  /// @see #getName(String)
   List<String> getAliases(String name);
 
 }

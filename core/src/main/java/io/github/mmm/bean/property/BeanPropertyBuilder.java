@@ -8,43 +8,35 @@ import io.github.mmm.property.PropertyMetadata;
 import io.github.mmm.property.builder.PropertyBuilder;
 import io.github.mmm.validation.main.ValidatorBuilderObject;
 
-/**
- * {@link PropertyBuilder} for {@link BeanProperty}.
- *
- * @param <V> type of the {@link WritableBean}.
- * @since 1.0.0
- */
+/// [PropertyBuilder] for [BeanProperty].
+///
+/// @param <V> type of the [WritableBean].
+/// @since 1.0.0
 public class BeanPropertyBuilder<V extends WritableBean> extends
     PropertyBuilder<V, BeanProperty<V>, ValidatorBuilderObject<V, BeanPropertyBuilder<V>>, BeanPropertyBuilder<V>> {
 
   private Class<V> valueClass;
 
-  /**
-   * The constructor.
-   *
-   * @param lock the {@link #getLock() lock}.
-   */
+  /// The constructor.
+  ///
+  /// @param lock the [lock][#getLock()].
   public BeanPropertyBuilder(PropertyLock lock) {
 
     this(lock, null);
   }
 
-  /**
-   * The constructor.
-   *
-   * @param lock the {@link #getLock() lock}.
-   * @param valueClass the {@link #valueClass(Class) value class}.
-   */
+  /// The constructor.
+  ///
+  /// @param lock the [lock][#getLock()].
+  /// @param valueClass the [value class][#valueClass(Class)].
   public BeanPropertyBuilder(PropertyLock lock, Class<V> valueClass) {
 
     super(lock);
     this.valueClass = valueClass;
   }
 
-  /**
-   * @param valueType the {@link BeanProperty#getValueClass() value class}.
-   * @return this builder itself ({@code this}) for fluent API calls.
-   */
+  /// @param valueType the [value class][BeanProperty#getValueClass()].
+  /// @return this builder itself (`this`) for fluent API calls.
   public BeanPropertyBuilder<V> valueClass(Class<V> valueType) {
 
     this.valueClass = valueType;

@@ -7,9 +7,7 @@ import java.util.Map.Entry;
 import io.github.mmm.base.exception.DuplicateObjectException;
 import io.github.mmm.bean.mapping.PropertyIdMapping;
 
-/**
- * Implementation of {@link PropertyIdMapping} based on {@link Map}.
- */
+/// Implementation of [PropertyIdMapping] based on [Map].
 public class PropertyIdMappingMap extends AbstractPropertyIdMapping {
 
   private final Map<String, Integer> name2idMap;
@@ -29,9 +27,7 @@ public class PropertyIdMappingMap extends AbstractPropertyIdMapping {
     }
   }
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public PropertyIdMappingMap() {
 
     super();
@@ -39,10 +35,8 @@ public class PropertyIdMappingMap extends AbstractPropertyIdMapping {
     this.id2nameMap = new HashMap<>();
   }
 
-  /**
-   * @param id the ID.
-   * @param name the property name.
-   */
+  /// @param id the ID.
+  /// @param name the property name.
   public void put(int id, String name) {
 
     Integer i = Integer.valueOf(id);

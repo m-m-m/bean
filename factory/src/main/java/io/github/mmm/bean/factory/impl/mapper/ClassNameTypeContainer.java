@@ -3,12 +3,10 @@ package io.github.mmm.bean.factory.impl.mapper;
 import io.github.mmm.bean.impl.BeanTypeImpl;
 import io.github.mmm.bean.mapping.ClassNameMapper.ClassType;
 
-/**
- * Container for {@link Class}, {@link io.github.mmm.bean.mapping.ClassNameMapper#getName(Class) name}, and
- * {@link ClassType}.
- *
- * @since 1.0.0
- */
+/// Container for [Class], [name][io.github.mmm.bean.mapping.ClassNameMapper#getName(Class)], and
+/// [ClassType].
+///
+/// @since 1.0.0
 public class ClassNameTypeContainer {
 
   final Class<?> javaClass;
@@ -23,12 +21,10 @@ public class ClassNameTypeContainer {
 
   final int priority;
 
-  /**
-   * The constructor.
-   *
-   * @param javaClass the java {@link Class}.
-   * @param classType the {@link ClassType}.
-   */
+  /// The constructor.
+  ///
+  /// @param javaClass the java [Class].
+  /// @param classType the [ClassType].
   public ClassNameTypeContainer(Class<?> javaClass, ClassType classType) {
 
     super();

@@ -10,9 +10,7 @@ import java.util.function.Function;
 
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Implementation of {@link BeanProperties} using {@link List}.
- */
+/// Implementation of [BeanProperties] using [List].
 public class BeanPropertiesDynamicArray extends BeanProperties {
 
   private int size;
@@ -22,11 +20,9 @@ public class BeanPropertiesDynamicArray extends BeanProperties {
 
   private final PropertiesCollection properties;
 
-  /**
-   * The constructor.
-   *
-   * @param capacity the initial capacity.
-   */
+  /// The constructor.
+  ///
+  /// @param capacity the initial capacity.
   public BeanPropertiesDynamicArray(int capacity) {
 
     super();

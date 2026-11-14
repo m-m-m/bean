@@ -7,12 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import io.github.mmm.bean.BeanFactory;
 
-/**
- * Test of {@link PersonClassBean}.
- */
+/// Test of [PersonClassBean].
 class PersonClassBeanTest extends Assertions {
 
-  /** Test of {@link PersonClassBean}. */
+  /// Test of [PersonClassBean].
   @Test
   void testCreateFromClass() {
 

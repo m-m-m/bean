@@ -7,14 +7,10 @@ import org.junit.jupiter.api.Test;
 import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.property.WritableProperty;
 
-/**
- * Test of {@link DynamicBean}.
- */
+/// Test of [DynamicBean].
 class DynamicBeanTest extends AbstractBeanTest {
 
-  /**
-   * Test of {@link TestBean}.
-   */
+  /// Test of [TestBean].
   @Test
   void testBean() {
 

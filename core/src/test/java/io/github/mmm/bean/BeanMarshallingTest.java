@@ -10,9 +10,7 @@ import io.github.mmm.marshall.MarshallingConfig;
 import io.github.mmm.marshall.StandardFormat;
 import io.github.mmm.marshall.StructuredTextFormat;
 
-/**
- * Test of marshalling and unmarshalling {@link io.github.mmm.bean.Bean} via {@link TestBean}.
- */
+/// Test of marshalling and unmarshalling [io.github.mmm.bean.Bean] via [TestBean].
 class BeanMarshallingTest extends Assertions {
 
   private static final int AGE = 42;
@@ -21,9 +19,7 @@ class BeanMarshallingTest extends Assertions {
 
   private static final String JSON = "{\"Age\":42,\"Name\":\"John Doe\"}";
 
-  /**
-   * Test of marshalling {@link TestBean} to JSON.
-   */
+  /// Test of marshalling [TestBean] to JSON.
   @Test
   void testMarshallToJson() {
 
@@ -40,9 +36,7 @@ class BeanMarshallingTest extends Assertions {
     assertThat(json).isEqualTo(JSON);
   }
 
-  /**
-   * Test of unmarshalling {@link TestBean} from JSON.
-   */
+  /// Test of unmarshalling [TestBean] from JSON.
   @Test
   void testUnmarshallFromJson() {
 

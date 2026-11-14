@@ -14,11 +14,9 @@ import io.github.mmm.bean.factory.impl.operation.BeanOperationEquals;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationGetReadOnly;
 import io.github.mmm.bean.factory.impl.operation.BeanOperationNewInstance;
 
-/**
- * Mapping from {@link Method} to {@link BeanOperation} for {@link BeanProxy}.
- *
- * @since 1.0.0
- */
+/// Mapping from [Method] to [BeanOperation] for [BeanProxy].
+///
+/// @since 1.0.0
 public class BeanProxyBaseMethods {
 
   @SuppressWarnings("rawtypes")
@@ -46,9 +44,7 @@ public class BeanProxyBaseMethods {
     }
   }
 
-  /**
-   * @param map the {@link Map} to initialize with the base methods.
-   */
+  /// @param map the [Map] to initialize with the base methods.
   public void init(Map<Method, BeanOperation> map) {
 
     map.putAll(this.method2operationMap);

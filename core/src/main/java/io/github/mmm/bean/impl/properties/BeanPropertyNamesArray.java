@@ -1,17 +1,13 @@
 package io.github.mmm.bean.impl.properties;
 
-/**
- * Implementation of {@link BeanPropertyNames}.
- */
+/// Implementation of [BeanPropertyNames].
 public class BeanPropertyNamesArray implements BeanPropertyNames {
 
   private final String[] names;
 
-  /**
-   * The constructor.
-   *
-   * @param names the static propery names in natural order.
-   */
+  /// The constructor.
+  ///
+  /// @param names the static propery names in natural order.
   public BeanPropertyNamesArray(String... names) {
 
     super();

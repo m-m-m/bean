@@ -5,18 +5,14 @@ package io.github.mmm.bean.factory.impl.operation;
 import io.github.mmm.bean.ReadableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 
-/**
- * {@link BeanOperation} for {@link ReadableBean#newInstance()}.
- *
- * @since 1.0.0
- */
+/// [BeanOperation] for [ReadableBean#newInstance()].
+///
+/// @since 1.0.0
 public class BeanOperationNewInstance extends BeanOperation {
 
   static final BeanOperationNewInstance INSTANCE = new BeanOperationNewInstance();
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanOperationNewInstance() {
 
     super();

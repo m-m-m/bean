@@ -4,31 +4,25 @@ package io.github.mmm.bean.factory.impl.proxy;
 
 import io.github.mmm.bean.WritableBean;
 
-/**
- * {@link BeanProxy} for a regular bean instance (that is not a {@link WritableBean#isPrototype() prototype}).
- *
- * @since 1.0.0
- */
+/// [BeanProxy] for a regular bean instance (that is not a [prototype][WritableBean#isPrototype()]).
+///
+/// @since 1.0.0
 public final class BeanProxyInstance extends BeanProxy {
 
-  /** @see #getPrototype() */
+  /// @see #getPrototype()
   protected final BeanProxyPrototype prototype;
 
-  /**
-   * The constructor.
-   *
-   * @param proxy the {@link BeanProxy} to create a {@link WritableBean#getReadOnly() read-only} view for.
-   */
+  /// The constructor.
+  ///
+  /// @param proxy the [BeanProxy] to create a [read-only][WritableBean#getReadOnly()] view for.
   public BeanProxyInstance(BeanProxy proxy) {
 
     this(proxy.proxy, proxy.getPrototype());
   }
 
-  /**
-   * The constructor.
-   *
-   * @param prototype the {@link #getPrototype() prototype}.
-   */
+  /// The constructor.
+  ///
+  /// @param prototype the [prototype][#getPrototype()].
   public BeanProxyInstance(BeanProxyPrototype prototype) {
 
     this(null, prototype);

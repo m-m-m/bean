@@ -13,13 +13,9 @@ import io.github.mmm.bean.examples.TestBean;
 import io.github.mmm.property.string.StringProperty;
 import io.github.mmm.property.time.localdate.LocalDateProperty;
 
-/**
- * Test of {@link AbstractBean} via {@link TestAdvancedBean}.
- */
+/// Test of [AbstractBean] via [TestAdvancedBean].
 class AdvancedBeanTest extends AbstractBeanTest {
-  /**
-   * Test of {@link TestBean} with {@link TestBean#isDynamic() dynamic flag} set.
-   */
+  /// Test of [TestBean] with [dynamic flag][TestBean#isDynamic()] set.
   @Test
   void testAdvancedBeanDynamicVirtual() {
 

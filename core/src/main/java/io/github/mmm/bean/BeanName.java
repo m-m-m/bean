@@ -8,20 +8,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation to configure {@link BeanType#getStableName() stable name} of a {@link WritableBean bean interface}.
- *
- * @see #value()
- */
+/// Annotation to configure [stable name][BeanType#getStableName()] of a [bean interface][WritableBean].
+///
+/// @see #value()
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
 public @interface BeanName {
 
-  /**
-   * @return the value that will be used as {@link BeanType#getStableName() stable name} of a {@link WritableBean bean}
-   *         interface or class.
-   */
+  /// @return the value that will be used as [stable name][BeanType#getStableName()] of a [bean][WritableBean]
+  ///         interface or class.
   String value();
 
 }

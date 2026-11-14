@@ -23,11 +23,9 @@ import io.github.mmm.bean.BeanClass;
 import io.github.mmm.bean.VirtualBean;
 import io.github.mmm.bean.WritableBean;
 
-/**
- * {@link BeanMetadataContainer} for an {@link Class#isInterface() interface}.
- *
- * @since 1.0.0
- */
+/// [BeanMetadataContainer] for an [interface][Class#isInterface()].
+///
+/// @since 1.0.0
 public class BeanMetadataContainerInterface extends BeanMetadataContainer {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanMetadataContainerInterface.class);
@@ -40,11 +38,9 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
 
   private final Set<Class<?>> typesVisited;
 
-  /**
-   * The constructor.
-   *
-   * @param beanClass primary bean type.
-   */
+  /// The constructor.
+  ///
+  /// @param beanClass primary bean type.
   private BeanMetadataContainerInterface(Class<? extends WritableBean> beanClass) {
 
     super(beanClass);
@@ -111,12 +107,10 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     }
   }
 
-  /**
-   * Writes the entire Java file.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the entire Java file.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void write(Writer writer) throws IOException {
 
     writePackageDeclaration(writer);
@@ -126,34 +120,28 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     writer.write("}\n");
   }
 
-  /**
-   * Writes the package declaration.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the package declaration.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writePackageDeclaration(Writer writer) throws IOException {
 
     BeanGenerator.writePackageDeclaration(writer, BeanGenerator.BASE_PACKAGE + "." + this.beanType.getPackageName());
   }
 
-  /**
-   * Writes the import statements.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the import statements.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeImports(Writer writer) throws IOException {
 
     BeanGenerator.writeImports(writer, this.importTypes);
   }
 
-  /**
-   * Writes the class declaration.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the class declaration.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeClassDeclaration(Writer writer) throws IOException {
 
     writer.write("public class ");
@@ -166,12 +154,10 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     writer.write("\n");
   }
 
-  /**
-   * Writes the fields.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the fields.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeFields(Writer writer) throws IOException {
 
     for (BeanPropertyContainer property : this.properties.values()) {
@@ -179,12 +165,10 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     }
   }
 
-  /**
-   * Writes the constructor(s).
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the constructor(s).
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeConstructors(Writer writer) throws IOException {
 
     writer.write("\n");
@@ -205,12 +189,10 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     writer.write("  }\n");
   }
 
-  /**
-   * Writes the methods.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the methods.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeMethods(Writer writer) throws IOException {
 
     for (BeanPropertyContainer property : this.properties.values()) {
@@ -229,12 +211,10 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     writer.write("  }\n");
   }
 
-  /**
-   * Writes the class body.
-   *
-   * @param writer the {@link Writer}.
-   * @throws IOException on error.
-   */
+  /// Writes the class body.
+  ///
+  /// @param writer the [Writer].
+  /// @throws IOException on error.
   public void writeBody(Writer writer) throws IOException {
 
     writeFields(writer);
@@ -256,11 +236,9 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     writer.write(")");
   }
 
-  /**
-   * @param beanClass the {@link Class} reflecting the {@link WritableBean} to check.
-   * @return {@code true} if the given {@link Class} {@link Class#isInterface() an interface} and is not annotated with
-   *         {@link AbstractInterface}.
-   */
+  /// @param beanClass the [Class] reflecting the [WritableBean] to check.
+  /// @return `true` if the given [Class] [an interface][Class#isInterface()] and is not annotated with
+  ///         [AbstractInterface].
   public static boolean isNonAbstractInterface(Class<? extends WritableBean> beanClass) {
 
     if (!beanClass.isInterface()) {
@@ -272,11 +250,9 @@ public class BeanMetadataContainerInterface extends BeanMetadataContainer {
     return true;
   }
 
-  /**
-   * @param beanClass the {@link Class} reflecting the {@link WritableBean} to get metadata for.
-   * @return the {@link BeanMetadataContainerInterface} for the given {@link Class} or {@code null} if not a
-   *         {@link #isNonAbstractInterface(Class) non-abstract interface}.
-   */
+  /// @param beanClass the [Class] reflecting the [WritableBean] to get metadata for.
+  /// @return the [BeanMetadataContainerInterface] for the given [Class] or `null` if not a
+  ///         [non-abstract interface][#isNonAbstractInterface(Class)].
   public static BeanMetadataContainerInterface of(Class<? extends WritableBean> beanClass) {
 
     if (isNonAbstractInterface(beanClass)) {

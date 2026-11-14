@@ -5,16 +5,12 @@ package io.github.mmm.bean.factory.impl.operation;
 import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.factory.impl.proxy.BeanProxy;
 
-/**
- * {@link BeanOperation} for {@link WritableBean#equals(Object)}.
- *
- * @since 1.0.0
- */
+/// [BeanOperation] for [WritableBean#equals(Object)].
+///
+/// @since 1.0.0
 public class BeanOperationEquals extends BeanOperation {
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanOperationEquals() {
 
     super();

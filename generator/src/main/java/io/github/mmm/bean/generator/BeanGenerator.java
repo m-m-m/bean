@@ -34,13 +34,11 @@ import io.github.mmm.bean.WritableBean;
 import io.github.mmm.bean.mapping.ClassNameMapper;
 import io.github.mmm.bean.mapping.ClassNameMapper.ClassType;
 
-/**
- * Code generator to create implementations of {@link WritableBean} sub-interfaces and {@link BeanFactory} Java
- * source-code.
- */
+/// Code generator to create implementations of [WritableBean] sub-interfaces and [BeanFactory] Java
+/// source-code.
 public class BeanGenerator {
 
-  /** The base package where the generated code is located in. */
+  /// The base package where the generated code is located in.
   public static final String BASE_PACKAGE = "beanimpl";
 
   static final Set<Class<?>> STANDARD_TYPES = Set.of(String.class, Boolean.class, Integer.class, Long.class,
@@ -49,14 +47,12 @@ public class BeanGenerator {
 
   private static final Logger LOG = LoggerFactory.getLogger(BeanGenerator.class);
 
-  /**
-   * Scans the class-path of the given {@link ClassLoader} for interfaces extending {@link WritableBean} (do not use
-   * module path when calling this).
-   *
-   * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
-   *        required packages will be created automatically.
-   * @param classloader the {@link ClassLoader} to scan for interfaces extending {@link WritableBean}.
-   */
+  /// Scans the class-path of the given [ClassLoader] for interfaces extending [WritableBean] (do not use
+  /// module path when calling this).
+  ///
+  /// @param targetDir the [Path] to the base-directory where to generate the source code. Sub-directories for
+  ///        required packages will be created automatically.
+  /// @param classloader the [ClassLoader] to scan for interfaces extending [WritableBean].
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public void generate(Path targetDir, ClassLoader classloader) {
 
@@ -77,11 +73,9 @@ public class BeanGenerator {
     generateFactory(metadataList, targetDir);
   }
 
-  /**
-   * @param beanClasses the {@link Collection} of {@link Class}es reflecting the {@link WritableBean}s to generate.
-   * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
-   *        required packages will be created automatically.
-   */
+  /// @param beanClasses the [Collection] of [Class]es reflecting the [WritableBean]s to generate.
+  /// @param targetDir the [Path] to the base-directory where to generate the source code. Sub-directories for
+  ///        required packages will be created automatically.
   public void generate(Collection<Class<? extends WritableBean>> beanClasses, Path targetDir) {
 
     List<BeanMetadataContainer> metadataList = new ArrayList<>();
@@ -97,15 +91,13 @@ public class BeanGenerator {
     generateFactory(metadataList, targetDir);
   }
 
-  /**
-   * Generates the implementation of {@link BeanFactory} capable to {@link BeanFactory#create(Class) create} all
-   * instances of the given {@link WritableBean} classes.
-   *
-   * @param metadatas the {@link Collection} with the {@link BeanMetadataContainer} instances of the
-   *        {@link WritableBean}s to be able to {@link BeanFactory#create(Class) create}.
-   * @param targetDir the {@link Path} to the base-directory where to generate the source code. Sub-directories for
-   *        required packages will be created automatically.
-   */
+  /// Generates the implementation of [BeanFactory] capable to [create][BeanFactory#create(Class)] all
+  /// instances of the given [WritableBean] classes.
+  ///
+  /// @param metadatas the [Collection] with the [BeanMetadataContainer] instances of the
+  ///        [WritableBean]s to be able to [create][BeanFactory#create(Class)].
+  /// @param targetDir the [Path] to the base-directory where to generate the source code. Sub-directories for
+  ///        required packages will be created automatically.
   public void generateFactory(Collection<BeanMetadataContainer> metadatas, Path targetDir) {
 
     try {
@@ -120,14 +112,12 @@ public class BeanGenerator {
     }
   }
 
-  /**
-   * Generates the implementation of {@link BeanFactory} capable to {@link BeanFactory#create(Class) create} all
-   * instances of the given {@link WritableBean} classes.
-   *
-   * @param metadatas the {@link Collection} with the {@link BeanMetadataContainer} instances of the
-   *        {@link WritableBean}s to be able to {@link BeanFactory#create(Class) create}.
-   * @param writer the {@link Writer} to write the generated class to.
-   */
+  /// Generates the implementation of [BeanFactory] capable to [create][BeanFactory#create(Class)] all
+  /// instances of the given [WritableBean] classes.
+  ///
+  /// @param metadatas the [Collection] with the [BeanMetadataContainer] instances of the
+  ///        [WritableBean]s to be able to [create][BeanFactory#create(Class)].
+  /// @param writer the [Writer] to write the generated class to.
   public void generateFactory(Collection<BeanMetadataContainer> metadatas, Writer writer) {
 
     try {
@@ -150,12 +140,10 @@ public class BeanGenerator {
     }
   }
 
-  /**
-   * @param beanClass the {@link Class} reflecting the {@link WritableBean} to generate.
-   * @param targetDir the {@link Path} to the base-directory where to generate the source-code. Sub-directories for
-   *        required packages will be created automatically.
-   * @return the {@link BeanMetadataContainerInterface} created for the {@link WritableBean}.
-   */
+  /// @param beanClass the [Class] reflecting the [WritableBean] to generate.
+  /// @param targetDir the [Path] to the base-directory where to generate the source-code. Sub-directories for
+  ///        required packages will be created automatically.
+  /// @return the [BeanMetadataContainerInterface] created for the [WritableBean].
   public BeanMetadataContainerInterface generate(Class<? extends WritableBean> beanClass, Path targetDir) {
 
     if (!BeanMetadataContainerInterface.isNonAbstractInterface(beanClass)) {
@@ -176,11 +164,9 @@ public class BeanGenerator {
     }
   }
 
-  /**
-   * @param beanClass the {@link Class} reflecting the {@link WritableBean} to generate.
-   * @param writer the {@link Writer} to write the Java source code to.
-   * @return the {@link BeanMetadataContainerInterface} created for the {@link WritableBean}.
-   */
+  /// @param beanClass the [Class] reflecting the [WritableBean] to generate.
+  /// @param writer the [Writer] to write the Java source code to.
+  /// @return the [BeanMetadataContainerInterface] created for the [WritableBean].
   public BeanMetadataContainerInterface generate(Class<? extends WritableBean> beanClass, Writer writer) {
 
     try {
@@ -194,13 +180,11 @@ public class BeanGenerator {
     }
   }
 
-  /**
-   * Writes the package declaration.
-   *
-   * @param writer the {@link Writer}.
-   * @param packageName the {@link Package#getName() package name}.
-   * @throws IOException on error.
-   */
+  /// Writes the package declaration.
+  ///
+  /// @param writer the [Writer].
+  /// @param packageName the [package name][Package#getName()].
+  /// @throws IOException on error.
   public static void writePackageDeclaration(Writer writer, String packageName) throws IOException {
 
     writer.write("package ");
@@ -208,25 +192,21 @@ public class BeanGenerator {
     writer.write(";\n");
   }
 
-  /**
-   * Writes the import statements.
-   *
-   * @param writer the {@link Writer}.
-   * @param importTypes the {@link Collection} of qualified imports.
-   * @throws IOException on error.
-   */
+  /// Writes the import statements.
+  ///
+  /// @param writer the [Writer].
+  /// @param importTypes the [Collection] of qualified imports.
+  /// @throws IOException on error.
   public static void writeImportClasses(Writer writer, Collection<Class<?>> importTypes) throws IOException {
 
     writeImports(writer, importTypes.stream().map(type -> type.getName()).collect(Collectors.toList()));
   }
 
-  /**
-   * Writes the import statements.
-   *
-   * @param writer the {@link Writer}.
-   * @param importTypes the {@link Collection} of qualified imports.
-   * @throws IOException on error.
-   */
+  /// Writes the import statements.
+  ///
+  /// @param writer the [Writer].
+  /// @param importTypes the [Collection] of qualified imports.
+  /// @throws IOException on error.
   public static void writeImports(Writer writer, Collection<String> importTypes) throws IOException {
 
     writer.write("\n");
@@ -240,15 +220,13 @@ public class BeanGenerator {
     }
   }
 
-  /**
-   * Writes the class declaration.
-   *
-   * @param writer the {@link Writer}.
-   * @param className the {@link Class#getSimpleName() simple class name}.
-   * @param superClass the optional {@link Class#getSuperclass() super class}.
-   * @param superInterface the optional {@link Class#getInterfaces() interface}.
-   * @throws IOException on error.
-   */
+  /// Writes the class declaration.
+  ///
+  /// @param writer the [Writer].
+  /// @param className the [simple class name][Class#getSimpleName()].
+  /// @param superClass the optional [super class][Class#getSuperclass()].
+  /// @param superInterface the optional [interface][Class#getInterfaces()].
+  /// @throws IOException on error.
   public static void writeClassDeclaration(Writer writer, String className, String superClass, String superInterface)
       throws IOException {
 
@@ -266,10 +244,8 @@ public class BeanGenerator {
     writer.write("\n");
   }
 
-  /**
-   * @param args the commandline arguments. The first argument is the target directory where the generated code is
-   *        written to. If no arguments are provided, code is written to "./target/generated".
-   */
+  /// @param args the commandline arguments. The first argument is the target directory where the generated code is
+  ///        written to. If no arguments are provided, code is written to "./target/generated".
   public static void main(String[] args) {
 
     Path targetDir;

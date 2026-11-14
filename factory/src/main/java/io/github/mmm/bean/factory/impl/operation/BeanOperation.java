@@ -13,43 +13,35 @@ import io.github.mmm.bean.factory.impl.proxy.BeanProxyPrototype;
 import io.github.mmm.property.WritableProperty;
 import io.github.mmm.property.factory.PropertyFactory;
 
-/**
- * Operation on a {@link BeanProxy}.
- *
- * @since 1.0.0
- */
+/// Operation on a [BeanProxy].
+///
+/// @since 1.0.0
 public abstract class BeanOperation {
 
-  /** Empty {@link Object} array. */
+  /// Empty [Object] array.
   protected static final Object[] NO_ARGS = new Object[0];
 
-  /**
-   * The constructor.
-   */
+  /// The constructor.
   public BeanOperation() {
 
     super();
   }
 
-  /**
-   * Invokes this operation of the given {@code access} using the given arguments.
-   *
-   * @param proxy the {@link BeanProxy}.
-   * @param args the arguments of the reflective method invocation.
-   * @return the result of the invocation.
-   * @throws Throwable if something goes wrong.
-   */
+  /// Invokes this operation of the given `access` using the given arguments.
+  ///
+  /// @param proxy the [BeanProxy].
+  /// @param args the arguments of the reflective method invocation.
+  /// @return the result of the invocation.
+  /// @throws Throwable if something goes wrong.
   public abstract Object invoke(BeanProxy proxy, Object[] args) throws Throwable;
 
-  /**
-   * Invokes the given {@link Method#isDefault() default} {@link Method}.
-   *
-   * @param proxy the {@link BeanProxy} to operate on.
-   * @param method the {@link Method#isDefault() default} {@link Method}.
-   * @param args the method parameters.
-   * @return the result of the method invocation.
-   * @throws Throwable if something went wrong.
-   */
+  /// Invokes the given [default][Method#isDefault()] [Method].
+  ///
+  /// @param proxy the [BeanProxy] to operate on.
+  /// @param method the [default][Method#isDefault()] [Method].
+  /// @param args the method parameters.
+  /// @return the result of the method invocation.
+  /// @throws Throwable if something went wrong.
   protected Object invokeDefaultMethod(BeanProxy proxy, Method method, Object[] args) throws Throwable {
 
     try {
@@ -59,44 +51,34 @@ public abstract class BeanOperation {
     }
   }
 
-  /**
-   * @return {@code true} if the {@link WritableProperty} is required for this operation, {@code false} otherwise.
-   */
+  /// @return `true` if the [WritableProperty] is required for this operation, `false` otherwise.
   public boolean isPropertyRequired() {
 
     return false;
   }
 
-  /**
-   * @return {@link io.github.mmm.property.Property#getName() property name}. May be {@code null} if not a property
-   *         related method.
-   */
+  /// @return [property name][io.github.mmm.property.Property#getName()]. May be `null` if not a property
+  ///         related method.
   public String getPropertyName() {
 
     return null;
   }
 
-  /**
-   * @param proxy the {@link BeanProxy}.
-   * @return a new {@link WritableProperty} for this operation. May be {@code null} if not a property related method.
-   */
+  /// @param proxy the [BeanProxy].
+  /// @return a new [WritableProperty] for this operation. May be `null` if not a property related method.
   public WritableProperty<?> createProperty(BeanProxy proxy) {
 
     return null;
   }
 
-  /**
-   * @param bean the {@link InternalBean} where to register potential aliases.
-   */
+  /// @param bean the [InternalBean] where to register potential aliases.
   public void registerAliases(InternalBean bean) {
 
   }
 
-  /**
-   * @param method the {@link Method}.
-   * @param prototype the {@link BeanProxyPrototype}.
-   * @return the according new {@link BeanOperation}.
-   */
+  /// @param method the [Method].
+  /// @param prototype the [BeanProxyPrototype].
+  /// @return the according new [BeanOperation].
   public static BeanOperation of(Method method, BeanProxyPrototype prototype) {
 
     if (Modifier.isStatic(method.getModifiers())) {
