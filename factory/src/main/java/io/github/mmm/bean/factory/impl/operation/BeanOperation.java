@@ -57,7 +57,7 @@ public abstract class BeanOperation {
     return false;
   }
 
-  /// @return [property name][io.github.mmm.property.Property#getName()]. May be `null` if not a property
+  /// @return the [property name][io.github.mmm.property.Property#getName()]. May be `null` if not a property
   ///         related method.
   public String getPropertyName() {
 
